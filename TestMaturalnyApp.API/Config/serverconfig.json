@@ -1,0 +1,14 @@
+﻿{
+  "TokenSettings": {
+    //"AccessTokenLifetimeHours": 24,
+    //"RefreshTokenLifetimeDays": 7,
+    "RefreshTokenRenewThresholdHours": 1
+  },
+  "QuestionSettings": {
+    "NumberOfTestQuestions": 30
+  },
+  "TestSessionSettings": {
+    "TimeLimitSeconds": 3600
+  }
+}
+
