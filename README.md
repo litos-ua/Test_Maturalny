@@ -141,4 +141,7 @@ const UserRoles = {
 Повторение типов  в src/models/Usertypes.tsx
 заккоментировал все.
 =======
+<<<<<<< HEAD
 
+=======
+>>>>>>> main

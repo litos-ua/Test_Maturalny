@@ -1,0 +1,55 @@
+/*!* ContactsPage.css *!*/
+
+.contacts-page__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.contacts-page__content p {
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.contacts-page__content h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+.contacts-page__ul h1, h2 {
+    color: #333;
+    font-size: 50px;
+    margin-top: 40px;
+}
+
+.contacts-page__ul {
+    list-style-type: square;
+    margin-left: 20px;
+    font-size: 22px;
+}
+
+.contacts-page__ul li {
+    margin-top: 25px;
+}
+
+.contacts-page {
+    margin-top: 20px;
+}
+
+.contacts-page__content a {
+    font-size: 30px;
+}
+
+.contacts-page__content_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 30vw;
+    margin: 0 auto;
+    padding: 1vh;
+    font-size: 16px;
+}
