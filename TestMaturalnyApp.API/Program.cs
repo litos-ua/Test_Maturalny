@@ -111,8 +111,6 @@ builder.Services.AddScoped<ITestSessionRepository, TestSessionRepository>();
 builder.Services.AddScoped<ITestSessionService, TestSessionService>();
 builder.Services.AddScoped<IUserAnswerRepository, UserAnswerRepository>();
 builder.Services.AddScoped<IUserAnswerService, UserAnswerService>();
-//builder.Services.AddScoped<IUserAnswerOptionRepository, UserAnswerOptionRepository>();
-//builder.Services.AddScoped<IUserAnswerOptionService, UserAnswerOptionService>();
 builder.Services.AddScoped<IUserOptionService, UserOptionService>();
 builder.Services.AddScoped<IUserOptionRepository, UserOptionRepository>();
 builder.Services.AddScoped<ITestEvaluationService, TestEvaluationService>();

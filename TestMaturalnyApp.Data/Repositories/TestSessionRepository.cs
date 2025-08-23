@@ -73,40 +73,7 @@ namespace TestMaturalnyApp.Data.Repositories
         }
 
         // Перегрузка для пагинации
-        //public async Task<PagedResult<TestSession>> GetByUserIdAsync(int userId, int page, int pageSize)
-        //{
-        //    try
-        //    {
-        //        var query = _context.TestSessions
-        //            .Include(ts => ts.UserAnswers)
-        //                .ThenInclude(ua => ua.Question)
-        //                    .ThenInclude(q => q.Topic)
-        //                        .ThenInclude(t => t.Discipline)
-        //            .Where(ts => ts.UserId == userId)
-        //            .OrderByDescending(ts => ts.StartedAt);
-
-        //        var totalCount = await query.CountAsync();
-
-        //        var items = await query
-        //            .Skip((page - 1) * pageSize)
-        //            .Take(pageSize)
-        //            .ToListAsync();
-
-        //        return new PagedResult<TestSession>
-        //        {
-        //            Items = items,
-        //            TotalCount = totalCount,
-        //            PageNumber = page,
-        //            PageSize = pageSize
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error getting paged sessions by userId: {UserId}", userId);
-        //        throw;
-        //    }
-        //}
-
+        
         public async Task<PagedResult<TestSession>> GetByUserIdAsync(int userId, int page, int pageSize)
         {
             try

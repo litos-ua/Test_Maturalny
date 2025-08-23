@@ -44,6 +44,7 @@ namespace TestMaturalnyApp.Services.Services
                     .ToList();
 
                 double totalScore = 0;
+                double maxTotalScore = 0;
                 var results = new List<QuestionResultDto>();
 
                 foreach (var question in questionsOrdered)
@@ -58,6 +59,7 @@ namespace TestMaturalnyApp.Services.Services
 
                         bool isCorrect = false;
                         double score = 0;
+                        maxTotalScore += question.MaxScore;
 
                         // Оценка
                         switch (question.Type)
@@ -139,9 +141,6 @@ namespace TestMaturalnyApp.Services.Services
                                     isCorrect = matchScore == expectedOptions.Count - 1;
                                     break;
                                 }
-
-
-
 
 
 
@@ -232,6 +231,7 @@ namespace TestMaturalnyApp.Services.Services
                 {
                     TestSessionId = session.Id,
                     TotalScore = totalScore,
+                    MaxTotalScore = maxTotalScore,
                     Results = results
                 };
             }
@@ -266,6 +266,7 @@ namespace TestMaturalnyApp.Services.Services
                     .ToList();
 
                 double totalScore = 0;
+                double maxTotalScore = 0;
                 var results = new List<QuestionResultDto>();
 
                 foreach (var question in questionsOrdered)
@@ -289,6 +290,7 @@ namespace TestMaturalnyApp.Services.Services
 
                         bool isCorrect = false;
                         double score = 0;
+                        maxTotalScore += question.MaxScore;
 
                         // Оценка
                         switch (question.Type)
@@ -381,10 +383,6 @@ namespace TestMaturalnyApp.Services.Services
 
 
 
-
-
-
-
                             case QuestionType.CorrectSequence:
                                 var optionsInOrder = question.Options
                                     .Where(o => o.GroupKey != null)
@@ -459,6 +457,7 @@ namespace TestMaturalnyApp.Services.Services
                 {
                     TestSessionId = session.Id,
                     TotalScore = totalScore,
+                    MaxTotalScore = maxTotalScore,
                     Results = results
                 };
             }

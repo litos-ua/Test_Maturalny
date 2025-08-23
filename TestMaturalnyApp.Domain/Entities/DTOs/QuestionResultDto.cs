@@ -1,18 +1,4 @@
-﻿
-//namespace TestMaturalnyApp.Domain.Entities.DTOs
-//{
-//    public class QuestionResultDto
-//    {
-//        public int QuestionId { get; set; }
-//        public List<int> SelectedOptionIds { get; set; } = new();
-//        public List<int> CorrectOptionIds { get; set; } = new();
-//        public bool IsCorrect { get; set; }
-//        public double Score { get; set; }
-//    }
-
-//}
-
-namespace TestMaturalnyApp.Domain.Entities.DTOs
+﻿namespace TestMaturalnyApp.Domain.Entities.DTOs
 {
     public class QuestionResultDto
     {

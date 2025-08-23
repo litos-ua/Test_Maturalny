@@ -71,51 +71,6 @@ namespace TestMaturalnyApp.Services.Services
         }
 
         // Для админ. Одновременно для пагинации и ids[]
-        //public async Task<PagedResult<Question>> GetPagedOrManyAsync(
-        //    int? pageNumber = null,
-        //    int? pageSize = null,
-        //    IEnumerable<int>? ids = null,
-        //    string? filter = null,
-        //    string? sortField = null,
-        //    string? sortOrder = null)
-        //{
-        //    try
-        //    {
-        //        if (ids != null && ids.Any())
-        //        {
-        //            // тут берём конкретные вопросы по ids
-        //            var many = await _questionAdminRepository.GetManyAsync(ids);
-
-        //            return new PagedResult<Question>
-        //            {
-        //                Items = many.Select(QuestionMapper.MapToDomain).ToList(),
-        //                TotalCount = many.Count(),
-        //                PageNumber = 1,
-        //                PageSize = many.Count()
-        //            };
-        //        }
-        //        else
-        //        {
-        //            // пагинация (как у тебя уже было)
-        //            var paged = await _questionAdminRepository
-        //                .GetPagedAsync(pageNumber ?? 1, pageSize ?? 10, filter, sortField, sortOrder);
-
-        //            return new PagedResult<Question>
-        //            {
-        //                Items = paged.Items.Select(QuestionMapper.MapToDomain).ToList(),
-        //                TotalCount = paged.TotalCount,
-        //                PageNumber = paged.PageNumber,
-        //                PageSize = paged.PageSize
-        //            };
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error while getting questions (paged or many).");
-        //        throw;
-        //    }
-        //}
-
 
         public async Task<PagedResult<Question>> GetPagedOrManyAsync(
             int? pageNumber = null,
