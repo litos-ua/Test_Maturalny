@@ -1,302 +1,3 @@
-
-// import { useParams, useLocation } from "react-router-dom";
-// import { Box, Button, Typography, Grid, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-// import { QuestionSingleChoice, QuestionDoubleChoice, QuestionMultipleChoice, QuestionMatching, QuestionCorrectSequence } from "./";
-// import { TestNavigation } from "./TestNavigation";
-// import { useTestSession, useTestSessionReal, useTestAnswers } from "../../hooks";
-// import { TestResultsDialog } from "./TestResultsDialog";
-// import { QuestionType } from "../../types/pages/testpages/types";
-// import { questionCircleStyle, questionHeaderStyle } from "./testSessionStyles"
-// import type { TestResult } from "../../types/pages/testpages/types";
-// import { useState, useMemo } from "react";
-
-// export function TestSessionPage() {
-//   const { id, name } = useParams();
-//   const location = useLocation();
-//   const params = new URLSearchParams(location.search);
-//   const testType = params.get("type") || "learn";
-//   const {
-//     questions,
-//     shuffledQuestions,
-//     currentIndex,
-//     setCurrentIndex,
-//     timeLeft,
-//     currentQuestion,
-//   } = useTestSession(id);
-
-  
-
-//  const leftItemsMap = useMemo(() => {
-//     const map: Record<number, { id: number; text: string }[]> = {};
-//     shuffledQuestions.forEach(q => {
-//       if (q.type === QuestionType.Matching || q.type === QuestionType.CorrectSequence) {
-//         map[q.id] = q.options.map(o => ({ id: o.id, text: o.text }));
-//       }
-//     });
-//     return map;
-//   }, [shuffledQuestions]);;
-
-//   //console.log (`TestSessionPage_leftItemsMap: ${JSON.stringify(leftItemsMap)}`);
-
-// const {
-//   answers,
-//   saveAnswer,
-//   clearAnswers,
-//   calculateResults,
-//   sendResultsToServer
-// } = useTestAnswers(questions, id, leftItemsMap);
-
-
-
-//   // Вычисляем список отвеченных вопросов
-//   // questionId – это ключи в объекте answers, а значения – массив выбранных optionIds для каждого вопроса.
-// const answeredIds = Object.entries(answers)
-//   .filter(([questionId, optionIds]) => {
-//     const q = questions.find(q => q.id === Number(questionId));
-//     if (!q || !Array.isArray(optionIds)) return false;
-
-//     let requiredLength = 1; // По умолчанию хотя бы один ответ
-
-//     switch (q.type) {
-//       case QuestionType.Matching:
-//         requiredLength = 5;
-//         break;
-//       case QuestionType.CorrectSequence:
-//         requiredLength = 4;
-//         break;
-//       case QuestionType.MultipleChoice:
-//         requiredLength = 3;
-//         break;
-//       case QuestionType.DoubleChoice:
-//         requiredLength = 2;
-//         break;
-//     }
-
-//     if (requiredLength > 1) {
-//       return optionIds.length >= requiredLength &&
-//              optionIds.every(val => val !== undefined && val !== null);
-//     } else {
-//       return optionIds.some(val => val !== undefined && val !== null);
-//     }
-//   })
-//   .map(([questionId]) => Number(questionId));
-
-
-// //console.log(`Final answeredIds: ${answeredIds}`);
-
-
-//   //   // Форматирование таймера
-//   const formatTime = (seconds: number) => {
-//     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-//     const s = (seconds % 60).toString().padStart(2, "0");
-//     return `${m}:${s}`;
-//   };
-
-//   const [showResults, setShowResults] = useState(false);
-//   const [testResult, setTestResult] = useState<TestResult | null>(null);
-//   const [showUnansweredDialog, setShowUnansweredDialog] = useState(false);
-//   const [pendingFinish, setPendingFinish] = useState(false);
-
-
-// // Проверка на то, отвечены ли все вопросы. Утилита finishAndsaveResults вынесена отдельно
-// const handleFinishTest = async () => {
-//   const unanswered = questions.filter(
-//     (q) =>
-//       !answers[q.id] ||
-//       answers[q.id].length === 0 ||
-//       answers[q.id].some((val) => val === undefined || val === null)
-//   );
-
-//   if (unanswered.length > 0) {
-//     setShowUnansweredDialog(true);
-//     setPendingFinish(true);
-//     return;
-//   }
-
-//   await finishAndSaveResults();
-// };
-
-// const finishAndSaveResults = async () => {
-//   const result = calculateResults();
-//   console.log("Результаты теста:", result);
-
-//   try {
-//     await sendResultsToServer(result);
-//   } catch (error) {
-//     console.error("Ошибка при отправке результатов:", error);
-//   } finally {
-
-//     // Снимаем фокус перед открытием диалога
-//     if (document.activeElement instanceof HTMLElement) {
-//       document.activeElement.blur();
-//     }
-
-//     setTestResult(result);
-//     setShowResults(true);
-//     clearAnswers();
-//   }
-// };
-
-
-//   if (!currentQuestion) return <Typography>Загрузка вопросов...</Typography>;
-
-//   return (
-//     <Box sx={{ p: 4 }}>
-//      <Box sx={{ ...questionHeaderStyle }}>
-//        <Typography variant="h4">
-//          Тестування: питання за предметом {name}
-//        </Typography>
-
-//        <Typography variant="h6">
-//          Час: {formatTime(timeLeft)}
-//        </Typography>
-//      </Box>
-
-//      {/* Индикаторы вопросов */}
-
-//       <Grid container spacing={1} justifyContent="center" sx={{ mb: 4 }}>
-//   {questions.map((q, index) => (
-//     <Grid
-//           key={q.id}
-//           sx={{
-//             flex: {
-//               xs: "0 0 calc(100% / 6)",   // маленький экран: 6 в ряд
-//               sm: "0 0 calc(100% / 8)",   // средний экран: 8 в ряд
-//               lg: "0 0 calc(100% / 15)"   // большой экран: 15 в ряд
-//             },
-//             maxWidth: {
-//               xs: "calc(100% / 6)",
-//               sm: "calc(100% / 8)",
-//               lg: "calc(100% / 15)"
-//             }
-//           }}
-//         >
-//           <Paper
-//             onClick={() => setCurrentIndex(index)}
-//             sx={{
-//               ...questionCircleStyle,
-//               backgroundColor: index === currentIndex
-//                 ? "secondary.main"                                    // текущий вопрос
-//                 : answeredIds.includes(q.id)
-//                 ? "success.light"                                     // вопрос уже отвечен
-//                 : "grey.300",                                         // вопрос еще не отвечен
-//               color: index === currentIndex ? "white" : "text.primary",
-//               fontWeight: index === currentIndex ? "bold" : "normal",
-//             }}
-//             elevation={index === currentIndex ? 4 : 1}
-//           >
-//             {index + 1}
-//           </Paper>
-//         </Grid>
-//       ))}
-//     </Grid>
-
-
-//       {/* Текущий вопрос */}
-
-//       {currentQuestion.type === QuestionType.SingleChoice && (
-//         <QuestionSingleChoice
-//             question={currentQuestion}
-//             onAnswer={saveAnswer}
-//             savedAnswer={answers[currentQuestion.id] || []}
-//         />
-//       )}
-//       {currentQuestion.type === QuestionType.MultipleChoice && (
-//         <QuestionMultipleChoice
-//             question={currentQuestion}
-//             savedAnswer={answers[currentQuestion.id] || []}
-//             onAnswer={saveAnswer}
-//         />
-//       )}
-
-//       {currentQuestion && currentQuestion.type === QuestionType.Matching && (
-//         <QuestionMatching
-//           key = {currentQuestion.id}  // Позволяет перерендерить компонент при переходе Matching → Matching
-//           question={currentQuestion}        
-//           onAnswer={saveAnswer}
-//           savedAnswer={answers[currentQuestion.id] || []}
-//         />
-//       )}
-
-//       {currentQuestion.type === QuestionType.DoubleChoice && (
-//         <QuestionDoubleChoice
-//             question={currentQuestion}
-//             savedAnswer={answers[currentQuestion.id] || []}
-//             onAnswer={saveAnswer}
-//         />
-//       )}
-
-//       {currentQuestion && currentQuestion.type === QuestionType.CorrectSequence && (
-//         <QuestionCorrectSequence
-//           key = {currentQuestion.id}
-//           question={currentQuestion}
-//           onAnswer={saveAnswer}
-//           savedAnswer={answers[currentQuestion.id] || []}
-//         />
-//       )}
-
-
-//       <TestNavigation
-//         currentIndex={currentIndex}
-//         total={questions.length}
-//         onPrev={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
-//         onNext={() => setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))}
-//         onFinish={handleFinishTest}
-//           onSave={() => {
-//           const currentAnswer = answers[currentQuestion.id] || [];
-//           saveAnswer(currentQuestion.id, currentAnswer);
-//         }}
-//       />
-
-//       <TestResultsDialog
-//         open={showResults}
-//         onClose={() => setShowResults(false)}
-//         result={testResult}
-//         disciplineName={name || ""}
-//         disciplineId={id}
-//       />
-
-//       <Dialog open={showUnansweredDialog} onClose={() => setShowUnansweredDialog(false)}>
-//         <DialogTitle sx={{ color: 'red' }}>
-//           У вас є питання без відповідей.
-//         </DialogTitle>
-//         <DialogContent>
-//           <Typography variant="body1">
-//             Ви впевнені, що хочете завершити тест або продовжити відповідати на питання?
-//           </Typography>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button
-//             onClick={() => {
-//               setShowUnansweredDialog(false);
-//               setPendingFinish(false);
-//             }}
-//             color="primary"
-//             variant="outlined"
-//           >
-//             Продовжити тест
-//           </Button>
-//           <Button
-//             onClick={async () => {
-//               setShowUnansweredDialog(false);
-//               setPendingFinish(false);
-//               await finishAndSaveResults();
-//             }}
-//             color="error"
-//             variant="contained"
-//           >
-//             Завершити тест
-//           </Button>
-//         </DialogActions>
-//       </Dialog>
-  
-
-//     </Box>
-
-    
-//   );
-// }
-
 // Несколько хуков
 
 import { useParams, useLocation } from "react-router-dom";
@@ -413,11 +114,7 @@ const answeredIds = Object.entries(answers)
   const [pendingFinish, setPendingFinish] = useState(false);
 
 
-
-
-
 const handleFinishTest = async () => {
-  console.log ("HandleFinishTest is starting ...");
   const unanswered = questions.filter(
     (q) =>
       !answers[q.id] ||
@@ -425,16 +122,11 @@ const handleFinishTest = async () => {
       answers[q.id].some((val) => val === undefined || val === null)
   );
 
-  console.log("Unanswered questions:", unanswered);
-
   if (unanswered.length > 0) {
-    console.log("Есть неотвеченные вопросы, показываю диалог...");
     setShowUnansweredDialog(true);
     setPendingFinish(true);
     return;
   }
-
-  console.log("Все вопросы отвечены. Завершаю тест...");
 
   let result: TestResult | null = null;
 
@@ -447,13 +139,10 @@ const handleFinishTest = async () => {
 
   // Если результат null (learn mode), вычисляем локально
   if (!result) {
-    console.log("Result is null, calculating locally...");
     result = calculateResults();
-    console.log("Calculated locally result:", `LocalResult: ${JSON.stringify(result)}`);
   }
 
   if (result) {
-    console.log("Setting test result from API and opening modal...", `API Result ${JSON.stringify(result)}`);
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }

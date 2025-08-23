@@ -1,22 +1,3 @@
-// import { userProfileClient } from "../api/userProfileClient";
-// import type { ProfileSessionDto, ProfileSessionQuestionDetailDto } from "../types";
-
-// export const userProfileService = {
-//   // Получить завершённые сессии пользователя с сортировкой (например, по дате)
-//   async getCompletedSessions(userId: number): Promise<ProfileSessionDto[]> {
-//     const sessions = await userProfileClient.getCompletedSessions(userId);
-//     return sessions.sort(
-//       (a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()
-//     );
-//   },
-
-//   // Получить подробные результаты по конкретной сессии
-//     async getSessionResults(sessionId: number): Promise<ProfileSessionQuestionDetailDto[]> {
-//     return await userProfileClient.getTestSessionResult(sessionId);
-//   },
-// };
-
-
 import { userProfileClient } from "../api/userProfileClient";
 import type { ProfileSessionDto, ProfileSessionQuestionDetailDto, PagedResult } from "../types";
 

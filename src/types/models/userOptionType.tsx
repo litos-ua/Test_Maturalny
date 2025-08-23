@@ -1,4 +1,3 @@
-
 export interface UserOptionDto {
   id: number;
   userId: number;

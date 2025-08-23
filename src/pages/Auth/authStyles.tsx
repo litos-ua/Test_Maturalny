@@ -1,36 +1,3 @@
-// import type { SxProps, Theme } from "@mui/material";
-
-// export const formContainer: SxProps<Theme> = {
-//   maxWidth: 400,
-//   mx: "auto",
-//   my: 6,
-//   p: 4,
-//   bgcolor: "background.paper",
-//   borderRadius: 2,
-//   boxShadow: 3,
-// };
-
-// export const inputField: SxProps<Theme> = {
-//   mb: 2,
-// };
-
-// export const checkbox: SxProps<Theme> = {
-//   mb: 2,
-// };
-
-// export const submitButton: SxProps<Theme> = {
-//   mt: 2,
-//   py: 1.5,
-//   fontSize: "1rem",
-// };
-
-// export const formTitle: SxProps<Theme> = {
-//   mb: 3,
-//   textAlign: "center",
-//   fontWeight: 600,
-// };
-
-
 import type { SxProps, Theme } from "@mui/material";
 
 export const pageContainer: SxProps<Theme> = (theme) => ({

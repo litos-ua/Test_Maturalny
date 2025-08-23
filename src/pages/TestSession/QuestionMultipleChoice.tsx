@@ -1,29 +1,3 @@
-// import { Box, Typography, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-// import type { Question } from "./types";
-
-// interface Props {
-//   question: Question;
-// }
-
-// export function QuestionMultipleChoice({ question }: Props) {
-//   return (
-//     <Box>
-//       {question.imageUrl && (
-//         <Box sx={{ textAlign: "center", my: 2 }}>
-//           <img src={question.imageUrl} alt="Зображення до питання" style={{ maxWidth: "100%", height: "auto" }} />
-//         </Box>
-//       )}
-//       <Typography variant="h6" gutterBottom>{question.text}</Typography>
-//       <FormGroup>
-//         {question.options.map(opt => (
-//           <FormControlLabel key={opt.id} control={<Checkbox />} label={opt.text} />
-//         ))}
-//       </FormGroup>
-//     </Box>
-//   );
-// }
-
-
 import { Box, Typography, FormGroup, FormControlLabel, Checkbox, Grid } from "@mui/material";
 import type { ChangeEvent } from "react";
 import type { Question } from "../../types/pages/testpages/types";

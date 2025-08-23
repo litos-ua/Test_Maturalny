@@ -2,18 +2,6 @@ import type { UserRole } from "../types";
 import { avatars } from "../constants";
 
 
-// export const getAvatarByRole = (role: UserRole) => {
-//   const avatarsRole = {
-//     Guest: avatars.Guest,
-//     Student: avatars.Student,
-//     Teacher: avatars.Teacher,   //'/assets/avatars/teacher.jpg',
-//     Admin: avatars.Admin,
-//   };
-//   console.log (`AvatarRole: ${role}`);
-  
-//   return avatarsRole[role] || avatarsRole.Teacher;
-// };
-
 export const getAvatarByRole = (roleValue: number | UserRole) => {
   // Если пришла строка (тип UserRole)
   if (typeof roleValue === 'string') {

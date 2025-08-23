@@ -5,115 +5,6 @@
 // Если в правильном ответе есть пара, а пользователь выбрал другой id или -1 → Неправильно.
 
 
-// import type { Question, TestResult, QuestionResult } from "../pages/TestSession/types";
-// import { QuestionType } from "../pages/TestSession/types";
-
-// export function calculateTestResults(
-//   questions: Question[],
-//   answers: Record<number, number[]>
-// ): TestResult {
-//   let totalScore = 0;
-
-//   const results: QuestionResult[] = questions.map((q) => {  //Проходимся по каждому вопросу
-//     const userAnswer = answers[q.id] || [];                 //Для каждого вопроса получаем ответ пользователя
-
-//     const correctAnswer = q.options                         // Извлекаем правильные варианты для данного вопроса                    
-//       .filter(opt => opt.isCorrect)
-//       .map(opt => opt.id);
-
-//     let isCorrect = false;
-//     console.log(`Вопрос ${q.id}: user=${userAnswer} correct=${correctAnswer} isCorrect=${isCorrect}`);
-
-//     if (q.type === QuestionType.SingleChoice || q.type === QuestionType.Matching) {   // Проверка по типу вопроса (числовые значения: условно 0=SingleChoice, 1=MultipleChoice, 2=Matching)
-//       // Проверяем, совпадают ли полностью массивы. Для одиночного и сопоставления: ответы должны полностью совпадать
-//       isCorrect =
-//         userAnswer.length === correctAnswer.length &&
-//         userAnswer.every((id, idx) => id === correctAnswer[idx]);
-//     } else if (q.type === QuestionType.MultipleChoice) {
-//       // Проверяем, совпадают ли полностью массивы. Для множественного выбора: все правильные выбраны, и нет лишних
-//       isCorrect =
-//         correctAnswer.every(id => userAnswer.includes(id)) &&
-//         userAnswer.every(id => correctAnswer.includes(id));
-//     }
-
-//     const score = isCorrect ? q.maxScore : 0;           // Определяем начисленные баллы
-//     totalScore += score;
-
-//     return {
-//       questionId: q.id,                                // Формируем результат по вопросу
-//       isCorrect,
-//       userAnswer,
-//       correctAnswer,
-//       score,
-//     };
-//   });
-
-//   return { totalScore, results };                      // Возвращаем объект с итогами
-// }
-
-// import type { Question, TestResult, QuestionResult } from "../pages/TestSession/types";
-// import { QuestionType } from "../pages/TestSession/types";
-
-// export function calculateTestResults(
-//   questions: Question[],
-//   answers: Record<number, number[]>
-// ): TestResult {
-//   let totalScore = 0;
-
-//   const results: QuestionResult[] = questions.map((q) => {  //Проходимся по каждому вопросу
-//     const userAnswer = answers[q.id] || [];                 //Для каждого вопроса получаем ответ пользователя
-
-//     const correctAnswer = q.options                         // Извлекаем правильные варианты для данного вопроса                    
-//       .filter(opt => opt.isCorrect)
-//       .map(opt => opt.id);
-
-//     let isCorrect = false;
-//     //console.log(`Вопрос ${q.id}: user=${userAnswer} correct=${correctAnswer} isCorrect=${isCorrect}`);
-
-//     if (q.type === QuestionType.SingleChoice) {   // Проверка по типу вопроса (числовые значения: условно 0=SingleChoice, 1=MultipleChoice, 2=Matching)
-//       // Проверяем, совпадают ли полностью массивы. Для одиночного и сопоставления: ответы должны полностью совпадать
-//       isCorrect =
-//         userAnswer.length === correctAnswer.length &&
-//         userAnswer.every((id, idx) => id === correctAnswer[idx]);
-//     } else if (q.type === QuestionType.MultipleChoice) {
-//       // Проверяем, совпадают ли полностью массивы. Для множественного выбора: все правильные выбраны, и нет лишних
-//       isCorrect =
-//         correctAnswer.every(id => userAnswer.includes(id)) &&
-//         userAnswer.every(id => correctAnswer.includes(id));
-//     } else if (q.type === QuestionType.Matching) {
-//         const correctOptions = q.options;
-//         isCorrect = userAnswer.length === correctOptions.length && // Проверяем полное соответствие по позициям
-//         correctOptions.every((opt, idx) => {
-//         const userSelected = userAnswer[idx];
-//             if (!opt.isCorrect) {
-//                 // Если правильный вариант - отсутствует пара
-//                 return userSelected === -1;
-//             } else {
-//                 // Если правильный вариант есть, сравниваем id
-//                 return userSelected === opt.id;
-//             }
-//         });
-//     }
-    
-//     const score = isCorrect ? q.maxScore : 0;           // Определяем начисленные баллы
-//     totalScore += score;
-
-//     return {
-//       questionId: q.id,                                // Формируем результат по вопросу
-//       isCorrect,
-//       userAnswer,
-//       correctAnswer,
-//       score,
-//     };
-//   });
-
-//   return { totalScore, results };                      // Возвращаем объект с итогами
-// }
-
-// ------------------------------------------------------------------------------------------------------------------------------
-
-
-
 // Глючит левый и немного правый списки в матчинге
 import type { Question, TestResult, QuestionResult } from "../types/pages/testpages/types";
 import { QuestionType } from "../types/pages/testpages/types";
@@ -125,6 +16,7 @@ export function calculateTestResults(
   leftItemsMap: Record<number, { id: number; text: string; }[]>
 ): TestResult {
   let totalScore = 0;
+  let maxTotalScore =0;
 
   const results: QuestionResult[] = questions.map((q) => {                             //Проходимся по каждому вопросу
     const userAnswer = answers[q.id] || [];                                            //Для каждого вопроса получаем ответ пользователя
@@ -225,9 +117,6 @@ export function calculateTestResults(
 
         const hasUniqueAnswers = new Set(userAnswers).size === userAnswers.length;
 
-        console.log("User answers:", userAnswers);
-        console.log("Correct answers:", correctAnswer);
-
         const isPerfectMatch = hasAllAnswers && hasUniqueAnswers &&
                               userAnswers.every((ans, idx) => ans === correctAnswer[idx]);
 
@@ -241,20 +130,21 @@ export function calculateTestResults(
         } else if (isFirstCorrect && isLastCorrect) {
           isCorrect = false;
           score = 2;
-          console.log("✔️ Совпали начало и конец. Score = 2");
+          //console.log("✔️ Совпали начало и конец. Score = 2");
         } else if (isFirstCorrect || isLastCorrect) {
           isCorrect = false;
           score = 1;
-          console.log("✔️ Совпало только начало или конец. Score = 1");
+          //console.log("✔️ Совпало только начало или конец. Score = 1");
         } else {
           isCorrect = false;
           score = 0;
-          console.log("❌ Нет совпадений по краям. Score = 0");
+          //console.log("❌ Нет совпадений по краям. Score = 0");
         }
       }
 
 
     totalScore += score;
+    maxTotalScore += q.maxScore;
 
 
     return {
@@ -265,8 +155,8 @@ export function calculateTestResults(
       score,
     };
   });
-
-  return { totalScore, results };
+  //console.log (`MaxEvaliableScore ${maxTotalScore}`);
+  return { totalScore, maxTotalScore, results };
 }
 
 

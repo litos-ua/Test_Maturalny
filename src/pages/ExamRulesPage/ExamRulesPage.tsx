@@ -1,29 +1,3 @@
-// import { Box, Typography } from "@mui/material";
-// import { useAuth } from "../../context";
-
-// export  function TestAuthPage() {
-//   const { authUser, isAuthenticated } = useAuth();
-//   console.log("🔎 isAuthenticated:", isAuthenticated);
-//   console.log("🔎 user:", authUser);
-
-//   return (
-//     <Box sx={{ p: 4 }}>
-//       <Typography variant="h4">Тест авторизації</Typography>
-//       <Typography variant="body1">
-//         Статус: {isAuthenticated ? "Авторизований" : "Не авторизований"}
-//       </Typography>
-//       {authUser && (
-//         <Box sx={{ mt: 2 }}>
-//           <Typography>Ім'я користувача: {authUser.id || authUser.email}</Typography>
-//           <Typography>Email: {authUser.email}</Typography>
-//           <Typography>Роль: {authUser.role}</Typography>
-//           <Typography>ID: {authUser.id}</Typography>
-//         </Box>
-//       )}
-//     </Box>
-//   );
-// }
-
 import { useState } from "react";
 import {
   Box,

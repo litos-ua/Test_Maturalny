@@ -14,7 +14,6 @@ export function QuestionSingleChoice({ question, savedAnswer, onAnswer }: Props)
   // обработчик изменения выбора
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedOptionId = Number(event.target.value);
-    console.log("Выбранный вариант в QuestionSingleChoice:", selectedOptionId);
     onAnswer(question.id, [selectedOptionId]);
   };
 

@@ -1,13 +1,3 @@
-// import type { SxProps, Theme } from "@mui/material";
-
-// export const floatingLabelStyle: SxProps<Theme> = {
-//   fontWeight: 600,
-//                         fontSize: "1rem",       
-//                         height: 48,             
-//                         px: 2,                  
-//                         "& .MuiChip-icon": {marginLeft: 4,}, 
-// };
-
 import { alpha } from "@mui/material/styles"
 import type { SxProps, Theme } from "@mui/material";
 

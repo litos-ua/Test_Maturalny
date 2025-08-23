@@ -1,4 +1,3 @@
-
 import { Box, Typography, Avatar, Chip, Divider } from "@mui/material";
 // import { useTheme } from "@mui/material";
 import { useAuth } from "../../context";

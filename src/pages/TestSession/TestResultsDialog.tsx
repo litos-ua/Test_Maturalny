@@ -39,7 +39,7 @@ export function TestResultsDialog({ open, onClose, result, disciplineName, disci
       <DialogContent>
         {result && (
           <>
-            <Typography>Загальна кількість балів: {result.totalScore}</Typography>
+            <Typography>Загальна/Максимально можлива кількість балів: {result.totalScore}/{result.maxTotalScore}</Typography>
             {result.results.map((r, index) => (
               <Box key={r.questionId} sx={{ mb: 2 }}>
                 <Typography>

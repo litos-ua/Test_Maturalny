@@ -2,8 +2,6 @@
 import type {
   DataProvider,
   RaRecord,
-  GetListParams,
-  GetListResult,
   GetOneParams,
   GetOneResult,
   GetManyParams,
@@ -55,34 +53,6 @@ const normalizeId = <T extends RaRecord | { Id?: any }>(rec: T): RaRecord => {
 };
 
 const dataProvider: DataProvider = {
-
-  // async getList(resource, params) {
-  //   // 1. Подготовка параметров как в рабочем варианте
-  //   const query = {
-  //     _page: params.pagination?.page || 1,
-  //     _perPage: params.pagination?.perPage || 10,
-  //     _sort: 'Id', // Всегда отправляем Id с большой буквы
-  //     _order: params.sort?.order || 'ASC',
-  //     ...(params.filter && { filter: JSON.stringify(params.filter) })
-  //   };
-
-  //   try{
-  //   // 2. Отправка запроса
-  //     const response = await get(`${API_BASE_URL}/${resource}`, {
-  //       params: query,
-  //       headers: getAuthHeaders()
-  //     });
-
-  //   // 3. Возвращаем данные как есть (сервер уже возвращает правильный формат)
-  //     return {
-  //       data: response.data,
-  //       total: response.total || response.data.length
-  //     };
-  //     } catch (error) {
-  //       console.error('Error in getAll:', error);
-  //       throw error;
-  //     }
-  // },
 
   // Работает и об
   async getList(resource, params) {

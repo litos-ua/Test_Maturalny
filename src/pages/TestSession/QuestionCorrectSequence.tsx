@@ -23,7 +23,6 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
     id: item.id,
     text: item.text,
   }));
-  //console.log(`LeftItemsCS: ${JSON.stringify(leftItems)}`);
 
   // ✅ Инициализация savedAnswer при первом рендере
   useEffect(() => {
@@ -36,7 +35,6 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
   const handleChange = (leftIndex: number, value: number) => {
     const updated = savedAnswer ? [...savedAnswer] : Array(leftItems.length).fill(undefined);
     updated[leftIndex] = value;
-    console.log("Выбраны варианты в CorrectSequence:", updated);
     onAnswer(question.id, updated);
   };
 

@@ -62,6 +62,7 @@ export interface CreateUserAnswerDto {
 export interface TestEvaluationResultDto {
   testSessionId: number;
   totalScore: number;
+  maxTotalScore: number;
   results: QuestionResultDto[];
 }
 

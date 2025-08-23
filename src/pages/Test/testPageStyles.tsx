@@ -1,26 +1,3 @@
-// import type { SxProps, Theme } from "@mui/material";
-
-// export const testButtonStyle: SxProps<Theme> = {
-//     position: "absolute",
-//     top: 16,
-//     textTransform: "none",
-//     fontSize: "1.1rem",
-//     px: 4,
-//     py: 1.5,
-//     borderRadius: 2,
-// };
-
-// export const testDisciplineImagetyle: SxProps<Theme> = {
-//     position: "relative",
-//     width: "100%",
-//     maxWidth: "180vh",
-//     aspectRatio: "16/9",
-//     margin: "2rem auto",
-//     borderRadius: "12px",
-//     overflow: "hidden",
-//     boxShadow: 3,
-// };
-
 import type { SxProps, Theme } from "@mui/material";
 
 export const testButtonStyle: SxProps<Theme> = {

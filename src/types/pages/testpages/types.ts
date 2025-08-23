@@ -45,6 +45,7 @@ export interface QuestionResult {
 
 export interface TestResult {
   totalScore: number;
+  maxTotalScore: number;
   results: QuestionResult[];
 }
 
