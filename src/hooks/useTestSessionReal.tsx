@@ -5,10 +5,10 @@ import { testSessionParameters } from "../constants";
 import type {
   RealTestSessionResult,
   StartExamRequestDto,
-  QuestionDto,
+  //QuestionDto,
   Question,
-  AnswerOptionDto,
-  QuestionType,
+  //AnswerOptionDto,
+  //QuestionType,
 } from "../types";
 
 export function useTestSessionReal(
@@ -27,7 +27,6 @@ export function useTestSessionReal(
 
   useEffect(() => {
     if (!userId || !disciplineId) return;
-    console.log (`useEffect in the  useTestSessionReal is starting`);
     const alreadyCreating = sessionStorage.getItem("testSessionCreating");
     if (alreadyCreating) return;
 

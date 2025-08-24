@@ -43,7 +43,6 @@ export function useTestAnswers(
 
   const finishAndSendResults = async (): Promise<TestResult> => {
     const result = calculateResults(); //Возвращает локальный result (не результат сервера!).
-    console.log("Calculated learn mode result:", result);
     return result;
   };
 

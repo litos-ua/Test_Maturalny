@@ -45,15 +45,25 @@ export function QuestionMultipleChoice({ question, savedAnswer, onAnswer }: Prop
 
       {/* Правая часть – изображение */}
       {question.imageUrl && (
+        // <Grid size={{ xs: 12, md: 4 }}>
+        //   <Box sx={{ textAlign: "center" }}>
+        //     <img
+        //       src={question.imageUrl}
+        //       alt="Зображення до питання"
+        //       style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+        //     />
+        //   </Box>
+        // </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: "center", mt: { xs: 2, md: 0 } }}>
             <img
               src={question.imageUrl}
               alt="Зображення до питання"
-              style={{ maxWidth: "100%", height: "auto", borderRadius: 8 }}
+              style={{ maxWidth: "100%", height: "auto", maxHeight: 300, borderRadius: 8 }}
             />
           </Box>
         </Grid>
+
       )}
     </Grid>
   );

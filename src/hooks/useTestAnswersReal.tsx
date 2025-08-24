@@ -44,14 +44,13 @@ const finishAndSendResults = async (): Promise<TestResult | null> => {
 }
   
   // фильтруем невалидные значения ответов на вопросы
-console.log("🔍 answers до формирования userAnswers:", answers);
 
 const userAnswers = questions.map(q => {
   const original = answers[q.id] ?? [];
 
   let selectedOptionIds;
 
-  console.log("original:", original);
+  
   if (q.type === 2) {
   // Matching: приводим массив к длине 5 и заменяем невалидные значения на 0
   const expectedLength = Array.isArray(q.options) ? q.options.length : 0;
@@ -66,8 +65,6 @@ const userAnswers = questions.map(q => {
       (v): v is number => typeof v === "number" && Number.isInteger(v) && !isNaN(v)
     );
   }
-
-  console.log("selectedOptionIds:", selectedOptionIds);
 
   return {
     questionId: q.id,

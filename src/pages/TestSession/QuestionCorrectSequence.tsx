@@ -54,11 +54,17 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
             {leftItems.map((item, index) => (
                 <ListItem
                 key={item.id}
+                // sx={{
+                //     display: "flex",
+                //     alignItems: "center",
+                //     gap: 2,
+                // }}
                 sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 2,
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "stretch", sm: "center" },
+                  gap: 2,
                 }}
+
                 >
                 {/* Текст события */}
                 <Box sx={{ flexGrow: 1, maxWidth: "100%" }}>
@@ -71,7 +77,8 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
                 <FormControl
                     size="small"
                     sx={{
-                    minWidth: "10vw",
+                    // minWidth: "10vw",
+                    minWidth: { xs: "100%", sm: "120px", md: "150px" },
                     ml: { xs: 0, sm: 1, md: 2, lg: 3 },
                     }}
                 >
