@@ -10,3 +10,4 @@ export * from './ExamRulesPage';
 export * from './Profile';
 export * from './Admin';
 export * from './SubjectsIntroPage';
+export * from './TestSelectionPage';

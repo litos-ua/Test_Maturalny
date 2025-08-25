@@ -1,6 +1,7 @@
 // src/components/Footer.tsx
 import { Box, Container, Grid, Typography, Link, useTheme } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import {ROUTE} from "../../router"
 
 export default function Footer() {
   const theme = useTheme();
@@ -32,21 +33,27 @@ export default function Footer() {
             <Typography variant="h6" gutterBottom>
               Навігація
             </Typography>
-            <Link component={RouterLink} to="/" color="inherit" display="block" underline="hover">
+            <Link component={RouterLink} to={ROUTE.HOME} color="inherit" display="block" underline="hover">
               Головна
             </Link>
-            <Link component={RouterLink} to="/topics" color="inherit" display="block" underline="hover">
-              Теми
+            <Link component={RouterLink} to={ROUTE.SUBJECTINTRO} color="inherit" display="block" underline="hover">
+              Предмети
             </Link>
-            <Link component={RouterLink} to="/quiz" color="inherit" display="block" underline="hover">
-              Пройти тест
+            <Link component={RouterLink} to={ROUTE.TESTSELECTION} color="inherit" display="block" underline="hover">
+              Тест
+            </Link>
+            <Link component={RouterLink} to={ROUTE.ABOUT} color="inherit" display="block" underline="hover">
+              Про Платформу
             </Link>
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="h6" gutterBottom>
+            {/* <Typography variant="h6" gutterBottom>
               Контакти
-            </Typography>
+            </Typography> */}
+            <Link component={RouterLink} to={ROUTE.CONTACTS} color="inherit" display="block" underline="hover">
+              Контакти
+            </Link>
             <Typography variant="body2">
               Email: info@yourplatform.com
             </Typography>

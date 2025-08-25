@@ -9,6 +9,12 @@ export const bannerMap: Record<number, { src: string; alt: string }> = {
     1001: { src:"/banners/chemistry.jpg", alt: "Хімія" },
 };
 
+export interface Banner {
+  src: string;
+  alt: string;
+}
+export const bannerExam: Banner = {src:"/banners/taking_exam.jpg", alt:"Екзамін"};
+
 export const disciplinesGenitive: Record<string, string> = {
     "Історія України": "Історії України",
     "Математика": "Математики",

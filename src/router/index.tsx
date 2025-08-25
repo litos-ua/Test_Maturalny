@@ -10,6 +10,7 @@ import {
   ResetPasswordPage,
   TestPage,
   ExamRulesPage,
+  TestSelectionPage,
   TestSessionPage,
   ForgotPasswordPage,
   ProfilePage,
@@ -37,6 +38,7 @@ export const ROUTE = {
   SUBJECTINTRO: "subject-intro",
   TEST: "/test/:slug/:id",
   TESTEXAMRULES: "exam-rules",
+  TESTSELECTION: "test-selection",
   TESTSESSION: "/test/session/:id/:name",
 
   // Admin routes
@@ -103,6 +105,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTE.TEST,
         element: (<ErrorBoundary> <TestPage /> </ErrorBoundary> ),
+      },
+      {
+        path: ROUTE.TESTSELECTION,
+        element: (<ErrorBoundary> <TestSelectionPage /> </ErrorBoundary> ),
       },
       {
         path: ROUTE.TESTEXAMRULES,

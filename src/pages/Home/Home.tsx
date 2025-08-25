@@ -1,3 +1,168 @@
+// // Можешь использовать любой из:
+// // https://unsplash.com/s/photos/university
+// // https://www.pexels.com/search/student/
+
+
+// import { Box, Typography, Grid, Paper, Stack, Button,Chip, useTheme, alpha } from "@mui/material"; //, useMediaQuery
+// import HeroSection from "../../components/HeroSection/HeroSection";
+// import {RotatingImage} from "../../components/RotatingImage";
+// import SchoolIcon from "@mui/icons-material/School";
+// import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
+// import QuizIcon from "@mui/icons-material/Quiz";
+// import { TypographyDualAnimator} from "../../components/TypographyDualAnimator";
+// import {floatingLabelStyle} from "./floatingLabelHomeStyle";
+// import { useAuth } from "../../context";
+
+// export function HomePage() {
+//   const theme = useTheme();
+//   // const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+//   const { authUser, isAuthenticated } = useAuth();
+//   console.log("🔎 isAuthenticated (Home):", isAuthenticated, authUser?.role);
+//   //console.log("🔎 user(Home):", authUser);
+//   return (
+//     <>
+//       <HeroSection />
+//       <Box 
+//         mt={6} 
+//         px={{ xs: 2, md: 6 }}
+//         sx={{
+//           backgroundColor: theme.palette.primary.main, // синий из темы
+//           color: theme.palette.getContrastText(theme.palette.primary.main), // авто контрастный текст
+//           py: { xs: 1, md: 2 },
+//           px: { xs: 1, md: 2 },
+//           textAlign: "center",
+//       }}
+//       >
+
+//         <Box flex={1}>
+//           <Stack spacing={2}>
+//             <Typography variant="h4" fontWeight={700}>
+//               Ласкаво просимо на платформу знань
+//             </Typography>
+//             <Typography variant="body1" sx={{
+//               width: "100%",       
+//               textAlign: "center", 
+//             }}>
+//               Збирайте досвід через тести, прокачуйте
+//               компетенції та стежте за прогресом.
+//             </Typography>
+            
+//           </Stack>
+//         </Box>
+
+//         <Grid container spacing={4} alignItems="center" mt={{ xs: 0.5, sm: 1, md: 2 }} mb={{ xs: 1, md: 4 }}>
+//            {/* Левая часть */}
+//            <Grid size = {{xs:12, md: 6}}>
+//              <TypographyDualAnimator
+//                 texts={[
+//                   ["Все, що необхідно знати", "про випускні тести"],
+//                   ["Підготуйся до НМТ зараз", "з нашою платформою"],
+//                 ]}
+//                 colorPairs={[
+//                   ["#FFA07A", "#ADD8E6"], // светло-оранжевый + светло-синий
+//                   ["#9c27b0", "#F4A460"], // фиолетовый + светло-коричневый
+//                   ["#808000", "#FFD700"], // оливковый + темно-желтый (золотой)
+//                 ]}
+//                 interval={8000}
+//                 variant="h3"
+//                 fontWeight={700}
+// />
+//              <Typography variant="body1" mb={3} marginTop={"1vh"}>
+//                Отримайте доступ до актуальних тестів, питань та навчальних матеріалів.
+//                <br />
+//                <strong>Зарегистрируйтесь, чтобы разблокировать все возможности!</strong>
+//              </Typography>
+//              <Box display="flex" justifyContent="center" mt={2}>
+//                 <Button
+//                   variant="contained"
+//                   color="secondary"
+//                   size="large"
+//                   sx={{ textTransform: "none" }}
+//                 >
+//                   Зареєструватись
+//                 </Button>
+//               </Box>
+//           </Grid>
+
+//           {/* Правая часть */}
+//           <Grid size = {{xs:12, md: 6}} sx={{ textAlign: "center", position: "relative" }}>
+//             <RotatingImage />  {/*  сменяющиеся картинки*/}
+//             {/* Ярлыки (плавающие) */}
+//             <Box sx={{ position: "absolute", top: 40, right: { xs: 4, sm: 8, md: 10, lg: 12, xl: 16 } }}>
+//               <Stack spacing={1}>
+//                 <Chip
+//                   icon={<SchoolIcon />}
+//                   label="Відеоуроки"
+//                   sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.videoLabel) })} //bgcolor: "#CBB7FF"
+//                 />
+//                 <Chip
+//                   icon={<RecordVoiceOverIcon />} 
+//                   label="Подкасти"
+//                   sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.podcastLabel) })} //bgcolor: "#B0E0FF"
+//                 />
+//                 <Chip
+//                   icon={<QuizIcon />}
+//                   label="Запитання"      
+//                   sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.quizLabel) })} //bgcolor: "#FFD580"
+//                 />
+//               </Stack>
+//             </Box>
+//           </Grid>
+//         </Grid>
+
+        
+//       </Box>
+
+//         <Typography variant="h4" fontWeight={700} gutterBottom>
+//           Переваги нашої платформи
+//         </Typography>
+
+//         <Typography variant="body1" sx={{ maxWidth: 800, mb: 4 }}>
+//           Підготуйтеся до іспитів та тестів з різних дисциплін за допомогою інтерактивних завдань, реальних питань та автоматичної перевірки відповідей. Ідеально підходить для школярів, студентів та викладачів.
+//         </Typography>
+
+//         <Grid container spacing={4}>
+//           <Grid  size = {{xs:12, md: 4}}>
+//             <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
+//               <Typography variant="h6" fontWeight={600} gutterBottom>
+//                 Актуальні дисципліни
+//               </Typography>
+//               <Typography variant="body2">
+//                 Постоянно обновляемая база знаний по математике, истории, биологии и другим предметам.
+//               </Typography>
+//             </Paper>
+//           </Grid>
+
+//           <Grid  size = {{xs:12, md: 4}}>
+//             <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
+//               <Typography variant="h6" fontWeight={600} gutterBottom>
+//                 База знань з математики, історії, біології та інших предметів, що постійно оновлюється.
+//               </Typography>
+//               <Typography variant="body2">
+//                 Вибір однієї/кілька відповідей, зіставлення, робота із зображеннями та поясненнями.
+//               </Typography>
+//             </Paper>
+//           </Grid>
+
+//           <Grid  size = {{xs:12, md: 4}}>
+//             <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
+//               <Typography variant="h6" fontWeight={600} gutterBottom>
+//                 Статистика та прогрес
+//               </Typography>
+//               <Typography variant="body2">
+//                 Відстежуйте свої результати, покращуйте слабкі сторони та досягайте більшого.
+//               </Typography>
+//             </Paper>
+//           </Grid>
+//         </Grid>
+//     </>
+//   );
+// }
+
+
+
+// Вносим адаптивние изменения
+
 // Можешь использовать любой из:
 // https://unsplash.com/s/photos/university
 // https://www.pexels.com/search/student/
@@ -36,7 +201,19 @@ export function HomePage() {
 
         <Box flex={1}>
           <Stack spacing={2}>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography 
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                fontSize: {
+                  xs: '1.5rem',   
+                  sm: '1.75rem',  
+                  md: '2rem',     
+                  lg: '2.125rem', 
+                  xl: '2.125rem'  
+                }
+              }}
+            >
               Ласкаво просимо на платформу знань
             </Typography>
             <Typography variant="body1" sx={{
@@ -50,34 +227,71 @@ export function HomePage() {
           </Stack>
         </Box>
 
-        <Grid container spacing={4} alignItems="center" mt={{ xs: 0.5, sm: 1, md: 2 }} mb={{ xs: 1, md: 4 }}>
-           {/* Левая часть */}
-           <Grid size = {{xs:12, md: 6}}>
-             <TypographyDualAnimator
-                texts={[
-                  ["Все, що необхідно знати", "про випускні тести"],
-                  ["Підготуйся до НМТ зараз", "з нашою платформою"],
-                ]}
-                colorPairs={[
-                  ["#FFA07A", "#ADD8E6"], // светло-оранжевый + светло-синий
-                  ["#9c27b0", "#F4A460"], // фиолетовый + светло-коричневый
-                  ["#808000", "#FFD700"], // оливковый + темно-желтый (золотой)
-                ]}
-                interval={8000}
-                variant="h3"
-                fontWeight={700}
-/>
-             <Typography variant="body1" mb={3} marginTop={"1vh"}>
-               Отримайте доступ до актуальних тестів, питань та навчальних матеріалів.
-               <br />
-               <strong>Зарегистрируйтесь, чтобы разблокировать все возможности!</strong>
-             </Typography>
-             <Box display="flex" justifyContent="center" mt={2}>
+        <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center" 
+              mt={{ xs: 0.5, sm: 1, md: 2 }} mb={{ xs: 1, md: 4 }}>
+          
+          {/* Левая часть */}
+          <Grid size = {{ xs:12, md:6}}>
+            <TypographyDualAnimator
+              texts={[
+                ["Все, що необхідно знати", "про випускні тести"],
+                ["Підготуйся до НМТ зараз", "з нашою платформою"],
+              ]}
+              colorPairs={[
+                ["#FFA07A", "#ADD8E6"],
+                ["#9c27b0", "#F4A460"],
+                ["#808000", "#FFD700"],
+              ]}
+              interval={8000}
+              variant="h3"
+              sx={{
+                fontSize: {
+                  xs: '1.5rem',
+                  sm: '1.75rem', 
+                  md: '2rem',
+                  lg: '2.125rem',
+                  xl: '3rem'
+                },
+                fontWeight: 700,
+                textAlign: { xs: 'center', md: 'left' },
+                mb: { xs: 3, md: 4, lg: 8, xl: 10 }, // ← добавляем отступ снизу
+                ml: { xs: 1, md: 2, lg: 6, xl: 8 } // ← добавляем отступ слева
+
+              }}
+            />
+            
+            <Typography variant="body1" 
+              sx={{
+                mb: { xs: 2, md: 3, lg: 6, xl: 8 },
+                mt: { xs: '2vh', md: '1vh' },
+                ml: { xs: 1, md: 2, lg: 6, xl: 8 },
+                textAlign: { xs: 'center', md: 'left' },
+                fontSize: { 
+                  xs: '0.9rem', 
+                  sm: '1rem' },
+                  md: '1.2rem',
+                  lg: '1.5rem',
+                  xl: '1.8rem'
+              }}
+            >
+              Отримайте доступ до актуальних тестів, питань та навчальних матеріалів.
+              <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
+              <strong>Зарегистрируйтесь, чтобы разблокировать все возможности!</strong>
+            </Typography>
+            
+            <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
+                  mt={2} 
+                  sx={{ width: '100%', ml: { xs: 1, md: 2, lg: 6, xl: 8 } }}>
                 <Button
                   variant="contained"
                   color="secondary"
                   size="large"
-                  sx={{ textTransform: "none" }}
+                  sx={{ 
+                    textTransform: "none",
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                    px: { xs: 3, md: 4 },
+                    py: { xs: 1, md: 1.5 }
+                  }}
                 >
                   Зареєструватись
                 </Button>
@@ -113,7 +327,23 @@ export function HomePage() {
         
       </Box>
 
-        <Typography variant="h4" fontWeight={700} gutterBottom>
+        {/* <Typography variant="h4" fontWeight={700} gutterBottom>
+          Переваги нашої платформи
+        </Typography> */}
+        <Typography 
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            fontSize: {
+              xs: '1.5rem',   
+              sm: '1.75rem',  
+              md: '2rem',     
+              lg: '2.125rem', 
+              xl: '2.125rem'  
+            },
+          }}
+        >
           Переваги нашої платформи
         </Typography>
 
@@ -121,35 +351,135 @@ export function HomePage() {
           Підготуйтеся до іспитів та тестів з різних дисциплін за допомогою інтерактивних завдань, реальних питань та автоматичної перевірки відповідей. Ідеально підходить для школярів, студентів та викладачів.
         </Typography>
 
-        <Grid container spacing={4}>
-          <Grid  size = {{xs:12, md: 4}}>
-            <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+          <Grid size = {{xs:12, sm:6, md:4, lg:4, xl:4}}>
+            <Paper
+              sx={{ 
+                p: { xs: 2, sm: 2.5, md: 3, lg: 3.5 },
+                height: "100%", 
+                borderRadius: { xs: 2, md: 3 },
+                transition: "all 0.3s ease",
+                boxShadow: { xs: 1, sm: 2, md: 3 }, // ← замена elevation
+                '&:hover': {
+                  transform: { xs: 'none', md: 'translateY(-4px)' },
+                  boxShadow: { xs: 2, md: 6 }
+                }
+              }}
+            >
+              <Typography variant="h6" fontWeight={600} gutterBottom sx={{
+                fontSize: {
+                  xs: '1rem',
+                  sm: '1.1rem',
+                  md: '1.2rem',
+                  lg: '1.25rem'
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
                 Актуальні дисципліни
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{
+                fontSize: {
+                  xs: '0.8rem',
+                  sm: '0.85rem', 
+                  md: '0.9rem',
+                  lg: '0.95rem'
+                },
+                lineHeight: {
+                  xs: 1.4,
+                  sm: 1.5
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
                 Постоянно обновляемая база знаний по математике, истории, биологии и другим предметам.
               </Typography>
             </Paper>
           </Grid>
 
-          <Grid  size = {{xs:12, md: 4}}>
-            <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
-                База знань з математики, історії, біології та інших предметів, що постійно оновлюється.
+          <Grid size = {{xs:12, sm:6, md:4, lg:4, xl:4}}>
+            <Paper
+              sx={{
+                p: { xs: 2, sm: 2.5, md: 3, lg: 3.5 },
+                height: "100%",
+                borderRadius: { xs: 2, md: 3 },
+                transition: "all 0.3s ease",
+                boxShadow: { xs: 1, sm: 2, md: 3 }, // заменяем elevation
+                '&:hover': {
+                  transform: { xs: 'none', md: 'translateY(-4px)' },
+                  boxShadow: { xs: 2, md: 6 }
+                }
+              }}
+            >
+              <Typography variant="h6" fontWeight={600} gutterBottom sx={{
+                fontSize: {
+                  xs: '1rem',
+                  sm: '1.1rem',
+                  md: '1.2rem',
+                  lg: '1.25rem'
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
+                База знань з математики, історії, біології та інших предметів
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{
+                fontSize: {
+                  xs: '0.8rem',
+                  sm: '0.85rem',
+                  md: '0.9rem',
+                  lg: '0.95rem'
+                },
+                lineHeight: {
+                  xs: 1.4,
+                  sm: 1.5
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
                 Вибір однієї/кілька відповідей, зіставлення, робота із зображеннями та поясненнями.
               </Typography>
             </Paper>
           </Grid>
 
-          <Grid  size = {{xs:12, md: 4}}>
-            <Paper elevation={3} sx={{ p: 3, height: "100%", borderRadius: 3 }}>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
+          <Grid size = {{xs:12, sm:6, md:4, lg:4, xl:4}}>
+            <Paper
+              sx={{
+                p: { xs: 2, sm: 2.5, md: 3, lg: 3.5 },
+                height: "100%",
+                borderRadius: { xs: 2, md: 3 },
+                transition: "all 0.3s ease",
+                boxShadow: {
+                  xs: 1,   
+                  sm: 2,   
+                  md: 3    
+                },
+                "&:hover": {
+                  transform: { xs: "none", md: "translateY(-4px)" },
+                  boxShadow: { xs: 2, md: 6 } // при hover разные уровни тени
+                }
+              }}
+            >
+              <Typography variant="h6" fontWeight={600} gutterBottom sx={{
+                fontSize: {
+                  xs: '1rem',
+                  sm: '1.1rem',
+                  md: '1.2rem',
+                  lg: '1.25rem'
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
                 Статистика та прогрес
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{
+                fontSize: {
+                  xs: '0.8rem',
+                  sm: '0.85rem',
+                  md: '0.9rem',
+                  lg: '0.95rem'
+                },
+                lineHeight: {
+                  xs: 1.4,
+                  sm: 1.5
+                },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
                 Відстежуйте свої результати, покращуйте слабкі сторони та досягайте більшого.
               </Typography>
             </Paper>
@@ -158,5 +488,4 @@ export function HomePage() {
     </>
   );
 }
-
 
