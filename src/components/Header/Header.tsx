@@ -334,6 +334,11 @@ export default function Header({ onToggleTheme }: Props) {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => setAnchorEl(null);
+
+  const handleMobileMenuClose = () => {
+      setDrawerOpen(false);
+    };
+
   const handleLogout = () => {
     handleMenuClose();
     logout();
@@ -457,21 +462,22 @@ export default function Header({ onToggleTheme }: Props) {
                 <Drawer
                   anchor="right"
                   open={drawerOpen}
-                  onClose={() => setDrawerOpen(false)}
+                  //onClose={() => setDrawerOpen(false)}
+                  onClose={handleMobileMenuClose}
                 >
                   <DrawerContainer>
                     <List>
-                      <StyledListItemButtonWithRouter to={ROUTE.HOME}>
+                      <StyledListItemButtonWithRouter to={ROUTE.HOME} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Головна" />
                       </StyledListItemButtonWithRouter>
-                      <StyledListItemButtonWithRouter to={ROUTE.SUBJECTINTRO}>
+                      <StyledListItemButtonWithRouter to={ROUTE.SUBJECTINTRO} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Предмети" />
                       </StyledListItemButtonWithRouter>
-                        <StyledListItemButtonWithRouter to={ROUTE.TESTEXAMRULES}>
+                        <StyledListItemButtonWithRouter to={ROUTE.TESTEXAMRULES} onClick={handleMobileMenuClose}>
                       <StyledListItemText primary="Правила тестування" />
                       </StyledListItemButtonWithRouter>
                         <TestMenuMobile onClose={() => setDrawerOpen(false)} />
-                      <StyledListItemButtonWithRouter to={ROUTE.ABOUT}>
+                      <StyledListItemButtonWithRouter to={ROUTE.ABOUT} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Про платформу" />
                       </StyledListItemButtonWithRouter>
                     </List>

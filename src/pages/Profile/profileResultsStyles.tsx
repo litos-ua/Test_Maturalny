@@ -36,6 +36,7 @@ export const questionBox: SxProps<Theme> = (theme) => ({
   mb: 2,
   p: 1.5,
   borderRadius: 2,
+  display: "block",
   backgroundColor: theme.palette.mode === "dark"
     ? theme.palette.grey[900]
     : theme.palette.grey[100],

@@ -59,18 +59,18 @@ export function TestSelectionPage() {
         color={theme.palette.primary.dark}
         sx={{
             fontSize: {
-            xs: '1.5rem',    // Мобильные - 24px
-            sm: '1.75rem',   // Планшеты - 28px
-            md: '2rem',      // Малые десктопы - 32px
-            lg: '2.125rem',  // Десктопы - 34px (стандартный h4)
-            xl: '2.25rem'    // Большие экраны - 36px
+            xs: '1.5rem',    
+            sm: '1.75rem',   
+            md: '2rem',      
+            lg: '2.125rem',  
+            xl: '2.25rem'    
             },
             textAlign: {
             xs: 'center',
             sm: 'center', 
             md: 'center'
             },
-            px: { xs: 2, sm: 0 } // Отступы по бокам на мобильных
+            px: { xs: 2, sm: 0 } 
         }}
         >
         Виберіть дисципліну для тестування ЗНО / НМТ
@@ -82,7 +82,7 @@ export function TestSelectionPage() {
         justifyContent: "center", 
         mt: { xs: 3, sm: 4, md: 4 },
         mb: { xs: 3, sm: 4, md: 4 },
-        px: { xs: 2, sm: 3, md: 0 } // Адаптивные отступы
+        px: { xs: 2, sm: 3, md: 0 } 
         }}>
         <Box
             component="img"
@@ -90,22 +90,22 @@ export function TestSelectionPage() {
             alt={bannerExam.alt}
             sx={{
             maxWidth: { 
-                xs: "100%",     // Мобильные - на всю ширину
-                sm: "500px",    // Планшеты - 500px
-                md: "600px",    // Десктопы - 600px  
-                lg: "700px"     // Большие экраны - 700px
+                xs: "100%",     // Смартфоны - на всю ширину
+                sm: "500px",    
+                md: "600px",      
+                lg: "700px"     
             },
             width: "100%",
             borderRadius: { 
-                xs: 8,         // Меньше скругление на мобильных
-                sm: 10,        // Планшеты
-                md: 12         // Десктопы
+                xs: 8,         
+                sm: 10,        
+                md: 12         
             },
             height: "auto",
             boxShadow: {
-                xs: 1,         // Легкая тень на мобильных
-                sm: 2,         // Средняя на планшетах
-                md: 3          // Сильная на десктопах
+                xs: 1,         
+                sm: 2,         
+                md: 3          
             }
             }}
         />
