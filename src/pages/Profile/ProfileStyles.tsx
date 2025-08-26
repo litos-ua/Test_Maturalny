@@ -7,17 +7,6 @@ export const pageWrapper: SxProps<Theme> = {
   py: 4,
 };
 
-// export const container: SxProps<Theme> = (theme) => ({
-//   width: "100%",
-//   maxWidth: 800,
-//   backgroundColor: theme.palette.primary.main, // ✅ используем primary.main
-//   color: theme.palette.getContrastText(theme.palette.primary.main),
-//   p: 4,
-//   borderRadius: 4,
-//   boxShadow: 3,
-//   border: `1px solid ${theme.palette.divider}`,
-// });
-
 export const container: SxProps<Theme> = (theme) => ({
   width: "100%",
   maxWidth: 800,

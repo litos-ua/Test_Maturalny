@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogActions
 } from "@mui/material";
+import {text} from "../../constants"
 
 // Описываем структуру вопроса
 interface QuestionType {
@@ -98,15 +99,11 @@ export function ExamRulesPage() {
       </Typography>
 
       <Typography variant="body1" mb={2}>
-        Зовнішнє незалежне оцінювання (ЗНО) та Національний мультипредметний тест (НМТ) проводяться
-        з метою об’єктивного визначення рівня знань абітурієнтів. Під час тестування заборонено
-        користуватися телефонами, підручниками, шпаргалками. Порушення правил може призвести до
-        анулювання результатів.
+        {text.examRules?.[0]}
       </Typography>
 
       <Typography variant="body1" mb={4}>
-        Оцінювання відбувається автоматизовано. Кожен тип питання має власну систему нарахування
-        балів, описану нижче.
+        {text.examRules?.[1]}
       </Typography>
 
       <Grid container spacing={2}>
