@@ -46,6 +46,9 @@ export const submitButton: SxProps<Theme> = (theme) => ({
   "&:hover": {
     backgroundColor: theme.palette.secondary.dark,
   },
+  width: "100%",
+  display: "block",
+  margin: "auto"
 });
 
 export const sectionTitleAdaptive: SxProps<Theme> = (theme) => ({

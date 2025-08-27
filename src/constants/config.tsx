@@ -5,3 +5,4 @@ export const configObj ={
     baseLanguage: 'ua',
     pagination:{startPage:1, pageSize:10} // фиксируем стартовую страницу и размер страницы
 }
+
