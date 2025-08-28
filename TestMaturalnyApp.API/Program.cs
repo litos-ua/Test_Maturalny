@@ -22,6 +22,11 @@ using TestMaturalnyApp.Data.Interfaces.Admin;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("https://localhost:7283", "http://localhost:5000",
+                         "https://192.168.43.91:7283", "http://192.168.43.91:5000", "http://0.0.0.0:5283"
+                         );
+
+
 // Add extension JSON-config
 builder.Configuration.AddJsonFile("Config/serverconfig.json", optional: true, reloadOnChange: true);
 
@@ -36,7 +41,12 @@ builder.Services.AddCors(options =>
                            "http://localhost:5173",
                            "https://localhost:5173",
                            "http://192.168.0.33:5173",
-                           "https://192.168.0.33")                         // Allow only your frontend
+                           "https://192.168.0.33:5173",
+                           "http://192.168.43.91:5173",
+                           "https://192.168.43.91:5173",
+                           "http://192.168.43.220:5173",
+                           "https://192.168.43.220:5173")                         // Allow only your frontend
+
         //policy.AllowAnyOrigin() // Allows requests from any sites
               .AllowAnyHeader()
               .AllowAnyMethod()
@@ -44,6 +54,52 @@ builder.Services.AddCors(options =>
               .WithExposedHeaders("X-Total-Count");
     });
 });
+
+
+//// Configure CORS
+//var corsPolicyTestMaturalny = "AllowFrontend";
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(corsPolicyTestMaturalny, policy =>
+//    {
+//        policy
+//            .SetIsOriginAllowed(origin =>
+//            {
+//                if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+//                {
+//                    // Разрешаем localhost на любом порту
+//                    if (uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase))
+//                        return true;
+
+//                    // Разрешаем https://localhost на любом порту
+//                    if (uri.Host.Equals("127.0.0.1"))
+//                        return true;
+
+//                    // Разрешаем только 192.168.*.* и только порт 5173
+//                    if (uri.Host.StartsWith("192.168.", StringComparison.OrdinalIgnoreCase) && uri.Port == 5173)
+//                        return true;
+//                }
+//                return false;
+//            })
+//            .AllowAnyHeader()
+//            .AllowAnyMethod()
+//            .AllowCredentials()
+//            .WithExposedHeaders("X-Total-Count");
+//    });
+//});
+
+
+
+// Явное указание Kestrel, какие адреса слушать
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // HTTP
+    serverOptions.ListenAnyIP(7283, listenOptions => // HTTPS
+    {
+        listenOptions.UseHttps();
+    });
+});
+
 
 
 builder.Services.AddControllers();
@@ -220,7 +276,7 @@ app.UseGlobalErrorHandling();
 // Enable CORS
 app.UseCors(corsPolicyTestMaturalny);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection(); 
 
 // Enable authentication and authorization
 app.UseAuthentication();
