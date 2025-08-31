@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
 using TestMaturalnyApp.Data.Interfaces;
-using TestMaturalnyApp.Domain.Entities.DTOs;
+using TestMaturalnyApp.Domain.Entities;
 using TestMaturalnyApp.Domain.Entities.DTOs.Auth;
 using TestMaturalnyApp.Domain.Entities.Enums;
 using TestMaturalnyApp.Services.Interfaces.Auth;
@@ -224,27 +224,81 @@ namespace TestMaturalnyApp.Services.Services.Auth
             }
         }
 
-        public async Task<bool> RevokeRefreshTokenAsync(string accessToken)
+        //public async Task<bool> RevokeRefreshTokenAsync(string accessToken, string? refreshToken)
+        //{
+        //    try
+        //    {
+        //        var principal = GetPrincipalFromExpiredToken(accessToken);
+        //        var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        //        if (string.IsNullOrEmpty(email)) return false;
+
+        //        var token = await _userTokenRepository.GetLatestTokenByEmailAsync(email);
+        //        if (token == null || !token.IsActive) return false;
+
+        //        token.RevokedAt = DateTime.UtcNow;
+        //        await _userTokenRepository.UpdateAsync(token);
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error revoking refresh token.");
+        //        throw new Exception("An error occurred while revoking the refresh token.");
+        //    }
+        //}
+
+        public async Task<bool> RevokeRefreshTokenAsync(string accessToken, string? refreshToken)
         {
             try
             {
                 var principal = GetPrincipalFromExpiredToken(accessToken);
                 var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                if (string.IsNullOrEmpty(email)) return false;
 
-                var token = await _userTokenRepository.GetLatestTokenByEmailAsync(email);
-                if (token == null || !token.IsActive) return false;
+                if (string.IsNullOrEmpty(email))
+                    return false;
+
+                Data.Entities.UserToken? tokenData;
+
+                if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    // ищем именно тот refreshToken, который прислал клиент
+                    tokenData = await _userTokenRepository.GetByTokenAsync(refreshToken);
+
+                    if (tokenData == null || tokenData.User.Email != email)
+                        return false; // защита от подмены чужого токена
+                }
+                else
+                {
+                    // ищем последний активный refreshToken по пользователю
+                    tokenData = await _userTokenRepository.GetLatestTokenByEmailAsync(email);
+
+                    if (tokenData == null)
+                        return false;
+                }
+
+                // маппим в Domain
+                var token = UserTokenMapper.MapToDomain(tokenData);
+
+                if (!token.IsActive)
+                    return false;
 
                 token.RevokedAt = DateTime.UtcNow;
-                await _userTokenRepository.UpdateAsync(token);
+
+                // обратно в Data и сохраняем
+                var updatedData = UserTokenMapper.MapToData(token);
+                await _userTokenRepository.UpdateAsync(updatedData);
+
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error revoking refresh token.");
-                throw new Exception("An error occurred while revoking the refresh token.");
+                throw;
             }
         }
+
+
+
+
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {

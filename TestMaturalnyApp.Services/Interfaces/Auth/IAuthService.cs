@@ -44,7 +44,7 @@ namespace TestMaturalnyApp.Services.Interfaces.Auth
 
         Task SaveRefreshTokenAsync(int userId, string refreshToken, string? ip = null);
         Task<TokenApiResponseDto?> RefreshTokensAsync(string accessToken, string refreshToken);
-        Task<bool> RevokeRefreshTokenAsync(string accessToken);
+        Task<bool> RevokeRefreshTokenAsync(string accessToken , string? refreshToken);
 
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
         Task<string?> GeneratePasswordResetTokenAsync(string email);

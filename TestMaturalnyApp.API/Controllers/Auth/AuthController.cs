@@ -4,6 +4,7 @@ using TestMaturalnyApp.Services.Interfaces;
 using TestMaturalnyApp.Services.Interfaces.Auth;
 using TestMaturalnyApp.Domain.Entities.DTOs.Auth;
 using TestMaturalnyApp.Services.Mapping.Dto.Auth;
+using TestMaturalnyApp.API.Controllers.Admin;
 
 namespace TestMaturalnyApp.API.Controllers.Auth
 {
@@ -14,15 +15,18 @@ namespace TestMaturalnyApp.API.Controllers.Auth
         private readonly IUserService _userService;
         private readonly IUserTokenService _userTokenService;
         private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
         public AuthController(
             IUserService userService,
             IUserTokenService userTokenService,
-            IAuthService authService)
+            IAuthService authService,
+            ILogger<AuthController> logger)
         {
             _userService = userService;
             _userTokenService = userTokenService;
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("register")]  // Вариант с DTO
@@ -103,13 +107,61 @@ namespace TestMaturalnyApp.API.Controllers.Auth
 
 
 
+        //[HttpPost("logout")]
+        //[Authorize]
+        //public async Task<IActionResult> Logout([FromBody] LogoutRequestDto request)
+        //{
+        //    var result = await _authService.RevokeRefreshTokenAsync(request.AccessToken);
+        //    return result ? Ok("Logged out") : BadRequest("Logout failed");
+        //}
+
+        /// <summary>
+        /// Логаут — отзыв refreshToken по accessToken (переданному в теле).
+        /// </summary>
+        /// 
         [HttpPost("logout")]
-        [Authorize]
         public async Task<IActionResult> Logout([FromBody] LogoutRequestDto request)
         {
-            var result = await _authService.RevokeRefreshTokenAsync(request.AccessToken);
-            return result ? Ok("Logged out") : BadRequest("Logout failed");
+            if (string.IsNullOrEmpty(request.AccessToken))
+                return BadRequest("Access token is required.");
+
+            try
+            {
+                var result = await _authService.RevokeRefreshTokenAsync(
+                    request.AccessToken,
+                    request.RefreshToken
+                );
+
+                if (!result)
+                {
+                    _logger.LogWarning(
+                        "Logout failed for AccessToken: {AccessToken}, RefreshToken: {RefreshToken}",
+                        request.AccessToken,
+                        request.RefreshToken
+                    );
+                    return BadRequest("Failed to revoke token (maybe already revoked or invalid).");
+                }
+
+                _logger.LogInformation(
+                    "User successfully logged out. AccessToken: {AccessToken}, RefreshToken: {RefreshToken}",
+                    request.AccessToken,
+                    request.RefreshToken
+                );
+
+                return Ok(new { message = "Logout successful." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Unexpected error while logging out. AccessToken: {AccessToken}, RefreshToken: {RefreshToken}",
+                    request.AccessToken,
+                    request.RefreshToken
+                );
+                return StatusCode(500, "An error occurred while processing logout.");
+            }
         }
+
+
 
         [HttpPost("refresh")]
         [AllowAnonymous]
@@ -139,16 +191,41 @@ namespace TestMaturalnyApp.API.Controllers.Auth
 
 
 
+        //[HttpPost("forgot-password")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        //{
+        //    var token = await _authService.GeneratePasswordResetTokenAsync(dto.Email);
+        //    if (token == null)
+        //        return NotFound("User not found");
+
+        //    // Отправить email или вернуть токен в ответ (если email не реализован)
+        //    return Ok(new { token });
+        //}
+
+        //[HttpPost("reset-password")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
+        //{
+        //    var success = await _authService.ResetPasswordAsync(dto.Token, dto.NewPassword);
+        //    return success ? Ok("Password has been reset") : BadRequest("Invalid or expired token");
+        //}
+
+        // Иммитаци отправки пока email не реализован
         [HttpPost("forgot-password")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
         {
             var token = await _authService.GeneratePasswordResetTokenAsync(dto.Email);
             if (token == null)
-                return NotFound("User not found");
+                return NotFound(new { success = false, message = "User not found" });
 
-            // Отправить email или вернуть токен в ответ (если email не реализован)
-            return Ok(new { token });
+            // Эмуляция: вместо отправки email — сразу возвращаем токен в ответе
+            return Ok(new
+            {
+                success = true,
+                resetToken = token
+            });
         }
 
         [HttpPost("reset-password")]
@@ -156,8 +233,12 @@ namespace TestMaturalnyApp.API.Controllers.Auth
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
         {
             var success = await _authService.ResetPasswordAsync(dto.Token, dto.NewPassword);
-            return success ? Ok("Password has been reset") : BadRequest("Invalid or expired token");
+
+            return success
+                ? Ok(new { success = true, message = "Password has been reset" })
+                : BadRequest(new { success = false, message = "Invalid or expired token" });
         }
+
     }
 }
 
