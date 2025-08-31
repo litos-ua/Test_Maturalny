@@ -197,7 +197,19 @@
 // }
 
 
-import { Box, Button, Checkbox, FormControlLabel, TextField, Paper, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { 
+  Box, 
+  Button, 
+  Checkbox, 
+  FormControlLabel, 
+  TextField, 
+  Paper, 
+  Typography, 
+  InputAdornment, 
+  IconButton,
+  useTheme, 
+  useMediaQuery 
+} from "@mui/material";
 import { useFormik } from "formik";
 import { registerSchema } from "./registerSchema";
 import { authService } from "../../../services";
@@ -208,6 +220,7 @@ import { useState } from "react";
 import type { RegisterUserDto } from "../../../types";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTE } from "../../../router";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export function RegisterPage() {
   const [submitError, setSubmitError] = useState("");
@@ -216,6 +229,8 @@ export function RegisterPage() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -252,6 +267,14 @@ export function RegisterPage() {
       }
     },
   });
+
+  const toggleNewPassword = () => {
+    setShowNewPassword(prev => !prev);
+  };
+
+  const toggleConfirmPassword = () => {
+    setShowConfirmPassword(prev => !prev);
+  };
 
   return (
     <Box sx={{
@@ -379,7 +402,7 @@ export function RegisterPage() {
               fullWidth
               label="Пароль"
               name="password"   
-              type="password"
+              type={showNewPassword ? "text" : "password"}
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
@@ -392,13 +415,28 @@ export function RegisterPage() {
                 },
               }}
               size={isMobile ? "small" : "medium"}
+              slotProps={{
+                input: {    
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleNewPassword}
+                        edge="end"
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                    ),
+                  },
+              }}             
             />
 
             <TextField
               fullWidth
               label="Підтвердження пароля"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"} 
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
@@ -411,6 +449,21 @@ export function RegisterPage() {
                 },
               }}
               size={isMobile ? "small" : "medium"}
+              slotProps={{
+                input: {    
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                    ),
+                  },
+              }}
             />
 
             <TextField

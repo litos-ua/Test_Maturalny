@@ -302,7 +302,7 @@
 // }
 
 
-import { Box, Button, TextField, Typography, useTheme, useMediaQuery, Paper } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme, useMediaQuery, Paper, InputAdornment, IconButton } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useState, useEffect } from "react";
@@ -311,6 +311,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import * as styles from "../authStyles";
 import { ROUTE } from "../../../router";
 import { storage } from "../../../utils";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const resetPasswordSchema = yup.object({
   newPassword: yup
@@ -323,6 +324,7 @@ const resetPasswordSchema = yup.object({
     .required("Підтвердження пароля є обов'язковим"),
 });
 
+
 export function ResetPasswordPage() {
   const { token } = useParams<{ token: string }>();
   const [isLoading, setIsLoading] = useState(false);
@@ -332,6 +334,8 @@ export function ResetPasswordPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
   // Получаем и очищаем email при загрузке
@@ -374,6 +378,14 @@ export function ResetPasswordPage() {
       }
     },
   });
+
+  const toggleNewPassword = () => {
+    setShowNewPassword(prev => !prev);
+  };
+
+  const toggleConfirmPassword = () => {
+    setShowConfirmPassword(prev => !prev);
+  };
 
   return (
     <Box
@@ -507,7 +519,7 @@ export function ResetPasswordPage() {
                 fullWidth
                 label="Новий пароль"
                 name="newPassword"
-                type="password"
+                type={showNewPassword ? "text" : "password"}
                 value={formik.values.newPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -521,6 +533,21 @@ export function ResetPasswordPage() {
                   },
                 }}
                 size={isMobile ? "small" : "medium"}
+                slotProps={{
+                  input: {    
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={toggleNewPassword}
+                          edge="end"
+                        >
+                          {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                      ),
+                    },
+                }}
                 disabled={isLoading}
               />
 
@@ -528,7 +555,7 @@ export function ResetPasswordPage() {
                 fullWidth
                 label="Підтвердження пароля"
                 name="confirmNewPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"} 
                 value={formik.values.confirmNewPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -542,6 +569,21 @@ export function ResetPasswordPage() {
                   },
                 }}
                 size={isMobile ? "small" : "medium"}
+                slotProps={{
+                input: {    
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                    ),
+                  },
+                }}
                 disabled={isLoading}
               />
 
