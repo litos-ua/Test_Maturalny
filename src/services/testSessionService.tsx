@@ -27,7 +27,7 @@ export const testSessionService = {
     }[]
   ): Promise<TestEvaluationResultDto> {
     const dto: CompleteTestSessionRequest = {
-      reason: 0, // CompletedByUser
+      reason: 0, 
       answers: userAnswers,
     };
 

@@ -3,11 +3,11 @@ import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context";
 import { Spinner } from "../Spinner";
-import { UserRoles, type UserRole } from "../../types"; // Импортируем ваши типы ролей
+import { UserRoles, type UserRole } from "../../types"; 
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  requiredRole?: UserRole; // Добавляем опциональную проверку роли
+  requiredRole?: UserRole; 
 }
 
 export const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
@@ -52,9 +52,8 @@ export const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) 
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Новая проверка роли (добавлена после проверки аутентификации)
+  // проверка роли (добавлена после проверки аутентификации)
   if (requiredRole && user?.role) {
-  // Проверяем, что role валидна
   const userRole = user.role as keyof typeof UserRoles;
   
   if (UserRoles[userRole] < UserRoles[requiredRole]) {

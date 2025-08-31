@@ -1,4 +1,3 @@
-// HeroSection.styles.tsx
 import type { SxProps, Theme } from "@mui/material";
 
 export const heroSectionSx: SxProps<Theme> = {

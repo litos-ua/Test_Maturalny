@@ -44,44 +44,6 @@ export function QuestionDoubleChoice({ question, savedAnswer, onAnswer }: Props)
     }
   };
 
-//   return (
-//     <Grid container spacing={2}>
-//       <Grid size = {{xs:12}}>
-//         <Typography variant="h6">{question.text}</Typography>
-//       </Grid>
-
-//       <Grid size = {{xs:12, sm:6}}>
-//         <TextField
-//           label="Відповідь 1"
-//           type="number"
-//           value={inputs[0]}
-//           error={errors[0]}
-//           helperText={errors[0] ? "Введіть коректне число" : ""}
-//           onChange={(e) => handleChange(0, e.target.value)}
-//           fullWidth
-//           inputProps={{
-//             step: "any" // Разрешаем десятичные числа
-//           }}
-//         />
-//       </Grid>
-
-//       <Grid size = {{xs:12, sm:6}}>
-//         <TextField
-//           label="Відповідь 2"
-//           type="number"
-//           value={inputs[1]}
-//           error={errors[1]}
-//           helperText={errors[1] ? "Введіть коректне число" : ""}
-//           onChange={(e) => handleChange(1, e.target.value)}
-//           fullWidth
-//           inputProps={{
-//             step: "any"
-//           }}
-//         />
-//       </Grid>
-//     </Grid>
-//   );
-
  // Добавляем масштабируемость
     return (
     <Grid container spacing={2}>

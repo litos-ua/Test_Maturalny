@@ -1,5 +1,3 @@
-
-
 import React, { Component } from "react";
 import type { ReactNode } from 'react';
 import { Button, Typography, Box } from "@mui/material";

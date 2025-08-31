@@ -97,21 +97,10 @@ async logout(): Promise<void> {
   /**
    * Forgot password – прямой вызов, токен не нужен
    */
-  // async forgotPassword(email: string): Promise<void> {
-  //   try {
-  //     const dto: ForgotPasswordRequestDto = { email };
-  //     await post("/auth/forgot-password", dto);
-  //   } catch (error) {
-  //     console.error("❌ Forgot password error:", error);
-  //     throw error;
-  //   }
-  // },
-
-  // Измените тип возвращаемого значения
   async forgotPassword(email: string): Promise<{ success: boolean; resetToken?: string; message?: string }> {
     try {
       const dto: ForgotPasswordRequestDto = { email };
-      return await post("/auth/forgot-password", dto); // Добавьте return
+      return await post("/auth/forgot-password", dto); 
     } catch (error) {
       console.error("❌ Forgot password error:", error);
       throw error;

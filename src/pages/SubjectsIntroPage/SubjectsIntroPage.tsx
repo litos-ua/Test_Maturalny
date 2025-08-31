@@ -1,5 +1,4 @@
 // Механизм сдвига карт перенесли в карусель
-// pages/SubjectsPage.tsx
 import { Container, useTheme } from "@mui/material";
 import { SubjectsCarousel } from "../../components";
 import { subjects } from "../../constants";
