@@ -197,7 +197,7 @@
 // }
 
 
-import { Box, Button, Checkbox, FormControlLabel, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, TextField, Paper, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
 import { registerSchema } from "./registerSchema";
 import { authService } from "../../../services";
@@ -206,12 +206,14 @@ import { TeacherImages } from "../../../constants";
 import * as styles from "../authStyles";
 import { useState } from "react";
 import type { RegisterUserDto } from "../../../types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ROUTE } from "../../../router";
 
 export function RegisterPage() {
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -244,6 +246,7 @@ export function RegisterPage() {
         await authService.register(dto);
         setSubmitSuccess("Реєстрація успішна. Тепер ви можете увійти.");
         formik.resetForm();
+        navigate(ROUTE.HOME);
       } catch (err: any) {
         setSubmitError(err.message || "Помилка реєстрації.");
       }
@@ -253,18 +256,18 @@ export function RegisterPage() {
   return (
     <Box sx={{
       ...styles.pageContainer,
-      display: 'flex', // ← ДОБАВИТЬ ЭТО
-      flexDirection: { xs: 'column', md: 'row' }, // ← И ЭТО
+      display: 'flex', 
+      flexDirection: { xs: 'column', md: 'row' }, 
       minHeight: '100vh',
       py: '5vh',
       backgroundColor: (theme) => theme.palette.primary.light,
     }}>
       {/* Левая часть с изображением и заголовком */}
       <Box sx={{
-        width: { xs: '100%', md: '50%' }, // ← ДОБАВИТЬ ШИРИНУ
-        pt: { xs: "5vh", md: "12vh" },
+        width: { xs: '100%', md: '50%' }, 
+        pt: { xs: "1vh", md: "2vh" },
         pl: { xs: "5vw", md: "10vw" },
-        pr: { xs: "5vw", md: 0 }, // ← ДОБАВИТЬ ПРАВЫЙ PADDING ДЛЯ МОБИЛЬНЫХ
+        pr: { xs: "5vw", md: 0 }, // ДЛЯ МОБИЛЬНЫХ
         textAlign: { xs: "center", md: "left" }
       }}>
         <Typography sx={{ 
@@ -291,20 +294,30 @@ export function RegisterPage() {
       {/* Правая форма */}
       <Box sx={{
         ...styles.formWrapper,
-        width: { xs: '100%', md: '50%' }, // ← ДОБАВИТЬ ШИРИНУ
+        width: { xs: '100%', md: '50%' }, 
         display: 'flex',
         alignItems: 'center',
         backgroundColor: (theme) => theme.palette.primary.light,
         justifyContent: 'center',
-        py: { xs: 4, md: 0 } // ← ДОБАВИТЬ PADDING ДЛЯ МОБИЛЬНЫХ
+        py: { xs: 4, md: 0 } 
       }}>
-        <Box sx={{
-          ...(typeof styles.formContainer === 'function' ? styles.formContainer(theme) : styles.formContainer),
-          width: { xs: "90%", sm: "80%", md: "90%" }, // ← ИЗМЕНИТЬ ШИРИНУ
-          maxWidth: { xs: "400px", md: "none" }, // ← МАКСИМАЛЬНАЯ ШИРИНА ДЛЯ МОБИЛЬНЫХ
-          p: { xs: 3, sm: 4 },
-          mx: "auto"
-        }}>
+        <Paper
+          elevation={8}
+          sx={{
+            ...styles.formContainer,
+            width: "100%",
+            maxWidth: { xs: "400px", md: "450px" },
+            p: { xs: 3, sm: 4, md: 5 },
+            mx: "auto",
+            borderRadius: 3,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            // bgcolor: theme.palette.mode === "light" // ← ФОН ВНУТРИ ФОРМЫ
+            //     ? "rgba(255,255,255,0.9)"
+            //     : "rgba(30,30,30,0.9)",
+            bgcolor: (theme) => theme.palette.primary.main // ← ФОН ВНУТРИ ФОРМЫ
+          }}
+        >
           <Typography variant="h5" sx={{
             ...styles.formTitle,
             fontSize: { xs: "1.5rem", md: "1.75rem" },
@@ -333,7 +346,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -346,7 +365,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -359,7 +384,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -372,7 +403,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
               helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -384,7 +421,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.fullname && Boolean(formik.errors.fullname)}
               helperText={formik.touched.fullname && formik.errors.fullname}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -396,7 +439,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.address && Boolean(formik.errors.address)}
               helperText={formik.touched.address && formik.errors.address}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -408,7 +457,13 @@ export function RegisterPage() {
               onChange={formik.handleChange}
               error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
               helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
-              sx={styles.inputField}
+              sx={{
+                ...styles.inputField,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
               size={isMobile ? "small" : "medium"}
             />
 
@@ -471,13 +526,22 @@ export function RegisterPage() {
             <Box sx={{ mt: 2, textAlign: "center" }}>
               <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "0.9rem" } }}>
                 Вже маєте акаунт?{" "}
-                <Link to="/login" style={{ color: "#1976d2" }}>
+                <Link to={ROUTE.LOGIN} style={{ color: "#1976d2" }}>
                   Увійти
                 </Link>
               </Typography>
+              
+              <Box sx={{ 
+                mt: 1, 
+                textAlign: "center"
+              }}>
+                <Link to={ROUTE.HOME} style={{ color: "#1976d2" }}>
+                  На Головну
+                </Link>
+              </Box>
             </Box>
           </form>
-        </Box>
+        </Paper>
       </Box>
     </Box>
   );

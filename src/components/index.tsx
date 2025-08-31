@@ -11,3 +11,4 @@ export * from './Auth/ProtectedRoute';
 export * from './Spinner';
 export * from './SubjectCard';
 export * from './SubjectCarousel';
+export * from './Layout/AppWithoutLayout';

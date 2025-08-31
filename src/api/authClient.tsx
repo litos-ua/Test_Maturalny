@@ -69,7 +69,7 @@ export const get = async <T = any>(
   config: {
     params?: Record<string, any>;
     headers?: Record<string, string>;
-  } = {} // Инициализатор перенесён сюда
+  } = {} 
 ): Promise<T> => {
   const token = tokenService.getAccessToken();
   

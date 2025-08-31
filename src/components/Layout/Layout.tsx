@@ -7,7 +7,7 @@ interface LayoutProps {
   onToggleTheme: () => void;
 }
 
-export default function Layout({ onToggleTheme }: LayoutProps) {
+export function Layout({ onToggleTheme }: LayoutProps) {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh"  >
       <Header onToggleTheme={onToggleTheme} />
@@ -26,4 +26,5 @@ export default function Layout({ onToggleTheme }: LayoutProps) {
     </Box>
   );
 }
+export default Layout;
 

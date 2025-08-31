@@ -45,17 +45,24 @@ export const authService = {
   },
 
   /**
-   * Logout – токен передаётся через Authorization header
+   * Logout – refresh, accsess токен передаётся в теле запроса
    */
-  async logout(): Promise<void> {
-    try {
-      await post("/auth/logout", {}); // тело пустое, токен в заголовке
-      tokenService.clearTokens();
-    } catch (error) {
-      console.error("❌ Logout error:", error);
-      throw error;
-    }
-  },
+async logout(): Promise<void> {
+  try {
+    const access = tokenService.getAccessToken();
+    const refresh = tokenService.getRefreshToken();
+
+    await post("/auth/logout", {
+      accessToken: access,
+      refreshToken: refresh
+    });
+
+    tokenService.clearTokens();
+  } catch (error) {
+    console.error("❌ Logout error:", error);
+    throw error;
+  }
+},
 
   /**
    * Refresh – передаём refreshToken и accessToken в теле, но также нужен Authorization header
@@ -90,10 +97,21 @@ export const authService = {
   /**
    * Forgot password – прямой вызов, токен не нужен
    */
-  async forgotPassword(email: string): Promise<void> {
+  // async forgotPassword(email: string): Promise<void> {
+  //   try {
+  //     const dto: ForgotPasswordRequestDto = { email };
+  //     await post("/auth/forgot-password", dto);
+  //   } catch (error) {
+  //     console.error("❌ Forgot password error:", error);
+  //     throw error;
+  //   }
+  // },
+
+  // Измените тип возвращаемого значения
+  async forgotPassword(email: string): Promise<{ success: boolean; resetToken?: string; message?: string }> {
     try {
       const dto: ForgotPasswordRequestDto = { email };
-      await post("/auth/forgot-password", dto);
+      return await post("/auth/forgot-password", dto); // Добавьте return
     } catch (error) {
       console.error("❌ Forgot password error:", error);
       throw error;
@@ -112,4 +130,15 @@ export const authService = {
       throw error;
     }
   },
+
+  async resetPasswordRequest(email: string): Promise<{ success: boolean; resetToken?: string }> {
+  try {
+    const dto = { email };
+    return await post("/auth/reset-password-request", dto);
+  } catch (error) {
+    console.error("❌ Reset password request error:", error);
+    throw error;
+  }
+}
+
 };
