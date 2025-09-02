@@ -7,20 +7,24 @@
 
 import { Box, Typography, Grid, Paper, Stack, Button,Chip, useTheme, alpha } from "@mui/material"; //, useMediaQuery
 import HeroSection from "../../components/HeroSection/HeroSection";
-import {RotatingImage} from "../../components/RotatingImage";
+import {RotatingImages} from "../../components/RotatingImages";
 import SchoolIcon from "@mui/icons-material/School";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import QuizIcon from "@mui/icons-material/Quiz";
 import { TypographyDualAnimator} from "../../components/TypographyDualAnimator";
 import {floatingLabelStyle} from "./floatingLabelHomeStyle";
 import { useAuth } from "../../context";
+import { defaultImages } from "../../constants/images";
+import { useNavigate } from "react-router-dom";
+import { ROUTE } from "../../router";
+
 
 export function HomePage() {
   const theme = useTheme();
-  // const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
   const { authUser, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   console.log("🔎 isAuthenticated (Home):", isAuthenticated, authUser?.role);
-  //console.log("🔎 user(Home):", authUser);
+ 
   return (
     <>
       <HeroSection />
@@ -28,8 +32,8 @@ export function HomePage() {
         mt={6} 
         px={{ xs: 2, md: 6 }}
         sx={{
-          backgroundColor: theme.palette.primary.main, // синий из темы
-          color: theme.palette.getContrastText(theme.palette.primary.main), // авто контрастный текст
+          backgroundColor: theme.palette.primary.main, 
+          color: theme.palette.getContrastText(theme.palette.primary.main), 
           py: { xs: 1, md: 2 },
           px: { xs: 1, md: 2 },
           textAlign: "center",
@@ -91,8 +95,8 @@ export function HomePage() {
                 },
                 fontWeight: 700,
                 textAlign: { xs: 'center', md: 'left' },
-                mb: { xs: 3, md: 4, lg: 8, xl: 10 }, // ← добавляем отступ снизу
-                ml: { xs: 1, md: 2, lg: 6, xl: 8 } // ← добавляем отступ слева
+                mb: { xs: 3, md: 4, lg: 8, xl: 10 }, 
+                ml: { xs: 1, md: 2, lg: 6, xl: 8 } 
 
               }}
             />
@@ -123,6 +127,7 @@ export function HomePage() {
                   variant="contained"
                   color="secondary"
                   size="large"
+                  onClick={() => navigate(ROUTE.REGISTRATION)}
                   sx={{ 
                     textTransform: "none",
                     fontSize: { xs: '0.9rem', sm: '1rem' },
@@ -137,24 +142,32 @@ export function HomePage() {
 
           {/* Правая часть */}
           <Grid size = {{xs:12, md: 6}} sx={{ textAlign: "center", position: "relative" }}>
-            <RotatingImage />  {/*  сменяющиеся картинки*/}
+            {/*  сменяющиеся картинки*/}
+            {/* <RotatingImage />   */}
+            <RotatingImages           
+              images={defaultImages}
+              switchInterval={8000}
+              height={{ xs: 200, sm: 300, md: 400, lg: 450 }}
+              objectFit="contain"
+              borderRadius={2}
+            />
             {/* Ярлыки (плавающие) */}
             <Box sx={{ position: "absolute", top: 40, right: { xs: 4, sm: 8, md: 10, lg: 12, xl: 16 } }}>
               <Stack spacing={1}>
                 <Chip
                   icon={<SchoolIcon />}
                   label="Відеоуроки"
-                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.videoLabel) })} //bgcolor: "#CBB7FF"
+                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.videoLabel) })} 
                 />
                 <Chip
                   icon={<RecordVoiceOverIcon />} 
                   label="Подкасти"
-                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.podcastLabel) })} //bgcolor: "#B0E0FF"
+                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.podcastLabel) })} 
                 />
                 <Chip
                   icon={<QuizIcon />}
                   label="Запитання"      
-                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.quizLabel) })} //bgcolor: "#FFD580"
+                  sx={(theme) => ({...floatingLabelStyle(theme, theme.palette.custom.quizLabel) })} 
                 />
               </Stack>
             </Box>

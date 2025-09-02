@@ -15,7 +15,7 @@ import {
 import { useFormik } from "formik";
 import { registerSchema } from "./registerSchema";
 import { authService } from "../../../services";
-import { RotatingImage } from "../../../components";
+import { RotatingImages } from "../../../components";
 import { TeacherImages } from "../../../constants";
 import * as styles from "../authStyles";
 import { useState } from "react";
@@ -109,10 +109,19 @@ export function RegisterPage() {
         </Typography>
 
         <Box sx={{
-          ...styles.imageContainer,
-          display: { xs: "none", md: "flex" }
+          width: '100%',
+          height: { xs: 300, md: 400, lg: 450 },
+          display: { xs: 'none', md: 'block' }, // Только меняем отображение, не flex
+          mt: { md: 2 }
         }}>
-          <RotatingImage images={TeacherImages}/>
+          <RotatingImages 
+            images={TeacherImages}
+            switchInterval={8000}
+            height={{ xs: 200, sm: 300, md: 400, lg: 450 }}
+            width= "100%"
+            objectFit="contain"
+            borderRadius={2}
+          />
         </Box>
       </Box>      
         

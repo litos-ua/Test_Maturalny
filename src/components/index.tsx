@@ -3,7 +3,7 @@ export * from './Header';
 export * from './Layout';
 export * from './HeroSection';
 export * from './InputForm';
-export * from './RotatingImage';
+export * from './RotatingImages';
 export * from './TestMenu';
 export * from './TypographyAnimator';
 export * from './TypographyDualAnimator';
