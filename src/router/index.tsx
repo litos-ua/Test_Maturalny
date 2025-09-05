@@ -20,6 +20,7 @@ import {
   ProfileResultsSession,
   SubjectsIntroPage,
   AdminPage,
+  MessagesPage,
 } from "../pages";
 import { App } from "../App";
 
@@ -32,6 +33,7 @@ export const ROUTE = {
   FORGOTPASSWORD: "/forgot-password",
   LOGIN: "/login",
   LOGOUT: "/logout",
+  MESSAGES: "/messages",
   PROFILEMAIN: "/profile",
   PROFILESETTINGS: "/profile-settings",
   PROFILERESULTS: "/profile-results",
@@ -62,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTE.CONTACTS,
         element: (<ErrorBoundary> <ContactsPage /> </ErrorBoundary> ),
+      },
+      {
+        path: ROUTE.MESSAGES,
+        element: (<ErrorBoundary> <MessagesPage /> </ErrorBoundary> ),
       },
       {
         path: ROUTE.PROFILEMAIN,

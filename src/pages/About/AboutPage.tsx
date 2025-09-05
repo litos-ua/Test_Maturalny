@@ -17,7 +17,7 @@ import { AboutImages, text } from '../../constants';
 import { subjects } from "../../constants"
 import { fetchDisciplines } from "../../api"; 
 import { Close as CloseIcon } from "@mui/icons-material";
-import {modalStyles} from './AboutPageStyles';
+import { modalStyles } from './AboutPageStyles';
 
 
 export function AboutPage() {

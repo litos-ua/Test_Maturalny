@@ -14,7 +14,6 @@ import {
   Divider,
   Drawer,
   List,
-  ListItemButton,
   ListItemText,
 } from "@mui/material";
 import {
@@ -28,6 +27,7 @@ import {
   AppRegistration,
   AdminPanelSettings,
   Menu as MenuIcon,
+  Mail,
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import { TestMenu } from "../TestMenu";
@@ -162,14 +162,17 @@ export default function Header({ onToggleTheme }: Props) {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
+                  <MenuItem component={RouterLink} to={ROUTE.PROFILEMAIN} onClick={handleMenuClose}>
                     <Person sx={{ mr: 1 }} /> Профіль
                   </MenuItem>
-                  <MenuItem component={RouterLink} to="/profile-results" onClick={handleMenuClose}>
+                  <MenuItem component={RouterLink} to={ROUTE.PROFILERESULTS} onClick={handleMenuClose}>
                     <Assessment sx={{ mr: 1 }} /> Сесії користувача
                   </MenuItem>
-                  <MenuItem component={RouterLink} to="/profile-settings" onClick={handleMenuClose}>
+                  <MenuItem component={RouterLink} to={ROUTE.PROFILERESULTS} onClick={handleMenuClose}>
                     <Settings sx={{ mr: 1 }} /> Налаштування
+                  </MenuItem>
+                  <MenuItem component={RouterLink} to={ROUTE.MESSAGES} onClick={handleMenuClose}>
+                    <Mail sx={{ mr: 1 }} /> Повідомлення
                   </MenuItem>
                   <Divider />
                   <MenuItem onClick={handleLogout}>

@@ -8,3 +8,4 @@ export * from './discipline';
 export * from './topic';
 export * from  './question';
 export * from '../types/subject_intro';
+export * from './messages';
