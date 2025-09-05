@@ -10,8 +10,6 @@ namespace TestMaturalnyApp.Data.Interfaces
 
         Task<UserToken?> GetByTokenAsync(string token);
 
-        //Task<UserToken?> GetLatestByEmailAsync(string email);  // повтор
-
         Task<IEnumerable<UserToken>> GetByUserIdAsync(int userId);
 
         Task<UserToken> CreateAsync(UserToken token);

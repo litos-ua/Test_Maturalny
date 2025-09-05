@@ -50,13 +50,13 @@ namespace TestMaturalnyApp.Data.Repositories
 
                 var query = _context.Users.AsQueryable();
 
-                // 🔍 Фильтрация (если есть filterJson)
+                // Фильтрация (если есть filterJson)
                 if (!string.IsNullOrEmpty(filterJson))
                 {
-                    // Здесь можно распарсить filterJson в ключ-значение и наложить Where()
+                    // Для Where() доделать
                 }
 
-                // 📌 Сортировка
+                // Сортировка
                 if (!string.IsNullOrEmpty(sortBy))
                 {
                     if (sortOrder?.ToLower() == "desc")
@@ -66,7 +66,7 @@ namespace TestMaturalnyApp.Data.Repositories
                 }
                 else
                 {
-                    query = query.OrderBy(e => e.Id); // сортировка по умолчанию
+                    query = query.OrderBy(e => e.Id); 
                 }
 
                 var totalCount = await query.CountAsync();

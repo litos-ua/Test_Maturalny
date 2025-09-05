@@ -35,60 +35,6 @@ namespace TestMaturalnyApp.Data.Repositories
 
         // Для админ
 
-        //public async Task<PagedResult<Topic>> GetPagedAsync(
-        //    int pageNumber, 
-        //    int pageSize, 
-        //    string? sortField, 
-        //    string? sortOrder,
-        //    string? filter
-        //    )
-        //{
-        //    try
-        //    {
-        //        Console.WriteLine($"[DEBUG] sortField={sortField}, sortOrder={sortOrder}");
-
-        //        var query = _context.Topics.AsQueryable();
-
-        //        // Сортировка
-        //        if (!string.IsNullOrEmpty(sortField))
-        //        {
-        //            bool descending = string.Equals(sortOrder, "DESC", StringComparison.OrdinalIgnoreCase);
-
-        //            // Проверка существования свойства
-        //            if (typeof(Topic).GetProperty(sortField) == null)
-        //                throw new ArgumentException($"Свойство {sortField} не найдено в Topic");
-
-        //            query = descending
-        //                ? query.OrderByDescending(e => EF.Property<object>(e, sortField))
-        //                : query.OrderBy(e => EF.Property<object>(e, sortField));
-        //        }
-        //        else
-        //        {
-        //            query = query.OrderBy(t => t.Id);
-        //        }
-
-        //        var totalCount = await query.CountAsync();
-
-        //        var items = await query
-        //            .Skip((pageNumber - 1) * pageSize)
-        //            .Take(pageSize)
-        //            .ToListAsync();
-
-        //        return new PagedResult<Topic>
-        //        {
-        //            Items = items,
-        //            TotalCount = totalCount,
-        //            PageNumber = pageNumber,
-        //            PageSize = pageSize
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"[ERROR] {ex}");
-        //        throw;
-        //    }
-        //}
-
         public async Task<PagedResult<Topic>> GetPagedAsync(
             int pageNumber,
             int pageSize,
@@ -196,10 +142,6 @@ namespace TestMaturalnyApp.Data.Repositories
         {
             try
             {
-                //_context.Topics.Update(topic);
-                //await _context.SaveChangesAsync();
-                //return topic;
-
                 var existing = await _context.Topics.FirstOrDefaultAsync(t => t.Id == topic.Id);
                 if (existing == null)
                     throw new KeyNotFoundException($"Topic with id {topic.Id} not found");

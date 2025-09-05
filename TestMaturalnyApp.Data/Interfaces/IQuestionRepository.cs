@@ -4,10 +4,8 @@ namespace TestMaturalnyApp.Data.Interfaces
 {
     public interface IQuestionRepository
     {
-        // Получить все вопросы
         Task<IEnumerable<Question>> GetAllAsync();
 
-        // Получить вопрос по Id
         Task<Question?> GetByIdAsync(int id);
 
         // Получить вопрос с опциями по Id
@@ -21,13 +19,10 @@ namespace TestMaturalnyApp.Data.Interfaces
         // Получить все вопросы по теме
         Task<IEnumerable<Question>> GetByTopicIdAsync(int topicId);
 
-        // Создать новый вопрос
         Task<Question> CreateAsync(Question question);
 
-        // Обновить существующий вопрос
         Task<Question?> UpdateAsync(Question question);
 
-        // Удалить вопрос по Id
         Task<bool> DeleteAsync(int id);
 
         // Получить случайные вопросы по теме

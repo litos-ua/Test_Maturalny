@@ -1,6 +1,4 @@
-﻿
-
-namespace TestMaturalnyApp.Domain.Entities.DTOs.Update
+﻿namespace TestMaturalnyApp.Domain.Entities.DTOs.Update
 {
     public class UpdateUserOptionDto
     {

@@ -21,10 +21,8 @@ namespace TestMaturalnyApp.Data.Entities
         [ForeignKey(nameof(AnswerOptionId))]
         public AnswerOption AnswerOption { get; set; } = null!;
 
-        // 💡 Новый столбец — сохранение позиции (для Matching)
         public int? MatchIndex { get; set; }
 
-        // 💡 Новый столбец — сохранение текста выбора (например, "А", "B", ...)
         [MaxLength(50)]
         public string? MatchLabel { get; set; }
 

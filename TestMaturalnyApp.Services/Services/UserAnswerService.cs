@@ -9,9 +9,6 @@ using TestMaturalnyApp.Domain.Entities.DTOs.Create;
 using TestMaturalnyApp.Domain.Entities.DTOs.Update;
 using TestMaturalnyApp.Services.Mapping.Dto.Create;
 using TestMaturalnyApp.Services.Mapping.Dto.Update;
-using TestMaturalnyApp.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
-using TestMaturalnyApp.Data;
 using System.Text.Json;
 
 namespace TestMaturalnyApp.Services.Services

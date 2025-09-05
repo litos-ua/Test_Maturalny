@@ -1,6 +1,4 @@
-﻿using TestMaturalnyApp.Domain.Entities.Enums;
-
-namespace TestMaturalnyApp.Domain.Entities.DTOs
+﻿namespace TestMaturalnyApp.Domain.Entities.DTOs
 
 { 
     public class DisciplineDto

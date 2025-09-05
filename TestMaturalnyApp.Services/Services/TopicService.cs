@@ -30,18 +30,6 @@ namespace TestMaturalnyApp.Services.Services
             return dataEntities.Select(TopicMapper.MapToDomain);
         }
 
-        //public async Task<PagedResult<Topic>> GetPagedAsync(int pageNumber, int pageSize, string? sortField, string? sortOrder)
-        //{
-        //    var pagedData = await _topicAdminRepository.GetPagedAsync(pageNumber, pageSize, sortField, sortOrder);
-
-        //    return new PagedResult<Topic>
-        //    {
-        //        Items = pagedData.Items.Select(TopicMapper.MapToDomain).ToList(),
-        //        TotalCount = pagedData.TotalCount,
-        //        PageNumber = pagedData.PageNumber,
-        //        PageSize = pagedData.PageSize
-        //    };
-        //}
 
         public async Task<PagedResult<TopicDto>> GetPagedAsync(
                     int pageNumber, 

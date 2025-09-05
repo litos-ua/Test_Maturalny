@@ -13,7 +13,6 @@ namespace TestMaturalnyApp.API.Extensions
             {
                 var response = context.HttpContext.Response;
 
-                // Пропускаем успешные статусы
                 if (response.StatusCode < 400) return;
 
                 response.ContentType = "application/json";

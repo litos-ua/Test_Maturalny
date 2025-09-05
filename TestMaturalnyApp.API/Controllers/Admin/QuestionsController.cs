@@ -27,87 +27,6 @@ namespace TestMaturalnyApp.API.Controllers.Admin
         // GET /api/admin/questions?_page=1&_perPage=10&_sort=text&_order=ASC&filter={"q":"term"}
 
 
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetPaged(
-        //    [FromQuery(Name = "_page")] int? ra_page,
-        //    [FromQuery(Name = "_perPage")] int? ra_perPage,
-        //    [FromQuery(Name = "page")] int? page,
-        //    [FromQuery(Name = "perPage")] int? perPage,
-        //    [FromQuery(Name = "_sort")] string? sortBy,
-        //    [FromQuery(Name = "_order")] string? sortOrder,
-        //    [FromQuery(Name = "id")] string? ids,   // 👇 принимаем строкой
-        //    [FromQuery(Name = "filter")] string? filterJson)
-        //{
-        //    try
-        //    {
-        //        int pageNumber = ra_page ?? page ?? 1;
-        //        int pageSize = ra_perPage ?? perPage ?? 10;
-
-        //        string? filterTerm = null;
-        //        if (!string.IsNullOrWhiteSpace(filterJson))
-        //        {
-        //            try
-        //            {
-        //                var doc = JsonSerializer.Deserialize<JsonElement>(filterJson);
-        //                if (doc.ValueKind == JsonValueKind.Object)
-        //                {
-        //                    if (doc.TryGetProperty("q", out var q)) filterTerm = q.GetString();
-        //                    else if (doc.TryGetProperty("text", out var t)) filterTerm = t.GetString();
-        //                    else if (doc.TryGetProperty("topicId", out var tid)) filterTerm = tid.ToString();
-        //                }
-        //            }
-        //            catch
-        //            {
-        //                filterTerm = filterJson;
-        //            }
-        //        }
-
-        //        IEnumerable<int>? parsedIds = null;
-        //        if (!string.IsNullOrWhiteSpace(ids))
-        //        {
-        //            try
-        //            {
-        //                parsedIds = ids
-        //                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-        //                    .Select(x => int.TryParse(x, out var id) ? id : (int?)null)
-        //                    .Where(x => x.HasValue)
-        //                    .Select(x => x.Value)
-        //                    .ToList();
-        //            } catch
-        //            { 
-        //                parsedIds = null;
-        //            }
-        //        }
-
-        //        var paged = await _service.GetPagedOrManyAsync(
-        //            pageNumber: pageNumber,
-        //            pageSize: pageSize,
-        //            ids: parsedIds,
-        //            filter: filterTerm,
-        //            sortField: sortBy,
-        //            sortOrder: sortOrder);
-
-        //        var itemsDto = paged.Items.Select(QuestionDtoMapper.MapToDto).ToList();
-
-        //        Response.Headers["X-Total-Count"] = paged.TotalCount.ToString();
-        //        Response.Headers["Access-Control-Expose-Headers"] = "X-Total-Count";
-
-        //        return Ok(new
-        //        {
-        //            data = itemsDto,
-        //            total = paged.TotalCount,
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error while retrieving paged questions for admin.");
-        //        return StatusCode(500, "An error occurred while retrieving questions.");
-        //    }
-        //}
-
-
         [HttpGet]
         public async Task<IActionResult> GetPaged(
             [FromQuery(Name = "_page")] int? ra_page,
@@ -125,26 +44,6 @@ namespace TestMaturalnyApp.API.Controllers.Admin
             {
                 int pageNumber = ra_page ?? page ?? 1;
                 int pageSize = ra_perPage ?? perPage ?? 10;
-
-                //string? filterTerm = null;
-                //if (!string.IsNullOrWhiteSpace(filterJson))
-                //{
-                //    try
-                //    {
-                //        var doc = JsonSerializer.Deserialize<JsonElement>(filterJson);
-                //        if (doc.ValueKind == JsonValueKind.Object)
-                //        {
-                //            if (doc.TryGetProperty("q", out var q)) filterTerm = q.GetString();
-                //            else if (doc.TryGetProperty("text", out var t)) filterTerm = t.GetString();
-                //            else if (doc.TryGetProperty("topicId", out var tid)) filterTerm = tid.ToString();
-                //        }
-                //    }
-                //    catch
-                //    {
-                //        filterTerm = filterJson;
-                //    }
-                //}
-
 
                 int? filterDisciplineId = null;
                 int? filterTopicId = null;
@@ -179,11 +78,9 @@ namespace TestMaturalnyApp.API.Controllers.Admin
                 //-------------------------
                 if (filterDisciplineId.HasValue)
                 {
-                    // ✅ Сюда попадём только если в фильтре был disciplineId
-                    //_logger.LogInformation("Фильтр по дисциплине: {DisciplineId}", filterDisciplineId);
+                    // попадаем сюда только если в фильтре был disciplineId
 
                     int a = 1;
-                    // System.Diagnostics.Debugger.Break();
                 }
                 //-------------------------
 

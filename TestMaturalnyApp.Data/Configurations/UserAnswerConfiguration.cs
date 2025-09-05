@@ -14,7 +14,7 @@
             builder.Property(u => u.UserId)
                    .IsRequired();
 
-            builder.HasOne<User>() // связь с User
+            builder.HasOne<User>() 
                    .WithMany()
                    .HasForeignKey(u => u.UserId)
                    .OnDelete(DeleteBehavior.Restrict);
@@ -22,7 +22,7 @@
             builder.Property(u => u.QuestionId)
                    .IsRequired();
 
-            builder.HasOne(u => u.Question) // связь с Question
+            builder.HasOne(u => u.Question) 
                    .WithMany()
                    .HasForeignKey(u => u.QuestionId)
                    .OnDelete(DeleteBehavior.Cascade);
@@ -38,7 +38,7 @@
                    .HasPrecision(4, 2)
                    .HasDefaultValue(0);
 
-            // 🔧 Новый JSON-поле (сохраняется как строка)
+            // JSON-поле (используется для сохранении маски при перемешивании вопросов)
             builder.Property(u => u.SelectedOptionJson)
                     .HasConversion(
                         v => string.IsNullOrWhiteSpace(v) ? "[]" : v,
@@ -48,18 +48,17 @@
                     .HasColumnType("nvarchar(300)")
                     .HasDefaultValue("[]");
 
-            // 🔧 Резервное текстовое поле
+            // Резервное текстовое поле
             builder.Property(u => u.GroupeLabel)
                    .HasMaxLength(100) 
                    .IsRequired(false)
                    .HasDefaultValue(null);
 
-            // 🔧 Резервное числовое поле
+            // Резервное числовое поле
             builder.Property(u => u.AnswerInt)
                    .IsRequired(false)
                    .HasDefaultValue(null);
 
-            // связь с TestSession
             builder.Property(u => u.TestSessionId)
                    .IsRequired(false);
 

@@ -34,8 +34,6 @@ namespace TestMaturalnyApp.Services.Interfaces.Auth
     {
         string HashPassword(string password);
         bool VerifyPassword(string password, string hashedPassword);
-
-        //string GenerateJwtToken(string email, UserRole role);
         public string GenerateJwtToken(int userId, string email, UserRole role);
         string GenerateRefreshToken();
         string GenerateVerificationToken(string email);

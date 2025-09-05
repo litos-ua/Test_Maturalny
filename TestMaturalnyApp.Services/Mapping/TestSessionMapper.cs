@@ -24,7 +24,6 @@ namespace TestMaturalnyApp.Services.Mapping
                 Id = domain.Id,
                 UserId = domain.UserId,
                 TimeLimitSeconds = domain.TimeLimitSeconds,
-                //StartedAt = domain.StartedAt,  // Закомментировано, т.к. задано по умолчанию
                 EndedAt = domain.EndedAt,
                 Description = domain.Description,
                 JsonMask = domain.JsonMask

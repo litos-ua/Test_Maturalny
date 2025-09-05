@@ -39,37 +39,6 @@ namespace TestMaturalnyApp.Services.Services
 
         // Для админ
 
-        //public async Task<PagedResult<User>> GetPagedAsync(
-        //int pageNumber,
-        //int pageSize,
-        //string? sortBy,
-        //string? sortOrder,
-        //string? filterJson)
-        //{
-        //    try
-        //    {
-        //        var pagedData = await _userAdminRepository.GetPagedAsync(
-        //            pageNumber,
-        //            pageSize,
-        //            sortBy,
-        //            sortOrder,
-        //            filterJson);
-
-        //        return new PagedResult<User>
-        //        {
-        //            Items = pagedData.Items.Select(UserMapper.MapToDomain).ToList(),
-        //            TotalCount = pagedData.TotalCount,
-        //            PageNumber = pagedData.PageNumber,
-        //            PageSize = pagedData.PageSize
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error getting paged users");
-        //        throw new ApplicationException("Failed to get paged users", ex);
-        //    }
-        //}
-
         public async Task<PagedResult<UserDto>> GetPagedAsync(
             int pageNumber,
             int pageSize,

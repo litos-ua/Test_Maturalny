@@ -13,8 +13,6 @@ namespace TestMaturalnyApp.Services.Interfaces
         Task<UserAnswerDto?> GetByIdAsync(int id);
         Task<UserAnswerDto> CreateAsync(CreateUserAnswerDto dto);
         Task UpdateAsync(UpdateUserAnswerDto dto);
-        // Два перегруженных метода
-        //Task AddRangeAsync(IEnumerable<UserAnswer> domainAnswers);
         Task AddRangeAsync(IEnumerable<CreateUserAnswerDto> dtos);
         Task<bool> DeleteAsync(int id);
     }

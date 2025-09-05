@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-//  Удаляем модель (таблицу) UserUnswerOptions и все связи с ней.
 namespace TestMaturalnyApp.Data.Entities
 {
     public class UserAnswer
@@ -24,7 +23,7 @@ namespace TestMaturalnyApp.Data.Entities
         [Range(0, 12)]
         public double Score { get; set; } = 0;
 
-        // 🔄 Новое поле: JSON-массив ID выбранных опций
+        // поле: JSON-массив ID выбранных опций
         public string? SelectedOptionJson { get; set; }
 
         [StringLength(300)]

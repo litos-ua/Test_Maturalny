@@ -43,7 +43,7 @@ namespace TestMaturalnyApp.API.Controllers
         }
 
         /// <summary>
-        /// Создание новой сессии тестирования.
+        /// Создание новой сессии тестирования ученика.
         /// </summary>
         [HttpPost("start")]
         public async Task<IActionResult> StartSession([FromBody] CreateTestSessionDto dto)
@@ -64,7 +64,7 @@ namespace TestMaturalnyApp.API.Controllers
         }
 
         /// <summary>
-        /// Получение сессии по ID.
+        /// Получение номера сессии по ID.
         /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -152,23 +152,22 @@ namespace TestMaturalnyApp.API.Controllers
                 if (userId == null)
                     return Unauthorized();
 
-                // ✅ Сравнение — пользователь не должен подделывать userId
+                // Проверяем id пользователя в запросе на соответствие auth userId
                 if (request.UserId != userId)
                     return Unauthorized("User ID in request does not match the authenticated user.");
 
-                // ✅ Получаем лимит времени с сервера
+                // Получаем лимит времени с сервера
                 int requestTimeLimitSeconds = request.TimeLimitSeconds ?? 3600;
                 int configTimeLimit = _configuration.GetValue<int>("TestSessionSettings:TimeLimitSeconds", requestTimeLimitSeconds);
 
-                // Проверка совпадения (можно логировать или бросать ошибку, если нужно)
+                // Проверка совпадения соответствия времени
                 if (request.TimeLimitSeconds != configTimeLimit)
                 {
                     Console.WriteLine("⚠ Время из UI отличается от серверного конфигурационного значения.");
-                    // Можно вернуть BadRequest или просто игнорировать и продолжать с configTimeLimit
                 }
 
 
-                // ✅ Создаем перемешанную сессию и вопросы
+                // Создаем сессию с перемешанними вопросами
                 int totalCount = _configuration.GetValue<int>("QuestionSettings:NumberOfTestQuestions", 30);
 
                 // var result = await _questionService.CreateRandomRealTestAsync(
@@ -244,7 +243,7 @@ namespace TestMaturalnyApp.API.Controllers
                         )
                 });
 
-                // ✅ ВСТАВЛЯЕМ Score из оценки
+                // Вставляем Score из оценки
                 int counter = 1;
                 int internalCount;
                 foreach (var answer in request.Answers)

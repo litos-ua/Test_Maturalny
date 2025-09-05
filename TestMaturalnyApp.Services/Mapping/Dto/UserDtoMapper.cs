@@ -1,7 +1,6 @@
 ﻿using TestMaturalnyApp.Domain.Entities;
 using TestMaturalnyApp.Domain.Entities.DTOs;
 using TestMaturalnyApp.Domain.Entities.DTOs.Create;
-using TestMaturalnyApp.Domain.Entities.Enums;
 
 namespace TestMaturalnyApp.Services.Mapping.Dto
 {

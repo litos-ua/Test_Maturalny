@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TestMaturalnyApp.Domain.Entities.Enums;
+﻿using TestMaturalnyApp.Domain.Entities.Enums;
 
 namespace TestMaturalnyApp.Domain.Entities.DTOs.Create
 {

@@ -1,5 +1,4 @@
 ﻿
-
 namespace TestMaturalnyApp.Domain.Entities.DTOs
 {
     public class UserOptionDto

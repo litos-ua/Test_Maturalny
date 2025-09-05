@@ -224,28 +224,6 @@ namespace TestMaturalnyApp.Services.Services.Auth
             }
         }
 
-        //public async Task<bool> RevokeRefreshTokenAsync(string accessToken, string? refreshToken)
-        //{
-        //    try
-        //    {
-        //        var principal = GetPrincipalFromExpiredToken(accessToken);
-        //        var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        //        if (string.IsNullOrEmpty(email)) return false;
-
-        //        var token = await _userTokenRepository.GetLatestTokenByEmailAsync(email);
-        //        if (token == null || !token.IsActive) return false;
-
-        //        token.RevokedAt = DateTime.UtcNow;
-        //        await _userTokenRepository.UpdateAsync(token);
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error revoking refresh token.");
-        //        throw new Exception("An error occurred while revoking the refresh token.");
-        //    }
-        //}
-
         public async Task<bool> RevokeRefreshTokenAsync(string accessToken, string? refreshToken)
         {
             try

@@ -8,19 +8,15 @@ namespace TestMaturalnyApp.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserOption> builder)
         {
-            // Название таблицы
             builder.ToTable("UserOptions");
 
-            // Ключ
             builder.HasKey(o => o.Id);
 
-            // Связь с пользователем
             builder.HasOne(o => o.User)
                    .WithOne(u => u.Option)
                    .HasForeignKey<UserOption>(o => o.UserId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            // Поля и значения по умолчанию
             builder.Property(o => o.Theme)
                    .HasMaxLength(20)
                    .IsRequired()

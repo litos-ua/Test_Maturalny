@@ -1,5 +1,4 @@
-﻿using TestMaturalnyApp.Domain.Entities.DTOs.Create;
-using TestMaturalnyApp.Domain.Entities.Enums;
+﻿using TestMaturalnyApp.Domain.Entities.Enums;
 
 namespace TestMaturalnyApp.Domain.Entities.DTOs.Update
 {

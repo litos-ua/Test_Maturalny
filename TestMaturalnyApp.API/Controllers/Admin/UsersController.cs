@@ -17,42 +17,16 @@ namespace TestMaturalnyApp.Api.Controllers.Admin
             _logger = logger;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetPaged(
-        //    [FromQuery(Name = "_page")] int? ra_page,
-        //    [FromQuery(Name = "_perPage")] int? ra_perPage,
-        //    [FromQuery(Name = "page")] int? page,
-        //    [FromQuery(Name = "perPage")] int? perPage,
-        //    [FromQuery(Name = "_sort")] string? sortBy,
-        //    [FromQuery(Name = "_order")] string? sortOrder,
-        //    [FromQuery(Name = "filter")] string? filterJson)
-        //{
-        //    try
-        //    {
-        //        int pageNumber = ra_page ?? page ?? 1;
-        //        int pageSize = ra_perPage ?? perPage ?? 10;
-
-        //        var pagedResult = await _service.GetPagedAsync(pageNumber, pageSize, sortBy, sortOrder, filterJson);
-
-        //        Response.Headers.Add("X-Total-Count", pagedResult.TotalCount.ToString());
-        //        return Ok(pagedResult.Items);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error fetching paged users");
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
-
+        
         [HttpGet]
         public async Task<IActionResult> GetPaged(
-    [FromQuery(Name = "_page")] int? ra_page,
-    [FromQuery(Name = "_perPage")] int? ra_perPage,
-    [FromQuery(Name = "page")] int? page,
-    [FromQuery(Name = "perPage")] int? perPage,
-    [FromQuery(Name = "_sort")] string? sortBy,
-    [FromQuery(Name = "_order")] string? sortOrder,
-    [FromQuery(Name = "filter")] string? filterJson)
+        [FromQuery(Name = "_page")] int? ra_page,
+        [FromQuery(Name = "_perPage")] int? ra_perPage,
+        [FromQuery(Name = "page")] int? page,
+        [FromQuery(Name = "perPage")] int? perPage,
+        [FromQuery(Name = "_sort")] string? sortBy,
+        [FromQuery(Name = "_order")] string? sortOrder,
+        [FromQuery(Name = "filter")] string? filterJson)
         {
             try
             {
@@ -60,11 +34,8 @@ namespace TestMaturalnyApp.Api.Controllers.Admin
                 int pageSize = ra_perPage ?? perPage ?? 10;
 
                 var pagedResult = await _service.GetPagedAsync(pageNumber, pageSize, sortBy, sortOrder, filterJson);
-
-                // Оставляем заголовок X-Total-Count — может пригодиться для других клиентов
                 Response.Headers.Add("X-Total-Count", pagedResult.TotalCount.ToString());
 
-                // Формат для React Admin
                 return Ok(new
                 {
                     data = pagedResult.Items,

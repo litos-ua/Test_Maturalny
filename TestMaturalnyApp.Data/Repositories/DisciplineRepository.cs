@@ -61,12 +61,12 @@ namespace TestMaturalnyApp.Data.Repositories
                     {
                         "id" => isDesc ? query.OrderByDescending(d => d.Id) : query.OrderBy(d => d.Id),
                         "name" => isDesc ? query.OrderByDescending(d => d.Name) : query.OrderBy(d => d.Name),
-                        _ => query.OrderBy(d => d.Name) // default sort
+                        _ => query.OrderBy(d => d.Name) 
                     };
                 }
                 else
                 {
-                    query = query.OrderBy(d => d.Name); // default sort
+                    query = query.OrderBy(d => d.Name); 
                 }
 
                 int totalCount = await query.CountAsync();

@@ -16,7 +16,7 @@ namespace TestMaturalnyApp.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public int DisciplineId { get; set; }
-        public Discipline Discipline { get; set; } = null!;  // ✅ навигационное свойство для получения запроса по сессиям пользователя
+        public Discipline Discipline { get; set; } = null!;  // навигационное свойство для получения запроса по сессиям пользователя
 
         public ICollection<Question> Questions { get; set; } = new List<Question>();
     }

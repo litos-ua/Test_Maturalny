@@ -2,7 +2,6 @@
 using TestMaturalnyApp.Domain.Entities;
 using TestMaturalnyApp.Domain.Entities.DTOs.Create;
 using TestMaturalnyApp.Domain.Entities.DTOs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TestMaturalnyApp.Services.Mapping.Dto
 {
@@ -18,8 +17,6 @@ namespace TestMaturalnyApp.Services.Mapping.Dto
             EndedAt = session.EndedAt,
             TimeLimitSeconds = session.TimeLimitSeconds,
             EndReason = session.EndReason,
-
-            // 👇 Добавлены новые поля
             TotalScore = session.UserAnswers?.Sum(ua => ua.Score) ?? 0.0,
             Duration = session.EndedAt.HasValue ? session.EndedAt.Value - session.StartedAt : TimeSpan.Zero,
             DisciplineName = session.UserAnswers

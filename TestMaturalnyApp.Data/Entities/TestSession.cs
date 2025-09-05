@@ -13,7 +13,7 @@ namespace TestMaturalnyApp.Data.Entities
         [StringLength(200)]
         public string? Description { get; set; }
 
-        // JSON маска для перемешивания (маска перемешивания) опций вопросов
+        // JSON маска для перемешивания опций вопросов
 
         [StringLength(3000)]
         public string JsonMask { get; set; } = "{}";
@@ -23,13 +23,11 @@ namespace TestMaturalnyApp.Data.Entities
 
         public DateTime? EndedAt { get; set; }
 
-        // Лимит времени в секундах (например, 3600 или 7200)
+        // Лимит времени в секундах
         public int? TimeLimitSeconds { get; set; }
 
         // Причина завершения сессии
         public SessionEndReason? EndReason { get; set; }
-
-        //public ICollection<UserAnswer> Answers { get; set; } = new List<UserAnswer>(); // дубликат
 
         public ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
     }

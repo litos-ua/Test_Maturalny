@@ -38,11 +38,9 @@ namespace TestMaturalnyApp.API.Controllers.Admin
         {
             try
             {
-                // pick whichever param set is provided (support both variants)
                 int pageNumber = ra_page ?? page ?? 1;
                 int pageSize = ra_perPage ?? perPage ?? 10;
 
-                // optional: parse filter param if RA sends JSON like {"q":"term"} or {"name":"..."}
                 string? filterTerm = null;
                 if (!string.IsNullOrWhiteSpace(filterJson))
                 {
@@ -53,28 +51,21 @@ namespace TestMaturalnyApp.API.Controllers.Admin
                         {
                             if (dict.TryGetValue("q", out var q)) filterTerm = q.GetString();
                             else if (dict.TryGetValue("name", out var n)) filterTerm = n.GetString();
-                            // extend parsing rules as needed
                         }
                     }
                     catch
                     {
-                        // ignore parse errors, use raw string
                         filterTerm = filterJson;
                     }
                 }
 
                 var paged = await _service.GetPagedAsync(pageNumber, pageSize, filterTerm, sortBy, sortOrder);
 
-                // Map to DTOs (your DTOs have lowercase 'id' — OK)
                 var itemsDto = paged.Items.Select(DisciplineDtoMapper.MapToDto).ToList();
 
-                // IMPORTANT: React-Admin expects array in body + X-Total-Count header
                 Response.Headers["X-Total-Count"] = paged.TotalCount.ToString();
-                // make header accessible to browser (also add in CORS policy — see below)
                 Response.Headers["Access-Control-Expose-Headers"] = "X-Total-Count";
 
-                //return Ok(itemsDto);
-                // Формат для React Admin
                 return Ok(new
                 {
                     data = itemsDto,

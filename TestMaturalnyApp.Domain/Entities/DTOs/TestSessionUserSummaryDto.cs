@@ -1,6 +1,4 @@
-﻿
-
-namespace TestMaturalnyApp.Domain.Entities.DTOs
+﻿namespace TestMaturalnyApp.Domain.Entities.DTOs
 {
     public class TestSessionUserSummaryDto
     {

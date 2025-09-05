@@ -23,7 +23,6 @@ namespace TestMaturalnyApp.Services.Mapping.Dto
         MatchLabel = dto.MatchLabel,
         Explanation = dto.Explanation,
         GroupKey = dto.GroupKey,
-        //QuestionId = dto.QuestionId  // Поля нет в Dto, оно только в полной модели
     };
     }
 }

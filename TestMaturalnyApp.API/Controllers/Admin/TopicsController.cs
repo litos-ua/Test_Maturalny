@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using TestMaturalnyApp.Domain.Entities.DTOs.Create;
 using TestMaturalnyApp.Domain.Entities.DTOs.Update;
@@ -23,40 +22,6 @@ namespace TestMaturalnyApp.API.Controllers.Admin
         }
 
         // GET с пагинацией, сортировкой
-        //[HttpGet]
-        //public async Task<IActionResult> GetPaged(
-        //    [FromQuery(Name = "_page")] int page = 1,
-        //    [FromQuery(Name = "_perPage")] int perPage = 10,
-        //    [FromQuery(Name = "_sort")] string? sortField = null,
-        //    [FromQuery(Name = "_order")] string? sortOrder = null,
-        //    [FromQuery(Name = "filter")] string? filterJson = null)
-
-        //{
-        //    try
-        //    {
-
-        //        var pagedData = await _topicAdminService.GetPagedAsync(page, perPage, sortField, sortOrder, filterJson);
-
-        //        Response.Headers.Add("X-Total-Count", pagedData.TotalCount.ToString());
-        //        Response.Headers.Add("Access-Control-Expose-Headers", "X-Total-Count");
-
-        //        //return Ok(pagedData.Items.Select(TopicDtoMapper.MapToDto));
-        //        return Ok(new
-        //        {
-        //            data = pagedData.Items,
-        //            total = pagedData.TotalCount,
-        //        });
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error while getting paged topics.");
-        //        return StatusCode(500, "An error occurred while retrieving topics.");
-        //    }
-        //}
-
-
 
         [HttpGet]
         public async Task<IActionResult> GetPaged(
@@ -105,8 +70,6 @@ namespace TestMaturalnyApp.API.Controllers.Admin
             }
         }
 
-
-
         // GET по id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -124,8 +87,7 @@ namespace TestMaturalnyApp.API.Controllers.Admin
                 return StatusCode(500, $"An error occurred while retrieving the topic with ID {id}.");
             }
         }
-
-        
+ 
 
         // POST
         [HttpPost]

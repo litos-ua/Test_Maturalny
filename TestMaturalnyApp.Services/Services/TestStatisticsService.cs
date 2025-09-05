@@ -56,33 +56,6 @@ namespace TestMaturalnyApp.Services.Services
                 throw;
             }
         }
-        // Перегрузка для пагинации
-        //public async Task<PagedResult<TestSessionUserSummaryDto>> GetUserCompletedSessionsAsync(int userId, int page, int pageSize)
-        //{
-        //    var pagedSessions = await _testSessionRepository.GetByUserIdAsync(userId, page, pageSize);
-
-        //    var dtoItems = pagedSessions.Items
-        //        .Where(s => s.EndedAt.HasValue)
-        //        .Select(session => new TestSessionUserSummaryDto
-        //        {
-        //            SessionId = session.Id,
-        //            StartedAt = session.StartedAt,
-        //            Duration = session.EndedAt.Value - session.StartedAt,
-        //            TotalScore = session.UserAnswers.Sum(ua => ua.Score),
-        //            DisciplineName = session.UserAnswers
-        //                .Select(ua => ua.Question?.Topic?.Discipline?.Name)
-        //                .FirstOrDefault()
-        //                ?? string.Empty
-        //        }).ToList();
-
-        //    return new PagedResult<TestSessionUserSummaryDto>
-        //    {
-        //        Items = dtoItems,
-        //        TotalCount = pagedSessions.TotalCount,
-        //        PageNumber = pagedSessions.PageNumber,
-        //        PageSize = pagedSessions.PageSize
-        //    };
-        //}
 
         public async Task<PagedResult<TestSessionUserSummaryDto>> GetUserCompletedSessionsAsync(int userId, int page, int pageSize)
         {

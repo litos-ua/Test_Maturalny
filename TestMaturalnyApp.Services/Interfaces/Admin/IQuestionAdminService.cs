@@ -15,8 +15,8 @@ namespace TestMaturalnyApp.Services.Interfaces.Admin
             int? pageNumber = null,
             int? pageSize = null,
             IEnumerable<int>? ids = null,
-            int? disciplineId = null, // Добавлено
-            int? topicId = null,   // Добавлено
+            int? disciplineId = null, 
+            int? topicId = null,  
             string? filter = null,
             string? sortField = null,
             string? sortOrder = null);

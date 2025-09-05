@@ -7,7 +7,7 @@ namespace TestMaturalnyApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")] // only for admins
+    [Authorize(Roles = "Admin")] 
     public class UserTokenController : ControllerBase
     {
         private readonly IUserTokenService _userTokenService;
@@ -51,7 +51,7 @@ namespace TestMaturalnyApp.API.Controllers
             }
         }
 
-        // DELETE: api/UserToken/5
+        // DELETE: api/UserToken/id
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

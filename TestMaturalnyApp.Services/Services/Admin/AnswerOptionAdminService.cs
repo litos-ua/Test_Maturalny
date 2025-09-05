@@ -1,7 +1,6 @@
 ﻿using TestMaturalnyApp.Services.Interfaces.Admin;
 using TestMaturalnyApp.Data.Interfaces.Admin;
 using TestMaturalnyApp.Domain.Models;
-using TestMaturalnyApp.Domain.Entities;
 using TestMaturalnyApp.Services.Mapping;
 
 namespace TestMaturalnyApp.Services.Services.Admin

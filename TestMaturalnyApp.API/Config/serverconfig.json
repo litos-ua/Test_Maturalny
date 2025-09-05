@@ -1,7 +1,7 @@
 ﻿{
   "TokenSettings": {
-    //"AccessTokenLifetimeHours": 24,
-    //"RefreshTokenLifetimeDays": 7,
+    "AccessTokenLifetimeHours": 24,
+    "RefreshTokenLifetimeDays": 7,
     "RefreshTokenRenewThresholdHours": 1
   },
   "QuestionSettings": {

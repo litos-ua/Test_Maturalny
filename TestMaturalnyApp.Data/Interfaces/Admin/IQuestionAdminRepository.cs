@@ -11,8 +11,8 @@ namespace TestMaturalnyApp.Data.Interfaces.Admin
             string? filter = null,
             string? sortField = null,
             string? sortOrder = null,
-            int? disciplineId = null,  // Добавлено
-            int? topicId = null);      // Добавлено);
+            int? disciplineId = null,  
+            int? topicId = null);     
 
         Task<IEnumerable<Question>> GetManyAsync(IEnumerable<int> ids);
     }

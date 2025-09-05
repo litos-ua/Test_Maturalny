@@ -349,7 +349,7 @@ namespace TestMaturalnyApp.Services.Services
                                     var baseOptionIds = expectedOptions.Select(o => o.Id).ToList();
                                     var shuffledOptionIds = mask.Options.TryGetValue(question.Id, out var optIds) ? optIds : baseOptionIds;
 
-                                    // 🎯 Восстанавливаем порядок пользовательских ответов к базе
+                                    // Восстанавливаем порядок пользовательских ответов к базе
                                     var normalizedUserAnswers = NormalizeAnswerToBaseOrder(userAnswerIds, baseOptionIds, shuffledOptionIds);
 
                                     // Проверка: размер должен совпадать

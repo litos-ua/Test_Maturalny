@@ -14,10 +14,5 @@ namespace TestMaturalnyApp.Services.Interfaces.Admin
             string? sortOrder,
             int? filter
             );
-        //Task<Topic?> GetByIdAsync(int id);
-        //Task<IEnumerable<Topic>> GetByDisciplineIdAsync(int disciplineId);
-        //Task<Topic> CreateAsync(Topic domainTopic);
-        //Task<Topic?> UpdateAsync(Topic domainTopic);
-        //Task<bool> DeleteAsync(int id);
     }
 }

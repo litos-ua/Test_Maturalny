@@ -1,6 +1,4 @@
-﻿
-
-namespace TestMaturalnyApp.Domain.Entities.DTOs.Models
+﻿namespace TestMaturalnyApp.Domain.Entities.DTOs.Models
 {
     public class CreatedTestSessionDto
     {

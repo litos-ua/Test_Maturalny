@@ -27,7 +27,6 @@ namespace TestMaturalnyApp.Services.Mapping
                 TestSession = includeTestSession && data.TestSession != null
                     ? TestSessionMapper.MapToDomain(data.TestSession)
                     : null,
-
                 // Распаковка из JSON
                 SelectedOptionJson = JsonSerializer.Deserialize<List<int>>(data.SelectedOptionJson ?? "[]")
                      ?? new List<int>()
