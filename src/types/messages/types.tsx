@@ -11,6 +11,7 @@ export interface ThreadSummary {
   withUser: {
     id: number;
     username: string;
+    fullname?: string;
     avatarUrl?: string;
   };
   lastMessage: MessageDto;

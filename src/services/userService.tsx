@@ -2,6 +2,14 @@ import { get, post, put, del } from "../api";
 import type { UserDto, CreateUserDto, UpdateUserDto } from "../types";
 
 export const userService = {
+  async getAllUsers(): Promise<UserDto[]> {
+    return await get<UserDto[]>("/user")
+  },
+
+  async getAllowedContacts(): Promise<UserDto[]> {
+  return await get<UserDto[]>("/messages/contacts");
+  },
+
   async getUserById(id: number): Promise<UserDto> {
     return await get<UserDto>(`/user/${id}`);
   },
