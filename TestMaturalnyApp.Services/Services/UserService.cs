@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using TestMaturalnyApp.Services.Interfaces.Admin;
 using TestMaturalnyApp.Data.Interfaces.Admin;
 using TestMaturalnyApp.Domain.Models;
+using TestMaturalnyApp.Domain.Entities.DTOs.Models;
 
 namespace TestMaturalnyApp.Services.Services
 {
@@ -71,6 +72,26 @@ namespace TestMaturalnyApp.Services.Services
                 _logger.LogError(ex, "Error getting paged users");
                 throw new ApplicationException("Failed to get paged users", ex);
             }
+        }
+
+
+        public async Task<IEnumerable<ConversationUserDto>> GetAllowedContactsAsync(int currentUserId)
+        {
+            // Получаем текущего пользователя (его роль)
+            var currentUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (currentUser == null)
+                return Enumerable.Empty<ConversationUserDto>();
+
+            var users = await _userRepository.GetAllowedContactsAsync(currentUserId, currentUser.Role);
+
+            return users.Select(u => new ConversationUserDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Email = u.Email,
+                Fullname = u.Fullname,
+                Role = u.Role
+            });
         }
 
 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using TestMaturalnyApp.Data.Entities;
 using TestMaturalnyApp.Data.Interfaces;
 using TestMaturalnyApp.Data.Interfaces.Admin;
+using TestMaturalnyApp.Domain.Entities.Enums;
 using TestMaturalnyApp.Domain.Models;
 
 namespace TestMaturalnyApp.Data.Repositories
@@ -89,6 +90,44 @@ namespace TestMaturalnyApp.Data.Repositories
                 throw;
             }
         }
+
+
+        public async Task<IEnumerable<User>> GetAllowedContactsAsync(int currentUserId, UserRole currentRole)
+        {
+            try
+            {
+                var query = _dbSet.AsQueryable();
+
+                switch (currentRole)
+                {
+                    case UserRole.Guest:
+                        query = query.Where(u => u.Role == UserRole.Admin);
+                        break;
+
+                    case UserRole.Student:
+                        query = query.Where(u => u.Role == UserRole.Teacher || u.Role == UserRole.Admin);
+                        break;
+
+                    case UserRole.Teacher:
+                    case UserRole.Admin:
+                        // могут общаться со всеми
+                        query = query.Where(u => u.Id != currentUserId);
+                        break;
+
+                    default:
+                        query = Enumerable.Empty<User>().AsQueryable();
+                        break;
+                }
+
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting allowed contacts for user {UserId}", currentUserId);
+                throw;
+            }
+        }
+
 
 
         public async Task<User?> GetByIdAsync(int id)

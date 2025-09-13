@@ -124,16 +124,24 @@ builder.Services.AddScoped<IUserTokenService, UserTokenService>();
 
 builder.Services.AddScoped<ITestSessionRepository, TestSessionRepository>();
 builder.Services.AddScoped<ITestSessionService, TestSessionService>();
+
 builder.Services.AddScoped<IUserAnswerRepository, UserAnswerRepository>();
 builder.Services.AddScoped<IUserAnswerService, UserAnswerService>();
+
 builder.Services.AddScoped<IUserOptionService, UserOptionService>();
 builder.Services.AddScoped<IUserOptionRepository, UserOptionRepository>();
+
 builder.Services.AddScoped<ITestEvaluationService, TestEvaluationService>();
 builder.Services.AddScoped<ITestStatisticsService, TestStatisticsService>();
+
 builder.Services.AddScoped<ITestExportService, TestExportService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<TestMaturalnyApp.Services.Interfaces.Auth.IAuthService, TestMaturalnyApp.Services.Services.Auth.AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 
 

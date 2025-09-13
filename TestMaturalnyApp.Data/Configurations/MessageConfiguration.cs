@@ -8,17 +8,15 @@ namespace TestMaturalnyApp.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Message> builder)
         {
-            // Явное имя таблицы
             builder.ToTable("Messages");
 
-            // Первичный ключ
             builder.HasKey(m => m.Id);
 
             // Связь с отправителем
             builder.HasOne(m => m.Sender)
                 .WithMany()
                 .HasForeignKey(m => m.SenderId)
-                .OnDelete(DeleteBehavior.Restrict); // чтобы при удалении юзера не удалялись все сообщения
+                .OnDelete(DeleteBehavior.Restrict); // при удалении юзера не удалялись его сообщения
 
             // Связь с получателем
             builder.HasOne(m => m.Receiver)
@@ -26,7 +24,6 @@ namespace TestMaturalnyApp.Data.Configurations
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Ограничения по полям
             builder.Property(m => m.Content)
                 .IsRequired()
                 .HasMaxLength(1000);

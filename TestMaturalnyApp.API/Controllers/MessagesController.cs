@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TestMaturalnyApp.Domain.Entities.DTOs.Create;
 using TestMaturalnyApp.Domain.Entities.DTOs.Update;
 using TestMaturalnyApp.Services.Interfaces;
+using TestMaturalnyApp.Services.Services;
 
 namespace TestMaturalnyApp.API.Controllers
 {
@@ -13,15 +14,18 @@ namespace TestMaturalnyApp.API.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IUserService _userService;
         private readonly ILogger<MessagesController> _logger;
 
         public MessagesController(
             IMessageService messageService,
             ICurrentUserService currentUserService,
+            IUserService userService,
             ILogger<MessagesController> logger)
         {
             _messageService = messageService;
             _currentUserService = currentUserService;
+            _userService = userService;
             _logger = logger;
         }
 
@@ -234,6 +238,28 @@ namespace TestMaturalnyApp.API.Controllers
             {
                 _logger.LogError(ex, "Error marking message {MessageId} as read", messageId);
                 return StatusCode(500, "Server error when marking as read");
+            }
+        }
+
+        /// <summary>
+        /// Получить список пользователей для диалога (в зависимости от роли)
+        /// </summary>
+        [HttpGet("contacts")]
+        public async Task<IActionResult> GetAllowedContacts()
+        {
+            var currentUserId = _currentUserService.UserId;
+            if (!currentUserId.HasValue)
+                return Unauthorized("User is not authorized");
+
+            try
+            {
+                var contacts = await _userService.GetAllowedContactsAsync(currentUserId.Value);
+                return Ok(contacts);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting allowed contacts for user {UserId}", currentUserId);
+                return StatusCode(500, "Server error when receiving contacts");
             }
         }
     }
