@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 using TestMaturalnyApp.Services.Interfaces.Admin;
 using TestMaturalnyApp.Data.Interfaces.Admin;
 using TestMaturalnyApp.Domain.Models;
+using TestMaturalnyApp.Data.Repositories;
+using TestMaturalnyApp.Domain.Entities.Enums;
+using TestMaturalnyApp.Domain.Exceptions;
 
 namespace TestMaturalnyApp.Services.Services
 {
@@ -15,18 +18,21 @@ namespace TestMaturalnyApp.Services.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuestionAdminRepository _questionAdminRepository;
         private readonly ITestSessionRepository _testSessionRepository;
+        private readonly IDisciplineRepository _disciplineRepository;
         private readonly ILogger<QuestionService> _logger;
 
         public QuestionService(
             IQuestionRepository repository,
             IQuestionAdminRepository adminRepository,
             ITestSessionRepository testSessionRepository,
+            IDisciplineRepository disciplineRepository,
             ILogger<QuestionService> logger)
         {
             _questionRepository = repository;
             _questionAdminRepository = adminRepository;
             _testSessionRepository = testSessionRepository;
             _logger = logger;
+            _disciplineRepository = disciplineRepository;
         }
 
         public async Task<IEnumerable<Question>> GetAllAsync()
@@ -243,12 +249,73 @@ namespace TestMaturalnyApp.Services.Services
             }
         }
 
+        //public async Task<IEnumerable<Question>> GetRandomByDisciplineAsync(int disciplineId, int totalCount)
+        //{
+        //    try
+        //    {
+        //        var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+        //        return dataEntities.Select(QuestionMapper.MapToDomain);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error while getting random questions by disciplineId: {DisciplineId}", disciplineId);
+        //        throw;
+        //    }
+        //}
+
         public async Task<IEnumerable<Question>> GetRandomByDisciplineAsync(int disciplineId, int totalCount)
         {
             try
             {
-                var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
-                return dataEntities.Select(QuestionMapper.MapToDomain);
+                var discipline = await _disciplineRepository.GetByIdAsync(disciplineId);
+                if (discipline == null)
+                    throw new ServiceException($"Discipline with ID {disciplineId} not found.");
+
+                //switch (discipline.Name)
+                //{
+                //    case "Історія України":
+                //        var singleChoice = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.SingleChoice, 20);
+                //        var matching = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.Matching, 4);
+                //        var correctSequence = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.CorrectSequence, 3);
+                //        var multipleChoice = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.MultipleChoice, 3);
+
+                //        return singleChoice
+                //            .Concat(matching)
+                //            .Concat(correctSequence)
+                //            .Concat(multipleChoice)
+                //            .Select(QuestionMapper.MapToDomain);
+
+                //    default:
+                //        // общий вариант — просто случайные вопросы
+                //        var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+                //        return dataEntities.Select(QuestionMapper.MapToDomain);
+                //}
+
+                switch (discipline.Name)
+                {
+                    case "Історія України":
+                        var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20, discipline.Name);
+                        var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4, discipline.Name);
+                        var correctSequence = await GetAndLogQuestionsAsync(disciplineId, QuestionType.CorrectSequence, 3, discipline.Name);
+                        var multipleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.MultipleChoice, 3, discipline.Name);
+
+                        return singleChoice
+                            .Concat(matching)
+                            .Concat(correctSequence)
+                            .Concat(multipleChoice);
+
+                    default:
+                        var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+                        if (dataEntities.Count() < totalCount)
+                        {
+                            _logger.LogWarning(
+                                "Discipline {DisciplineName}: Not enough random questions. Expected {Expected}, got {Actual}.",
+                                discipline.Name, totalCount, dataEntities.Count());
+                        }
+
+                        return dataEntities.Select(QuestionMapper.MapToDomain);
+                }
+
             }
             catch (Exception ex)
             {
@@ -256,5 +323,26 @@ namespace TestMaturalnyApp.Services.Services
                 throw;
             }
         }
+
+        private async Task<List<Question>> GetAndLogQuestionsAsync(
+            int disciplineId,
+            QuestionType type,
+            int expectedCount,
+            string disciplineName)
+        {
+            var dataQuestions = (await _questionRepository
+                .GetRandomByTypeAsync(disciplineId, type, expectedCount))
+                .ToList();
+
+            if (dataQuestions.Count < expectedCount)
+            {
+                _logger.LogWarning(
+                    "Discipline {DisciplineName}: Not enough questions of type {QuestionType}. Expected {Expected}, got {Actual}.",
+                    disciplineName, type, expectedCount, dataQuestions.Count);
+            }
+
+            return dataQuestions.Select(QuestionMapper.MapToDomain).ToList();
+        }
+
     }
 }

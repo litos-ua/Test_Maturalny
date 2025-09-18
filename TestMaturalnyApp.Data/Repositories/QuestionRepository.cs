@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using TestMaturalnyApp.Data.Entities;
 using TestMaturalnyApp.Data.Interfaces;
 using TestMaturalnyApp.Data.Interfaces.Admin;
+using TestMaturalnyApp.Domain.Entities.Enums;
 using TestMaturalnyApp.Domain.Models;
 
 namespace TestMaturalnyApp.Data.Repositories
@@ -361,6 +362,18 @@ namespace TestMaturalnyApp.Data.Repositories
                 throw new RepositoryException($"Error while getting random questions by discipline ID {disciplineId}.", ex);
             }
         }
+
+        // Получить M < N случайных вопросов определенного типа по всей дисциплине
+        public async Task<IEnumerable<Question>> GetRandomByTypeAsync(int disciplineId, QuestionType type, int count)
+        {
+            return await _context.Questions
+                .Where(q => q.Topic.DisciplineId == disciplineId && q.Type == type)
+                .OrderBy(q => Guid.NewGuid())
+                .Take(count)
+                .Include(q => q.Options)
+                .ToListAsync();
+        }
+
     }
 
     // Кастомное исключение для репозитория

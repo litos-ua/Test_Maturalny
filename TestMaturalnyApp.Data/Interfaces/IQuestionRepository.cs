@@ -1,4 +1,5 @@
 ﻿using TestMaturalnyApp.Data.Entities;
+using TestMaturalnyApp.Domain.Entities.Enums;
 
 namespace TestMaturalnyApp.Data.Interfaces
 {
@@ -33,5 +34,7 @@ namespace TestMaturalnyApp.Data.Interfaces
 
         // Получить N случайных вопросов по всей дисциплине
         Task<IEnumerable<Question>> GetRandomByDisciplineAsync(int disciplineId, int totalCount);
+        // Получить M < N случайных вопросов определенного типа по всей дисциплине
+        Task<IEnumerable<Question>> GetRandomByTypeAsync(int disciplineId, QuestionType type, int count);
     }
 }
