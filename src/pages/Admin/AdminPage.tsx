@@ -6,12 +6,14 @@ import { DisciplineList, DisciplineEdit, DisciplineCreate } from "../Admin/disci
 import { TopicList, TopicEdit, TopicCreate } from "../Admin/topic";
 import { QuestionList, QuestionEdit, QuestionCreate } from "../Admin/question";
 import { AnswerOptionList, AnswerOptionEdit, AnswerOptionCreate } from "../Admin/unsweroption";
+import { CustomLayout } from "./CustomLayout";
 
 export const AdminPage = () => (
   <Admin 
-     basename="/admin"
+    basename="/admin"
     dataProvider={dataProvider} 
     authProvider={authProvider} 
+    layout={CustomLayout}
   >
     <Resource
       name="users"

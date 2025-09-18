@@ -6,7 +6,7 @@ import type { Question } from "../../types/pages/testpages/types";
 interface Props {
   question: Question;
   savedAnswer: number[]; // текущий выбранный ответ
-  onAnswer: (questionId: number, optionIds: number[]) => void; // функция сохранения
+  onAnswer: (questionId: number, optionIds: number[]) => void; 
 }
 
 export function QuestionSingleChoice({ question, savedAnswer, onAnswer }: Props) {

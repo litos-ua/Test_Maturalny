@@ -28,13 +28,13 @@ export function TestMenu() {
   const handleSelect = (name: string, id: number) => {
   const slug = name
     .toLowerCase()
-    .replace(/і/g, "i") // Украинская "і"
-    .replace(/ї/g, "i") // Украинская "ї"
-    .replace(/є/g, "e") // Украинская "є"
-    .replace(/ґ/g, "g") // Украинская "ґ"
-    .replace(/[^a-zа-яё0-9]+/gi, "-") // Только буквы/цифры
-    .replace(/-+/g, "-") // Убрать одинарные дефисы
-    .replace(/^-|-$/g, ""); // Убрать дефисы по краям
+    .replace(/і/g, "i") 
+    .replace(/ї/g, "i") 
+    .replace(/є/g, "e") 
+    .replace(/ґ/g, "g") 
+    .replace(/[^a-zа-яё0-9]+/gi, "-") 
+    .replace(/-+/g, "-") 
+    .replace(/^-|-$/g, ""); 
 
   navigate(`/test/${slug}/${id}`);
   handleClose();

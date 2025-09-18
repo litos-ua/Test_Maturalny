@@ -1,10 +1,9 @@
 import { SimpleForm, TextInput, SelectInput, Create, PasswordInput } from "react-admin";
-//import { UserRoles } from "../../../types"; // Импортируем константу и тип
 import { UserRoles } from "../../../types";
 
 // Преобразуем UserRoles в массив для SelectInput
 const roleChoices = Object.entries(UserRoles)
-  .filter(([key]) => isNaN(Number(key))) // Игнорируем обратные числовые ключи (для TS)
+  .filter(([key]) => isNaN(Number(key))) 
   .map(([key, value]) => ({
     id: value,
     name: key, // "Guest", "Student"...

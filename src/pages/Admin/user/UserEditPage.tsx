@@ -1,5 +1,5 @@
 import { Edit, SimpleForm, TextInput, SelectInput } from "react-admin";
-import { UserRoles, type UserRole } from "../../../types"; // Импортируем константу и тип
+import { UserRoles, type UserRole } from "../../../types"; 
 
 // Преобразуем UserRoles в массив для SelectInput
 const roleChoices = Object.entries(UserRoles)

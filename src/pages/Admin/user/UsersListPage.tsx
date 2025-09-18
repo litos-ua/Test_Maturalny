@@ -1,7 +1,7 @@
 import { List, Datagrid, TextField, EmailField, BooleanField, SelectField } from "react-admin";
 import { UserRoles } from "../../../types";
 
-// 1. Фиксим тип для roleNames
+// 1. Тип для roleNames
 const roleNames: Record<number, string> = {
   [UserRoles.Guest]: "Гость",
   [UserRoles.Student]: "Студент",

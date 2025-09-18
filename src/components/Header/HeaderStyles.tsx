@@ -28,7 +28,7 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: theme.spacing(1, 2),
 }));
 
-// Правильно типизируем компонент с пропсами Typography
+// Типизируем компонент с пропсами Typography
 export const LogoWrapper = styled(Typography)<TypographyProps>(() => ({
   textDecoration: "none",
   display: "flex",
@@ -48,10 +48,10 @@ export const LogoImg = styled("img")(() => ({
 
 // Текст логотипа
 export const LogoText = styled(Box)(() => ({
-  display: "flex", // меняем на flex
-  flexDirection: "row", // располагаем в строку
-  alignItems: "center", // выравниваем по центру
-  gap: 4, // небольшой отступ между словами
+  display: "flex", 
+  flexDirection: "row", 
+  alignItems: "center", 
+  gap: 4, 
   fontSize: "1.1rem",
   fontWeight: "bold",
 }));
@@ -65,7 +65,7 @@ export const NavWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-// Кнопки навигации  типизируем 
+// Кнопки навигации 
 export const NavButton = styled(Button)<ButtonProps>(() => ({
   color: "inherit",
   textTransform: "none",
@@ -87,7 +87,7 @@ export const DrawerContainer = styled(Box)(({ theme }) => ({
 }));
 
 
-// Правильно типизируем StyledListItemButton с поддержкой component prop
+// Типизируем StyledListItemButton с поддержкой component prop
 export const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.hover,

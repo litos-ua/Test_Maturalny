@@ -26,9 +26,9 @@ export const containerStyle: SxProps<Theme> = {
   position: "relative",
   overflow: "hidden",
   width: "100%",
-  height: "100%", // ← ДОБАВИТЬ height
+  height: "100%", 
   margin: "0 auto",
-  display: "flex", // ← ДЛЯ ПРАВИЛЬНОГО РАЗМЕЩЕНИЯ
+  display: "flex", 
   alignItems: "center", 
   justifyContent: "center", 
 };
@@ -40,5 +40,5 @@ export const imageStyle: SxProps<Theme> = {
   position: "absolute",
   top: 0,
   left: 0,
-  objectFit: "cover", // ← ЗАДАТЬ objectFit ПО УМОЛЧАНИЮ
+  objectFit: "cover", 
 };

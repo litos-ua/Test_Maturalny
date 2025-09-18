@@ -165,7 +165,6 @@ export function TestSessionPage() {
       {/* Индикаторы вопросов */}
       <Grid container spacing={1} justifyContent="center" sx={{ mb: 3 }}>
         {questions.map((q, index) => (
-          // <Grid item key={q.id} xs={2} sm={1.5} md={1} lg={0.8} xs={2} sm={1.5} md={1} lg={0.8}>
           <Grid size = {{xs:2, sm:1.5, md:1, lg:0.8}} key={q.id} >
             <Paper
               onClick={() => setCurrentIndex(index)}

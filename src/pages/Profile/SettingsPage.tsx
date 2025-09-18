@@ -44,7 +44,6 @@ export function ProfileSettingsPage() {
       if (!userData || !userOption) return;
 
       try {
-        // Обновляем User
         await updateUserData({
           id: userData.id,
           username: values.username,
@@ -57,7 +56,6 @@ export function ProfileSettingsPage() {
           isLocked: userData.isLocked,
         });
 
-        // Обновляем UserOption
         await updateUserOption({
           id: userOption.id,
           userId: userData.id,
@@ -113,9 +111,6 @@ export function ProfileSettingsPage() {
               InputProps={{
                 readOnly: true,
               }}
-              // onChange={formik.handleChange}
-              // error={formik.touched.email && Boolean(formik.errors.email)}
-              // helperText={formik.touched.email && formik.errors.email}
             />
 
             <TextField
@@ -163,16 +158,6 @@ export function ProfileSettingsPage() {
               error={formik.touched.language && Boolean(formik.errors.language)}
               helperText={formik.touched.language && formik.errors.language}
             />
-
-            {/* <TextField
-              fullWidth
-              label="Налаштування питань (JSON)"
-              name="questionPreferencesJson"
-              multiline
-              rows={2}
-              value={formik.values.questionPreferencesJson}
-              onChange={formik.handleChange}
-            /> */}
 
             <TextField
               fullWidth

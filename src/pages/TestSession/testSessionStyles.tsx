@@ -17,11 +17,11 @@ export const questionHeaderStyle: SxProps<Theme> = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  backgroundColor: "secondary.main", // как кнопка color="secondary"
-  color: "primary.contrastText", // белый текст поверх primary
-  p: 2, // паддинг
-  borderRadius: 1, // скругление углов
-  mb: 2, // отступ снизу
+  backgroundColor: "secondary.main", 
+  color: "primary.contrastText", 
+  p: 2, 
+  borderRadius: 1, 
+  mb: 2, 
 };
 
 export const testFinishButtonStyle: SxProps<Theme> = {

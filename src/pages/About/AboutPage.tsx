@@ -48,7 +48,6 @@ export function AboutPage() {
     }
   };
 
-  // Функция для закрытия модального окна
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedDiscipline(null);

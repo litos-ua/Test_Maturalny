@@ -116,7 +116,16 @@ export const ProfileResultsSession = () => {
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                       Час: {formatDuration(s.duration)}
                     </Typography>
-                    <Button variant="outlined" size="small" fullWidth>
+                    <Button 
+                        variant="outlined" 
+                        size="small" 
+                        fullWidth
+                        onClick={() => {
+                          setCurrentSessionId(s.sessionId);
+                          setCurrentSessionScore(s.totalScore);
+                          userProfileService.getSessionResults(s.sessionId).then(setSelectedResult);
+                        }}
+                        >
                       Деталі
                     </Button>
                   </>
@@ -133,7 +142,17 @@ export const ProfileResultsSession = () => {
                     </Box>
                     <Box sx={{ ...styles.cell, flex: 1 }}>{s.totalScore}</Box>
                     <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
-                      <Button variant="outlined" size="small">Деталі</Button>
+                      <Button 
+                          variant="outlined" 
+                          size="small"
+                          onClick={() => {
+                            setCurrentSessionId(s.sessionId);
+                            setCurrentSessionScore(s.totalScore);
+                            userProfileService.getSessionResults(s.sessionId).then(setSelectedResult);
+                          }}
+                          >
+                            Деталі
+                      </Button>
                     </Box>
                   </>
                 )}

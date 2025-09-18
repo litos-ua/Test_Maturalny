@@ -111,7 +111,7 @@ export function RegisterPage() {
         <Box sx={{
           width: '100%',
           height: { xs: 300, md: 400, lg: 450 },
-          display: { xs: 'none', md: 'block' }, // Только меняем отображение, не flex
+          display: { xs: 'none', md: 'block' }, 
           mt: { md: 2 }
         }}>
           <RotatingImages 

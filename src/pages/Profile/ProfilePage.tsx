@@ -1,4 +1,3 @@
-// Адаптация для всех типов устройств
 import { 
   Box, 
   Typography, 
@@ -46,7 +45,7 @@ export function ProfilePage() {
   return (
     <Box sx={styles.pageWrapper}>
       <Box sx={{
-        ...(styles.container as any)(theme), // ← ЯВНОЕ ПРЕОБРАЗОВАНИЕ ТИПА
+        ...(styles.container as any)(theme), 
         maxWidth: { xs: '95%', sm: '90%', md: 800, lg: 1000 },
         p: { xs: 3, sm: 3, md: 4 },
         mx: { xs: 2, sm: 3, md: 4 }
@@ -250,7 +249,7 @@ function InfoItem({ icon, label, value }: { icon: React.ReactNode; label: string
       mb: 2,
       p: 2,
       borderRadius: 2,
-      bgcolor: 'rgba(255,255,255,0.1)' // ← легкий фон для каждого элемента
+      bgcolor: 'rgba(255,255,255,0.1)' 
     } as any}>
       <Box sx={{ color: 'text.secondary', mr: 2 }}>
         {icon}

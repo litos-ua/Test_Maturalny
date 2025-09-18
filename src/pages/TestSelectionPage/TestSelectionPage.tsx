@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchDisciplines } from "../../api";
 import { bannerExam, type Banner } from "../../constants";
 
-// Функция для создания slug (как у тебя в TestMenu)
 function slugify(name: string): string {
   return name
     .toLowerCase()

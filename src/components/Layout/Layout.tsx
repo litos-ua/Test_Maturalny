@@ -11,7 +11,6 @@ export function Layout({ onToggleTheme }: LayoutProps) {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh"  >
       <Header onToggleTheme={onToggleTheme} />
-      {/* <Container sx={{ flexGrow: 1, py: 4 }}> */}
       <Container 
         maxWidth={false} disableGutters 
         sx={{

@@ -30,10 +30,10 @@ export const containerSx: SxProps<Theme> = {
 export const titleSx: SxProps<Theme> = {
   fontWeight: "bold",
   fontSize: {
-    xs: "1.8rem",   // смартфоны
-    sm: "2.2rem",   // планшеты
-    md: "3rem",     // десктоп
-    lg: "3.5rem",   // большие мониторы
+    xs: "1.8rem",   
+    sm: "2.2rem",   
+    md: "3rem",     
+    lg: "3.5rem",   
   },
 };
 

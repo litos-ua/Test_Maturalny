@@ -43,27 +43,6 @@ export const post = async <T = any>(
   }
 };
 
-// export const get = async <T = any>(
-//   url: string,
-//   extraHeaders: Record<string, string> = {}
-// ): Promise<T> => {
-//   const token = tokenService.getAccessToken();
-
-//   const headers: Record<string, string> = {
-//     "Content-Type": "application/json",
-//     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-//     ...extraHeaders,
-//   };
-
-//   try {
-//     const response = await axiosClient.get(url, { headers });
-//     return response.data;
-//   } catch (error) {
-//     handleAuthError(error);
-//     throw error;
-//   }
-// };
-
 export const get = async <T = any>(
   url: string,
   config: {

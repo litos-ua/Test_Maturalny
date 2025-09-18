@@ -10,11 +10,11 @@ export const pageWrapper: SxProps<Theme> = {
 export const container: SxProps<Theme> = (theme) => ({
   width: "100%",
   maxWidth: 800,
-  backgroundColor: theme.palette.primary.light, // ← ИЗМЕНИТЕ НА primary.light
-  color: theme.palette.getContrastText(theme.palette.primary.light), // ← И getContrastText
+  backgroundColor: theme.palette.primary.light, 
+  color: theme.palette.getContrastText(theme.palette.primary.light), 
   p: 4,
   borderRadius: 4,
-  boxShadow: 3, // ← ТЕНИ ДЛЯ ЭФФЕКТА "ПЛИТЫ"
+  boxShadow: 3, 
   border: `1px solid ${theme.palette.divider}`,
 });
 

@@ -18,7 +18,6 @@ export function QuestionMultipleChoice({ question, savedAnswer, onAnswer }: Prop
     } else {
       updated = savedAnswer.filter(id => id !== optionId);
     }
-  //  console.log("Выбраны варианты в MultipleChoice:", updated);
     onAnswer(question.id, updated);
   };
 

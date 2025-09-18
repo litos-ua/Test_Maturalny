@@ -1,4 +1,3 @@
-//Модернизироан метод getList - работает как с обычным списком, так и с ReferenceInput
 import type {
   DataProvider,
   RaRecord,
@@ -54,7 +53,6 @@ const normalizeId = <T extends RaRecord | { Id?: any }>(rec: T): RaRecord => {
 
 const dataProvider: DataProvider = {
 
-  // Работает и об
   async getList(resource, params) {
     // 1. Определяем, это ReferenceInput для выбора темы в вопросе
     const isTopicReferenceInput = 
@@ -87,9 +85,6 @@ const dataProvider: DataProvider = {
         throw error;
     }
 },
-
-
-
 
 
 async getOne<RecordType extends RaRecord>(
@@ -182,7 +177,6 @@ async create<RecordType extends RaRecord>(
   params: CreateParams<RecordType>
 ): Promise<CreateResult<RecordType>> {
   try {
-    // ⬇️ передаём именно headers-объект, без { headers: ... }
     const response = await post<RecordType>(
       `${API_BASE_URL}/${resource}`,
       params.data,

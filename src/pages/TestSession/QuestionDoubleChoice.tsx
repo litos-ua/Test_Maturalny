@@ -44,7 +44,6 @@ export function QuestionDoubleChoice({ question, savedAnswer, onAnswer }: Props)
     }
   };
 
- // Добавляем масштабируемость
     return (
     <Grid container spacing={2}>
      {/* Заголовок вопроса */}

@@ -21,7 +21,7 @@ export function InputForm({ onFormChange }: InputFormProps) {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Передаём родителю, если нужно
+  //При необходимости возвращаем родителю
   useEffect(() => {
     if (onFormChange) {
       onFormChange(form);

@@ -52,7 +52,7 @@ export function LoginPage() {
         minHeight: "100vh",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: (theme) => theme.palette.primary.main, // ← ОБЩИЙ ФОН как в ForgotPassword
+        backgroundColor: (theme) => theme.palette.primary.main, 
         p: { xs: 2, md: 4 }
       }}
     >
@@ -65,7 +65,7 @@ export function LoginPage() {
           alignItems: 'center',
           justifyContent: 'center',
           py: { xs: 4, md: 6 },
-          backgroundColor: (theme) =>  // ← ЦВЕТ ВОКРУГ ФОРМЫ как в ForgotPassword
+          backgroundColor: (theme) =>  
             theme.palette.mode === "dark"
               ? theme.palette.primary.dark
               : theme.palette.primary.light,
@@ -82,7 +82,7 @@ export function LoginPage() {
             borderRadius: 3,
             boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
             border: "1px solid rgba(255,255,255,0.1)",
-            bgcolor: (theme) =>  // ← ФОН ВНУТРИ ФОРМЫ
+            bgcolor: (theme) =>  
               theme.palette.mode === "light"
                 ? "rgba(255,255,255,0.9)"
                 : "rgba(30,30,30,0.9)",
@@ -130,7 +130,7 @@ export function LoginPage() {
                 mb: 3,
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  backgroundColor: 'transparent', // ← ПРОЗРАЧНЫЙ ФОН инпута
+                  backgroundColor: 'transparent', 
                   color: (theme) => theme.palette.text.primary,
                   '& fieldset': {
                     borderColor: (theme) => theme.palette.primary.main,
@@ -168,7 +168,7 @@ export function LoginPage() {
                 mb: 3,
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  backgroundColor: 'transparent', // ← ПРОЗРАЧНЫЙ ФОН инпута
+                  backgroundColor: 'transparent', 
                   color: (theme) => theme.palette.text.primary,
                   '& fieldset': {
                     borderColor: (theme) => theme.palette.primary.main,

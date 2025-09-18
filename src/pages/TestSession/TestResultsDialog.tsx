@@ -46,9 +46,6 @@ export function TestResultsDialog({ open, onClose, result, disciplineName, disci
                   Питання № {index+1} ({r.questionId}):{" "}
                   {r.isCorrect ? "✅ Правильно" : r.score > 0 ? "⚠️ Частково правильно" : "❌ Неправильно"} ({r.score} бал.)
                 </Typography>
-                  {/* {!r.isCorrect && (
-                <Typography>Правильна відповідь: {r.correctAnswer.join(", ")}</Typography>
-                )} */}
                 {!r.isCorrect && ( 
                   <Typography>
                     Правильна відповідь: {r.correctAnswer && r.correctAnswer.length > 0

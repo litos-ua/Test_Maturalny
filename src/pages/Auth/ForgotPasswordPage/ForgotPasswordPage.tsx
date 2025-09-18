@@ -181,8 +181,8 @@ export function ForgotPasswordPage() {
                 borderRadius: 2,
                 backgroundColor: (theme) => 
                 theme.palette.mode === "light"
-                  ? "rgba(255,255,255,0.9)"  // КАК ОБЩИЙ ФОН
-                  : "rgba(30,30,30,0.9)",    // КАК ОБЩИЙ ФОН
+                  ? "rgba(255,255,255,0.9)"  
+                  : "rgba(30,30,30,0.9)",    
                 }
             }}
             size={isMobile ? "small" : "medium"}

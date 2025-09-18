@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, List, ListItem, Select, MenuItem, FormControl, InputLabel, Box } from "@mui/material";
 import type { Question } from "../../types/pages/testpages/types";
 import { shuffleArray } from "../../utils/shuffleArray";
-//import { storage } from "../../utils/storage"
 
 interface Props {
   question: Question;
@@ -43,9 +42,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
     return labels;
   }
 
-  // ✅ ИНИЦИАЛИЗАЦИЯ savedAnswer при первом рендере
-
-
+  // Инициализация savedAnswer при первом рендере
   useEffect(() => {
   if (!savedAnswer || savedAnswer.length !== leftItems.length) {
     const initial = Array(leftItems.length).fill(undefined);
@@ -66,7 +63,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
     const handleChange = (leftIndex: number, rightId: string | number) => {
       const updated = savedAnswer ? [...savedAnswer] : Array(leftItems.length).fill(undefined);
       updated[leftIndex] = Number(rightId);
-      onAnswer(question.id, updated);  // Вызываем без условия
+      onAnswer(question.id, updated);  
     };
 
   return (
@@ -85,7 +82,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
             display: "flex",
             alignItems: "center",
             gap: 2,
-            flexWrap: "wrap", // чтобы текст переносился
+            flexWrap: "wrap", 
           }}
         >
           <Box sx={{ flexGrow: 1, maxWidth: "100%" }}>

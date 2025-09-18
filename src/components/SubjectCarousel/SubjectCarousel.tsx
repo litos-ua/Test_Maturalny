@@ -46,10 +46,10 @@ export function SubjectsCarousel({
   // Функция для расчета количества видимых карточек
   const getVisibleCardsCount = () => {
     return {
-      xs: 1,  // мобильные - 1 карточка
-      sm: 2,  // планшеты - 2 карточки
-      md: 3,  // десктопы - 3 карточки
-      lg: 3   // большие экраны - 3 карточки
+      xs: 1,  
+      sm: 2,  
+      md: 3,  
+      lg: 3   
     };
   };
 
@@ -95,7 +95,7 @@ export function SubjectsCarousel({
               boxSizing: "border-box",
               display: "flex",
               justifyContent: "center",
-              minWidth: 0 // предотвращает переполнение
+              minWidth: 0 
             }}
           >
             <SubjectCard

@@ -40,7 +40,7 @@ export function TypographyDualAnimator({
   const [firstColor, secondColor] = colorPairs[colorIndex];
 
   return (
-    <Box textAlign="center"> {/* убираем sx отсюда */}
+    <Box textAlign="center"> 
       <AnimatePresence mode="wait">
         <motion.div
           key={index + "-" + colorIndex}
@@ -56,7 +56,7 @@ export function TypographyDualAnimator({
             gutterBottom
             sx={{
               width: '100%',
-              ...sx // ← переносим sx сюда!
+              ...sx 
             }}
           >
             <Box component="span" sx={{ color: firstColor }}>
