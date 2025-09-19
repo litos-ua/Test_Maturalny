@@ -4,6 +4,7 @@ export interface AnswerOption {
   isCorrect: boolean;
   groupKey?: string;
   matchLabel?: string;
+  explanation?: string;
 }
 
 export interface Question {

@@ -50,8 +50,18 @@ export const getQuestionsByDiscipline = async (disciplineId: number) => {
   }
 };
 
+// 4. Получить Explanation по ID вопроса
+export const getExplanationByQuestionId = async (id: number) => {
+  try {
+    const response = await httpQuestionClient.get(`/${id}/explanation`);
+    return response.data; // { QuestionId, Explanation }
+  } catch (error) {
+    handleError(error);
+  }
+};
 
-// 4. Получить все вопросы по теме
+
+// 5. Получить все вопросы по теме
 export const getQuestionsByTopic = async (topicId: number) => {
   try {
     const response = await httpQuestionClient.get(`/by-topic/${topicId}`);
@@ -61,7 +71,7 @@ export const getQuestionsByTopic = async (topicId: number) => {
   }
 };
 
-// 5. Создать новый вопрос
+// 6. Создать новый вопрос
 export const createQuestion = async (data: any) => {
   try {
     const response = await httpQuestionClient.post("/", data);
@@ -71,7 +81,7 @@ export const createQuestion = async (data: any) => {
   }
 };
 
-// 6. Обновить вопрос
+// 7. Обновить вопрос
 export const updateQuestion = async (id: number, data: any) => {
   try {
     const response = await httpQuestionClient.put(`/${id}`, data);
@@ -81,7 +91,7 @@ export const updateQuestion = async (id: number, data: any) => {
   }
 };
 
-// 7. Удалить вопрос
+// 8. Удалить вопрос
 export const deleteQuestion = async (id: number) => {
   try {
     const response = await httpQuestionClient.delete(`/${id}`);
@@ -91,7 +101,7 @@ export const deleteQuestion = async (id: number) => {
   }
 };
 
-// 8. Получить N случайных вопросов по теме
+// 9. Получить N случайных вопросов по теме
 export const getRandomQuestionsByTopic = async (topicId: number, count: number) => {
   try {
     const allQuestions = await getQuestionsByTopic(topicId);
@@ -111,7 +121,7 @@ export const getRandomQuestionsByTopic = async (topicId: number, count: number) 
   }
 };
 
-// 9. Получить по countPerTopic случайных вопросов из каждой темы дисциплины
+// 10. Получить по countPerTopic случайных вопросов из каждой темы дисциплины
 export const getRandomQuestionsGroupedByDiscipline = async (disciplineId: number, countPerTopic: number) => {
   try {
     const response = await httpQuestionClient.get(`/random/by-discipline/grouped/${disciplineId}/${countPerTopic}`);
@@ -121,7 +131,7 @@ export const getRandomQuestionsGroupedByDiscipline = async (disciplineId: number
   }
 };
 
-// 10. Получить totalCount случайных вопросов по всей дисциплине
+// 11. Получить totalCount случайных вопросов по всей дисциплине
 export const getRandomQuestionsByDiscipline = async (disciplineId: number, totalCount: number) => {
   try {
     const response = await httpQuestionClient.get(
@@ -135,7 +145,7 @@ export const getRandomQuestionsByDiscipline = async (disciplineId: number, total
 };
 
 
-// 11. Метод для запроса на получение вопросов и одновременный старт сессии. Пока не проверен
+// 12. Метод для запроса на получение вопросов и одновременный старт сессии. Пока не проверен
 export const startRealTestSession = async (
   disciplineId: number,
   totalCount: number

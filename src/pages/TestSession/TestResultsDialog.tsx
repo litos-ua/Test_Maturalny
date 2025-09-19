@@ -1,9 +1,10 @@
-import { Dialog, DialogTitle, DialogContent, Typography, Button, Box } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Typography, Button, Box, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import type { TestResult } from "../../types";
-import { testFinishButtonStyle, } from "./testSessionStyles";
+import { testFinishButtonStyle } from "./testSessionStyles";
 import { useNavigate } from "react-router-dom";
+import { useExplanation } from "../../hooks/useExplanation"; 
 
 interface Props {
   open: boolean;
@@ -15,6 +16,7 @@ interface Props {
 
 export function TestResultsDialog({ open, onClose, result, disciplineName, disciplineId }: Props) {
   const navigate = useNavigate();
+  const { fetchExplanation, cache } = useExplanation(); //Подключение кэширования
 
   return (
     <Dialog 
@@ -39,16 +41,37 @@ export function TestResultsDialog({ open, onClose, result, disciplineName, disci
       <DialogContent>
         {result && (
           <>
-            <Typography>Загальна/Максимально можлива кількість балів: {result.totalScore}/{result.maxTotalScore}</Typography>
+            <Typography>
+              Загальна/Максимально можлива кількість балів: {result.totalScore}/{result.maxTotalScore}
+            </Typography>
+
             {result.results.map((r, index) => (
               <Box key={r.questionId} sx={{ mb: 2 }}>
-                <Typography>
-                  Питання № {index+1} ({r.questionId}):{" "}
-                  {r.isCorrect ? "✅ Правильно" : r.score > 0 ? "⚠️ Частково правильно" : "❌ Неправильно"} ({r.score} бал.)
-                </Typography>
+                
+                {/* ⬅️ 4. Оборачиваем вопрос в Tooltip */}
+                <Tooltip
+                  title={
+                    cache[r.questionId] !== undefined
+                      ? (cache[r.questionId] || "Обґрунтування відсутнє")
+                      : "Завантаження..."
+                  }
+                  arrow
+                  onOpen={() => fetchExplanation(r.questionId)} // Загружаем Explanation при первом наведении
+                >
+                  <Typography sx={{ cursor: "help" }}>
+                    Питання № {index+1} ({r.questionId}):{" "}
+                    {r.isCorrect
+                      ? "✅ Правильно"
+                      : r.score > 0
+                        ? "⚠️ Частково правильно"
+                        : "❌ Неправильно"} ({r.score} бал.)
+                  </Typography>
+                </Tooltip>
+
                 {!r.isCorrect && ( 
                   <Typography>
-                    Правильна відповідь: {r.correctAnswer && r.correctAnswer.length > 0
+                    Правильна відповідь:{" "}
+                    {r.correctAnswer && r.correctAnswer.length > 0
                       ? r.correctAnswer.join(", ")
                       : ""}
                   </Typography>
@@ -58,6 +81,7 @@ export function TestResultsDialog({ open, onClose, result, disciplineName, disci
           </>
         )}
       </DialogContent>
+      
       <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2, mb: 2 }}>
         <Button
           variant="contained"
@@ -68,7 +92,12 @@ export function TestResultsDialog({ open, onClose, result, disciplineName, disci
         </Button>
         <Button
           variant="contained"
-          sx={{ ...testFinishButtonStyle, minWidth: "150px", backgroundColor: "#1976d2", "&:hover": { backgroundColor: "#115293" } }}
+          sx={{
+            ...testFinishButtonStyle,
+            minWidth: "150px",
+            backgroundColor: "#1976d2",
+            "&:hover": { backgroundColor: "#115293" },
+          }}
           onClick={() => navigate("/")}
         >
           На головну
