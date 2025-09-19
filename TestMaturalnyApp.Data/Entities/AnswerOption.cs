@@ -7,7 +7,7 @@ namespace TestMaturalnyApp.Data.Entities
     {
         public int Id { get; set; }
 
-        [Required, StringLength(200)]
+        [Required, StringLength(400)]
         public string Text { get; set; } = null!;
 
         public bool IsCorrect { get; set; }

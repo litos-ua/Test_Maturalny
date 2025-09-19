@@ -8,6 +8,7 @@ namespace TestMaturalnyApp.Services.Interfaces
     {
         Task<IEnumerable<Question>> GetAllAsync();
         Task<Question?> GetByIdAsync(int id);
+        Task<Question?> GetByIdWithOptionsAsync(int id);
         Task<IEnumerable<Question>> GetByDisciplineIdAsync(int disciplineId);
         Task<IEnumerable<Question>> GetByTopicIdAsync(int topicId);
         Task<Question> CreateAsync(Question question);

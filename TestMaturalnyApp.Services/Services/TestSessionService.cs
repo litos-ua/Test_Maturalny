@@ -2,11 +2,14 @@
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using TestMaturalnyApp.Data.Interfaces;
+using TestMaturalnyApp.Data.Repositories;
 using TestMaturalnyApp.Domain.Entities.DTOs;
 using TestMaturalnyApp.Domain.Entities.DTOs.Create;
 using TestMaturalnyApp.Domain.Entities.DTOs.Models;
 using TestMaturalnyApp.Domain.Entities.Enums;
+using TestMaturalnyApp.Domain.Exceptions;
 using TestMaturalnyApp.Domain.Models;
+using TestMaturalnyApp.Domain.Entities;
 using TestMaturalnyApp.Services.Interfaces;
 using TestMaturalnyApp.Services.Mapping;
 using TestMaturalnyApp.Services.Mapping.Dto;
@@ -17,6 +20,7 @@ namespace TestMaturalnyApp.Services.Services
     {
         private readonly ITestSessionRepository _sessionRepository;
         private readonly IQuestionRepository _questionRepository;
+        private readonly IDisciplineRepository _disciplineRepository;
         private readonly IMemoryCache _cache;
         private readonly ILogger<TestSessionService> _logger;
 
@@ -24,11 +28,13 @@ namespace TestMaturalnyApp.Services.Services
             ITestSessionRepository sessionRepository,
             IMemoryCache cache,
             IQuestionRepository questionRepository,
+            IDisciplineRepository disciplineRepository,
             ILogger<TestSessionService> logger)
         {
             _sessionRepository = sessionRepository;
             _cache = cache;
             _questionRepository = questionRepository;
+            _disciplineRepository = disciplineRepository;
             _logger = logger;
         }
 
@@ -120,6 +126,60 @@ namespace TestMaturalnyApp.Services.Services
             }
         }
 
+        //public async Task<CreatedTestSessionDto> CreateRandomRealTestAsync(
+        //    int disciplineId,
+        //    int totalCount,
+        //    int userId,
+        //    int? timeLimitSeconds,
+        //    string? description)
+        //{
+        //    try
+        //    {
+        //        if (totalCount <= 0 || totalCount > 100)
+        //            throw new ArgumentException("Invalid number of questions.");
+
+        //        var dataQuestions = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+        //        var domainQuestions = dataQuestions.Select(QuestionMapper.MapToDomain).ToList();
+
+        //        var rng = new Random();
+        //        var mask = new ShuffleMask
+        //        {
+        //            Questions = new List<int>(),
+        //            Options = new Dictionary<int, List<int>>()
+        //        };
+
+        //        foreach (var question in domainQuestions)
+        //        {
+        //            mask.Questions.Add(question.Id);
+        //            var shuffledOptions = question.Options.OrderBy(_ => rng.Next()).ToList();
+        //            mask.Options[question.Id] = shuffledOptions.Select(o => o.Id).ToList();
+        //            question.Options = shuffledOptions;
+        //        }
+
+        //        var domainSession = new Domain.Entities.TestSession
+        //        {
+        //            UserId = userId,
+        //            JsonMask = JsonSerializer.Serialize(mask),
+        //            StartedAt = DateTime.UtcNow,
+        //            TimeLimitSeconds = timeLimitSeconds ?? null,
+        //        };
+
+        //        var dataSession = TestSessionMapper.MapToData(domainSession);
+        //        await _sessionRepository.CreateAsync(dataSession);
+
+        //        return new CreatedTestSessionDto
+        //        {
+        //            SessionId = dataSession.Id,
+        //            Questions = domainQuestions.Select(QuestionDtoMapper.MapToDto).ToList()
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error while creating a random real test for user {UserId} in discipline {DisciplineId}", userId, disciplineId);
+        //        throw;
+        //    }
+        //}
+
         public async Task<CreatedTestSessionDto> CreateRandomRealTestAsync(
             int disciplineId,
             int totalCount,
@@ -132,8 +192,7 @@ namespace TestMaturalnyApp.Services.Services
                 if (totalCount <= 0 || totalCount > 100)
                     throw new ArgumentException("Invalid number of questions.");
 
-                var dataQuestions = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
-                var domainQuestions = dataQuestions.Select(QuestionMapper.MapToDomain).ToList();
+                var domainQuestions = await GetQuestionsForRealTestAsync(disciplineId, totalCount);
 
                 var rng = new Random();
                 var mask = new ShuffleMask
@@ -155,7 +214,8 @@ namespace TestMaturalnyApp.Services.Services
                     UserId = userId,
                     JsonMask = JsonSerializer.Serialize(mask),
                     StartedAt = DateTime.UtcNow,
-                    TimeLimitSeconds = timeLimitSeconds ?? null,
+                    TimeLimitSeconds = timeLimitSeconds,
+                    Description = description
                 };
 
                 var dataSession = TestSessionMapper.MapToData(domainSession);
@@ -169,9 +229,67 @@ namespace TestMaturalnyApp.Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating a random real test for user {UserId} in discipline {DisciplineId}", userId, disciplineId);
+                _logger.LogError(ex,
+                    "Error while creating a random real test for user {UserId} in discipline {DisciplineId}",
+                    userId, disciplineId);
                 throw;
             }
         }
+
+        private async Task<List<Domain.Entities.Question>> GetQuestionsForRealTestAsync(int disciplineId, int totalCount)
+        {
+            var discipline = await _disciplineRepository.GetByIdAsync(disciplineId);
+            if (discipline == null)
+                throw new ServiceException($"Discipline with ID {disciplineId} not found.");
+
+            switch (discipline.Name)
+            {
+                case "Історія України":
+                    var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20, discipline.Name);
+                    var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4, discipline.Name);
+                    var correctSequence = await GetAndLogQuestionsAsync(disciplineId, QuestionType.CorrectSequence, 3, discipline.Name);
+                    var multipleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.MultipleChoice, 3, discipline.Name);
+
+                    return singleChoice
+                        .Concat(matching)
+                        .Concat(correctSequence)
+                        .Concat(multipleChoice)
+                        .ToList();
+
+
+                default:
+                    var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+                    if (dataEntities.Count() < totalCount)
+                    {
+                        _logger.LogWarning(
+                            "Discipline {DisciplineName}: Not enough random questions. Expected {Expected}, got {Actual}.",
+                            discipline.Name, totalCount, dataEntities.Count());
+                    }
+
+                    return dataEntities.Select(QuestionMapper.MapToDomain).ToList();
+            }
+        }
+
+        private async Task<List<Question>> GetAndLogQuestionsAsync(
+            int disciplineId,
+            QuestionType type,
+            int expectedCount,
+            string disciplineName)
+        {
+            var dataQuestions = (await _questionRepository
+                .GetRandomByTypeAsync(disciplineId, type, expectedCount))
+                .ToList();
+
+            if (dataQuestions.Count < expectedCount)
+            {
+                _logger.LogWarning(
+                    "Discipline {DisciplineName}: Not enough questions of type {QuestionType}. Expected {Expected}, got {Actual}.",
+                    disciplineName, type, expectedCount, dataQuestions.Count);
+            }
+
+            return dataQuestions.Select(QuestionMapper.MapToDomain).ToList();
+        }
+
+
     }
 }

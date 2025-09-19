@@ -159,6 +159,22 @@ namespace TestMaturalnyApp.Services.Services
             }
         }
 
+        public async Task<Question?> GetByIdWithOptionsAsync(int id)
+        {
+            try
+            {
+                var data = await _questionRepository.GetByIdsWithOptionsAsync(new[] { id });
+                var entity = data.FirstOrDefault();
+                return entity == null ? null : QuestionMapper.MapToDomain(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting question with options by id: {Id}", id);
+                throw;
+            }
+        }
+
+
         public async Task<IEnumerable<Question>> GetByTopicIdAsync(int topicId)
         {
             try
@@ -271,25 +287,7 @@ namespace TestMaturalnyApp.Services.Services
                 if (discipline == null)
                     throw new ServiceException($"Discipline with ID {disciplineId} not found.");
 
-                //switch (discipline.Name)
-                //{
-                //    case "Історія України":
-                //        var singleChoice = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.SingleChoice, 20);
-                //        var matching = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.Matching, 4);
-                //        var correctSequence = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.CorrectSequence, 3);
-                //        var multipleChoice = await _questionRepository.GetRandomByTypeAsync(disciplineId, QuestionType.MultipleChoice, 3);
-
-                //        return singleChoice
-                //            .Concat(matching)
-                //            .Concat(correctSequence)
-                //            .Concat(multipleChoice)
-                //            .Select(QuestionMapper.MapToDomain);
-
-                //    default:
-                //        // общий вариант — просто случайные вопросы
-                //        var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
-                //        return dataEntities.Select(QuestionMapper.MapToDomain);
-                //}
+        
 
                 switch (discipline.Name)
                 {

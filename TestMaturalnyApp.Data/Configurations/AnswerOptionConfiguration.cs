@@ -10,7 +10,7 @@ namespace TestMaturalnyApp.Data.Configurations
         {
             builder.Property(a => a.Text)
                    .IsRequired()
-                   .HasMaxLength(200);
+                   .HasMaxLength(400);
 
             builder.Property(a => a.Explanation)
                    .HasMaxLength(500);

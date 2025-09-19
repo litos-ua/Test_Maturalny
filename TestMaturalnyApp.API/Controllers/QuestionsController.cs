@@ -8,6 +8,7 @@ using TestMaturalnyApp.Domain.Entities.DTOs.Update;
 using TestMaturalnyApp.Services.Mapping.Dto.Update;
 using TestMaturalnyApp.API.Extensions;
 using TestMaturalnyApp.Data.Repositories;
+using TestMaturalnyApp.Services.Services;
 
 
 namespace TestMaturalnyApp.API.Controllers
@@ -18,11 +19,14 @@ namespace TestMaturalnyApp.API.Controllers
     {
         private readonly IQuestionService _service;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ILogger<MessagesController> _logger;
+        ILogger<MessagesController> logger;
 
         public QuestionsController(IQuestionService service, ICurrentUserService currentUserService)
         {
             _service = service;
             _currentUserService = currentUserService;
+            _logger = logger;
         }
 
         // Получить все вопросы (DTO)
@@ -65,6 +69,36 @@ namespace TestMaturalnyApp.API.Controllers
                 return StatusCode(500, new { Title = "Internal Server Error", Status = 500 });
             }
         }
+
+        // Получить вопрос с опциями по ID 
+        [HttpGet("{id}/explanation")]
+        public async Task<IActionResult> GetExplanation(int id)
+        {
+            try
+            {
+                var question = await _service.GetByIdWithOptionsAsync(id);
+                if (question == null)
+                    return NotFound(new { Title = "Question not found", Status = 404 });
+
+                var explanation = question.Options
+                    .FirstOrDefault(o => !string.IsNullOrEmpty(o.Explanation))
+                    ?.Explanation;
+
+                return Ok(new { QuestionId = id, Explanation = explanation });
+            }
+            catch (RepositoryException ex)
+            {
+                _logger.LogError(ex, "Repository error while retrieving explanation for question {Id}", id);
+                return StatusCode(500, new { Title = "Error retrieving question", Status = 500 });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error while retrieving explanation for question {Id}", id);
+                return StatusCode(500, new { Title = "Internal Server Error", Status = 500 });
+            }
+        }
+
+
 
         // Получить все вопросы по дисциплине
         [HttpGet("by-discipline/{disciplineId}")]
@@ -263,45 +297,5 @@ namespace TestMaturalnyApp.API.Controllers
                 return StatusCode(500, "Error creating test.");
             }
         }
-
-        //// Получить totalCount случайных вопросов по всей дисциплине с перемешиванием опций и созданием сессии
-        //[HttpPost("exam/start")]
-        //[Authorize]
-        //public async Task<IActionResult> StartExamSession([FromBody] StartExamRequestDto request)
-        //{
-        //    try
-        //    {
-        //        // Получаем id текущего аутентифицированного пользователя
-        //        var userId = _currentUserService.UserId;
-
-        //        if (userId == null)
-        //            return Unauthorized();
-
-        //        // ✅ Сравнение — пользователь не должен подделывать userId
-        //        if (request.UserId != userId)
-        //            return Unauthorized("User ID in request does not match the authenticated user.");
-
-        //        // ✅ Создаем перемешанную сессию и вопросы
-        //        var result = await _service.CreateRandomRealTestAsync(
-        //            request.DisciplineId,
-        //            request.TotalCount,
-        //            userId.Value,
-        //            request.TimeLimitSeconds,
-        //            request.Description  
-        //        );
-
-        //        return Ok(result);
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Ошибка при запуске сессии теста: {ex.Message}");
-        //        return StatusCode(500, "Ошибка при запуске сессии теста.");
-        //    }
-        //}
-
     }
 }
