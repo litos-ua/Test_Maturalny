@@ -18,10 +18,16 @@ const questionTypeChoices = Object.entries(QuestionType).map(([key, value]) => (
   name: key,
 }));
 
+// const difficultyChoices = Object.entries(DifficultyOfQuestion).map(([key, value]) => ({
+//   id: value,
+//   name: key,
+// }));
+
 const difficultyChoices = Object.entries(DifficultyOfQuestion).map(([key, value]) => ({
-  id: value,
+  id: String(value), 
   name: key,
 }));
+
 
 // Зависимый выбор темы
 const TopicInput = () => {
@@ -55,7 +61,8 @@ export const QuestionCreate = () => (
 
       <SelectInput source="type" label="Тип вопроса" choices={questionTypeChoices} validate={[required()]} />
       <NumberInput source="maxScore" label="Макс. балл" min={0} step={0.5} validate={[required()]} />
-      <SelectInput source="difficulty" label="Сложность" choices={difficultyChoices} validate={[required()]} />
+      {/* конвертируем в число чтобы корректно отображалось */}
+      <SelectInput source="difficulty" label="Сложность" choices={difficultyChoices} validate={[required()]} parse={(v) => Number(v)} format={(v) => String(v)}/>
 
       <ArrayInput source="options" label="Варианты ответов" defaultValue={[]}>
         <SimpleFormIterator>

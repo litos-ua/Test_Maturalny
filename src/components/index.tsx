@@ -12,3 +12,4 @@ export * from './Spinner';
 export * from './SubjectCard';
 export * from './SubjectCarousel';
 export * from './Layout/AppWithoutLayout';
+export * from './ZoomableImage';

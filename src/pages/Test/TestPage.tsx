@@ -189,17 +189,27 @@ export function TestPage() {
               title={
                 <span
                   style={{
-                    maxWidth: "clamp(15rem, 30vw, 25rem)",
+                    maxWidth: "clamp(15rem, 30vw, 35rem)",
                     display: "block",
-                    whiteSpace: "normal",
+                    whiteSpace: "pre-line",   //whiteSpace: "normal",  - различаем переносы
                     fontSize: "clamp(0.9rem, 1.2vw, 1.1rem)",
                   }}
                 >
-                  {topic.description}
+                  {/* {topic.description} */}
+                  {topic.description    // в базе хранятся '\\n', меняем их на обычные и убираем второй перенос
+                    .replace(/\\n/g, '')
+                    .replace(/\n{2,}/g, '')} 
                 </span>
               }
               arrow
               placement="top-end"
+              slotProps={{
+                tooltip: {
+                  sx: {
+                    maxWidth: "clamp(260px, 60vw, 800px)"
+                  }
+                },
+              }}
             >
               <ListItem sx={styles.listItem}>
                 <ListItemText

@@ -135,3 +135,117 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+
+// import { createBrowserRouter } from "react-router-dom";
+// import { ProtectedRoute, AppWithoutLayout } from "../components";
+// import {
+//   HomePage,
+//   AboutPage,
+//   ContactsPage,
+//   ErrorBoundary,
+//   LoginPage,
+//   RegisterPage,
+//   ResetPasswordPage,
+//   TestPage,
+//   ExamRulesPage,
+//   TestSelectionPage,
+//   TestSessionPage,
+//   ForgotPasswordPage,
+//   ProfilePage,
+//   ProfileSettingsPage,
+//   ProfileResultsSession,
+//   SubjectsIntroPage,
+//   AdminPage,
+//   MessagesPage,
+// } from "../pages";
+// import { App } from "../App";
+
+// export const ROUTE = {
+//   HOME: "/",
+//   ABOUT: "/about",
+//   CONTACTS: "/contacts",
+//   DEMO: "/demo",
+//   FORGOTPASSWORD: "/forgot-password",
+//   LOGIN: "/login",
+//   LOGOUT: "/logout",
+//   MESSAGES: "/messages",
+
+//   // Profile (вложенные)
+//   PROFILE: "/profile",
+//   PROFILESETTINGS: "/profile/settings",
+//   PROFILERESULTS: "/profile/results",
+
+//   REGISTRATION: "/register",
+//   RESETPASSWORD: "/reset-password/:token",
+//   SUBJECTINTRO: "/subject-intro",
+//   TEST: "/test/:slug/:id",
+//   TESTEXAMRULES: "/exam-rules",
+//   TESTSELECTION: "/test-selection",
+//   TESTSESSION: "/test/session/:id/:name",
+
+//   // Admin routes
+//   ADMIN: "/admin",
+// };
+
+// export const router = createBrowserRouter([
+//   {
+//     element: (
+//       <ErrorBoundary>
+//         <App />
+//       </ErrorBoundary>
+//     ),
+//     children: [
+//       { path: ROUTE.HOME, element: <HomePage /> },
+//       { path: ROUTE.ABOUT, element: <AboutPage /> },
+//       { path: ROUTE.CONTACTS, element: <ContactsPage /> },
+//       { path: ROUTE.MESSAGES, element: <MessagesPage /> },
+
+//       {
+//         path: ROUTE.PROFILE,
+//         element: (
+//           <ProtectedRoute>
+//             <ProfilePage />
+//           </ProtectedRoute>
+//         ),
+//         children: [
+//           { path: "settings", element: <ProfileSettingsPage /> },
+//           { path: "results", element: <ProfileResultsSession /> },
+//         ],
+//       },
+
+//       { path: ROUTE.SUBJECTINTRO, element: <SubjectsIntroPage /> },
+//       { path: ROUTE.TEST, element: <TestPage /> },
+//       { path: ROUTE.TESTSELECTION, element: <TestSelectionPage /> },
+//       {
+//         path: ROUTE.TESTEXAMRULES,
+//         element: (
+//           <ProtectedRoute>
+//             <ExamRulesPage />
+//           </ProtectedRoute>
+//         ),
+//       },
+//       { path: ROUTE.TESTSESSION, element: <TestSessionPage /> },
+//     ],
+//   },
+//   {
+//     element: (
+//       <ErrorBoundary>
+//         <AppWithoutLayout />
+//       </ErrorBoundary>
+//     ),
+//     children: [
+//       { path: ROUTE.LOGIN, element: <LoginPage /> },
+//       { path: ROUTE.FORGOTPASSWORD, element: <ForgotPasswordPage /> },
+//       { path: ROUTE.REGISTRATION, element: <RegisterPage /> },
+//       { path: ROUTE.RESETPASSWORD, element: <ResetPasswordPage /> },
+//       {
+//         path: ROUTE.ADMIN + "/*",
+//         element: (
+//           <ProtectedRoute requiredRole="Admin">
+//             <AdminPage />
+//           </ProtectedRoute>
+//         ),
+//       },
+//     ],
+//   },
+// ]);

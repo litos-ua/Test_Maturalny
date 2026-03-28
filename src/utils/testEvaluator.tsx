@@ -69,21 +69,37 @@ export function calculateTestResults(
         }
     }
 
-    } else if (q.type === QuestionType.MultipleChoice) {
-            const numCorrect = correctAnswer.length;  // количество правильных вариантов в вопросе
-            const numSelectedCorrect = correctAnswer.filter(id => userAnswer.includes(id)).length;    // сколько правильных вариантов выбрал пользователь
-            const numSelectedIncorrect = userAnswer.filter(id => !correctAnswer.includes(id)).length;  // сколько пользователь выбрал ЛИШНИХ (неправильных) вариантов
+    // } else if (q.type === QuestionType.MultipleChoice) {
+    //         const numCorrect = correctAnswer.length;  // количество правильных вариантов в вопросе
+    //         const numSelectedCorrect = correctAnswer.filter(id => userAnswer.includes(id)).length;    // сколько правильных вариантов выбрал пользователь
+    //         const numSelectedIncorrect = userAnswer.filter(id => !correctAnswer.includes(id)).length;  // сколько пользователь выбрал ЛИШНИХ (неправильных) вариантов
 
-            if (numSelectedCorrect === numCorrect && numSelectedIncorrect === 0) {
-                isCorrect = true;
-                score = 2;
-            } else if (numSelectedCorrect === numCorrect && numSelectedIncorrect === 1) {
-                isCorrect = false;
-                score = 1;
-            } else {
-                isCorrect = false;
-                score = 0;
-            }
+    //         if (numSelectedCorrect === numCorrect && numSelectedIncorrect === 0) {
+    //             isCorrect = true;
+    //             score = 2;
+    //         } else if (numSelectedCorrect === numCorrect && numSelectedIncorrect === 1) {
+    //             isCorrect = false;
+    //             score = 1;
+    //         } else {
+    //             isCorrect = false;
+    //             score = 0;
+    //         }
+
+    } else if (q.type === QuestionType.MultipleChoice) {
+    const numCorrect = correctAnswer.length;  // количество правильных вариантов
+    const uniqueUserAnswers = Array.from(new Set(userAnswer)); // убираем дубли
+
+    // Проверка на дубликаты или неправильное количество выбранных ответов
+    if (uniqueUserAnswers.length !== userAnswer.length || userAnswer.length !== numCorrect) {
+        isCorrect = false;
+        score = 0;
+    } else {
+        // Подсчёт количества правильных ответов
+        const numSelectedCorrect = uniqueUserAnswers.filter(id => correctAnswer.includes(id)).length;
+        score = numSelectedCorrect;                     // 1 балл за каждый правильно выбранный вариант
+        isCorrect = score === numCorrect;               // если все совпали — ответ полностью верный
+    }
+
 
     } else if (q.type === QuestionType.Matching) {
       let matchScore = 0;

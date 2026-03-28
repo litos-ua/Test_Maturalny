@@ -18,10 +18,14 @@
     "axios": "^1.10.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.19.2",
+    "prop-types": "^15.8.1",
+    "ra-core": "^5.13.4",
     "react": "^19.1.0",
     "react-admin": "^5.10.1",
     "react-dom": "^19.1.0",
+    "react-is": "^19.2.3",
     "react-router-dom": "^7.6.2",
+    "react-transition-group": "^4.4.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {

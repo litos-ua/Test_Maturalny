@@ -165,10 +165,11 @@ export default function Header({ onToggleTheme }: Props) {
                   <MenuItem component={RouterLink} to={ROUTE.PROFILEMAIN} onClick={handleMenuClose}>
                     <Person sx={{ mr: 1 }} /> Профіль
                   </MenuItem>
+                  {/* <MenuItem component={RouterLink} to={ROUTE.PROFILERESULTS} onClick={handleMenuClose}> */}
                   <MenuItem component={RouterLink} to={ROUTE.PROFILERESULTS} onClick={handleMenuClose}>
                     <Assessment sx={{ mr: 1 }} /> Сесії користувача
                   </MenuItem>
-                  <MenuItem component={RouterLink} to={ROUTE.PROFILERESULTS} onClick={handleMenuClose}>
+                  <MenuItem component={RouterLink} to={ROUTE.PROFILESETTINGS} onClick={handleMenuClose}>
                     <Settings sx={{ mr: 1 }} /> Налаштування
                   </MenuItem>
                   <MenuItem component={RouterLink} to={ROUTE.MESSAGES} onClick={handleMenuClose}>
