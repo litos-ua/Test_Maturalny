@@ -22,7 +22,8 @@ namespace TestMaturalnyApp.Data.Entities
         [StringLength(50)]
         public string? GroupKey { get; set; }     // для Matching
 
-        [StringLength(200)]
+        //[StringLength(200)]
+        [StringLength(400)]
         public string? MatchLabel { get; set; }   // для Matching
 
         [Required]

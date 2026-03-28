@@ -15,7 +15,7 @@ namespace TestMaturalnyApp.Data.Entities
         [Range(0, int.MaxValue)]
         public LevelType Level { get; set; }
 
-        [Required, StringLength(700)]
+        [Required, StringLength(4000)]
         public string Description { get; set; } = null!;
 
         [Required]

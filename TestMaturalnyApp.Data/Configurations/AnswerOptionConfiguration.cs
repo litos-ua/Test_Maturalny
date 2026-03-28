@@ -19,7 +19,9 @@ namespace TestMaturalnyApp.Data.Configurations
                    .HasMaxLength(50);
 
             builder.Property(a => a.MatchLabel)
-                   .HasMaxLength(200);
+                   //.HasMaxLength(200);
+                   .HasMaxLength(400);
+
 
             builder.Property(a => a.CreatedAt)
             .IsRequired()

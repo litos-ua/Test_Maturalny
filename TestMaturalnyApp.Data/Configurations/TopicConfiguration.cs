@@ -14,7 +14,7 @@ namespace TestMaturalnyApp.Data.Configurations
 
             builder.Property(t => t.Description)
                    .IsRequired()
-                   .HasMaxLength(700);
+                   .HasMaxLength(4000);
 
             builder.Property(t => t.Level)
                    .HasConversion<int>()
