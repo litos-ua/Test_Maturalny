@@ -44,6 +44,7 @@ export const ROUTE = {
   TESTEXAMRULES: "exam-rules",
   TESTSELECTION: "test-selection",
   TESTSESSION: "/test/session/:id/:name",
+  TOPIC_SESSION: "/test/topic-session/:topicId/:topicName",
 
   // Admin routes
   ADMIN: "/admin",
@@ -100,6 +101,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTE.TESTSESSION,
         element: (<ErrorBoundary> <TestSessionPage /> </ErrorBoundary> ),
+      },
+      {
+        path: ROUTE.TOPIC_SESSION,
+        element: (<ErrorBoundary> <TestSessionPage /> </ErrorBoundary>),
       },
     ],
   },
