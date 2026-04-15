@@ -117,7 +117,7 @@ export function HomePage() {
             >
               Отримайте доступ до актуальних тестів, питань та навчальних матеріалів.
               <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
-              <strong>Зарегистрируйтесь, чтобы разблокировать все возможности!</strong>
+              <strong>Зареєструйтесь, щоб розблокувати усі можливості!</strong>
             </Typography>
             
             <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
@@ -240,7 +240,7 @@ export function HomePage() {
                 },
                 textAlign: { xs: 'center', sm: 'left' }
               }}>
-                Постоянно обновляемая база знаний по математике, истории, биологии и другим предметам.
+                Постійно оновлювана база знань з математики, історії, біології та інших предметів.
               </Typography>
             </Paper>
           </Grid>

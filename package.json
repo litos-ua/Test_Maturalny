@@ -23,6 +23,7 @@
     "react": "^19.1.0",
     "react-admin": "^5.10.1",
     "react-dom": "^19.1.0",
+    "react-helmet-async": "^3.0.0",
     "react-is": "^19.2.3",
     "react-router-dom": "^7.6.2",
     "react-transition-group": "^4.4.5",
