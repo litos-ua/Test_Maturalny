@@ -21,6 +21,7 @@ import {
   SubjectsIntroPage,
   AdminPage,
   MessagesPage,
+  UsefulMaterials,
 } from "../pages";
 import { App } from "../App";
 
@@ -45,6 +46,7 @@ export const ROUTE = {
   TESTSELECTION: "test-selection",
   TESTSESSION: "/test/session/:id/:name",
   TOPIC_SESSION: "/test/topic-session/:topicId/:topicName",
+  USEFULMATERIALS: "/usefulmaterials/:slug/:disciplineId",
 
   // Admin routes
   ADMIN: "/admin",
@@ -105,6 +107,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTE.TOPIC_SESSION,
         element: (<ErrorBoundary> <TestSessionPage /> </ErrorBoundary>),
+      },
+      {
+        path: ROUTE.USEFULMATERIALS,
+        element: (<ErrorBoundary> <UsefulMaterials /> </ErrorBoundary>),
       },
     ],
   },

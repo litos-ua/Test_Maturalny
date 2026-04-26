@@ -153,7 +153,7 @@ export default function Footer() {
                 }}
               >
                 <span>📧</span>
-                info@yourplatform.com
+                info@zno-nmt.com.ua
               </Typography>
               <Typography 
                 variant="body2"

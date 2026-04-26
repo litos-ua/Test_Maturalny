@@ -12,3 +12,4 @@ export * from './Admin';
 export * from './SubjectsIntroPage';
 export * from './TestSelectionPage';
 export * from './Messages';
+export * from './UsefulMaterials';

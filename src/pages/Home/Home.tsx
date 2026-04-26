@@ -117,6 +117,8 @@ export function HomePage() {
             >
               Отримайте доступ до актуальних тестів, питань та навчальних матеріалів.
               <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
+              Пройдіть тести у форматах пробного та реального іспиту.
+              <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
               <strong>Зареєструйтесь, щоб розблокувати усі можливості!</strong>
             </Typography>
             

@@ -30,8 +30,9 @@ import {
   Mail,
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
-import { TestMenu } from "../TestMenu";
-import { TestMenuMobile } from "../../components";
+// import { TestMenu } from "../TestMenu";
+// import { TestMenuMobile } from "../../components";
+import { DisciplineMenuDesktop, DisciplineMenuMobile } from "../../components";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import logo from "../../../public/logo/donkey_logo.jpg";
@@ -130,7 +131,13 @@ export default function Header({ onToggleTheme }: Props) {
               </NavButton>
               
               {/* открывающееся меню */}
-              <TestMenu /> 
+              {/* <TestMenu />  */}
+              <DisciplineMenuDesktop basePath="/test" buttonText="Тест" />
+
+              {/* <NavButton component={RouterLink} to={ROUTE.USEFULMATERIALS}>
+                Корисні матеріали
+              </NavButton> */}
+              <DisciplineMenuDesktop basePath="/usefulmaterials" buttonText="Корисні матеріали" />
 
               <NavButton component={RouterLink} to={ROUTE.ABOUT}>
                 Про платформу
@@ -220,13 +227,28 @@ export default function Header({ onToggleTheme }: Props) {
                       <StyledListItemButtonWithRouter to={ROUTE.HOME} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Головна" />
                       </StyledListItemButtonWithRouter>
+
                       <StyledListItemButtonWithRouter to={ROUTE.SUBJECTINTRO} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Предмети" />
                       </StyledListItemButtonWithRouter>
-                        <StyledListItemButtonWithRouter to={ROUTE.TESTEXAMRULES} onClick={handleMobileMenuClose}>
-                      <StyledListItemText primary="Правила тестування" />
+
+                      <StyledListItemButtonWithRouter to={ROUTE.TESTEXAMRULES} onClick={handleMobileMenuClose}>
+                        <StyledListItemText primary="Правила тестування" />
                       </StyledListItemButtonWithRouter>
-                        <TestMenuMobile onClose={() => setDrawerOpen(false)} />
+
+                        {/* <TestMenuMobile onClose={() => setDrawerOpen(false)} /> */}
+                        <DisciplineMenuMobile 
+                          basePath="/test" 
+                          buttonText="Тести" 
+                          onClose={() => setDrawerOpen(false)} 
+                        />
+
+                        <DisciplineMenuMobile 
+                          basePath="/usefulmaterials" 
+                          buttonText="Корисні матеріали" 
+                          onClose={() => setDrawerOpen(false)} 
+                        />
+
                       <StyledListItemButtonWithRouter to={ROUTE.ABOUT} onClick={handleMobileMenuClose}>
                         <StyledListItemText primary="Про платформу" />
                       </StyledListItemButtonWithRouter>
