@@ -1,45 +1,3 @@
-// import type { ReactNode } from "react";
-
-// export interface MaterialItem {
-//   id: string;
-//   title: string;
-//   description?: string;
-//   component: ReactNode;
-// }
-
-// // Конфиг материалов по дисциплинам (ключи соответствуют ID с сервера)
-// export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
-//   // 1 - Історія України
-//   1: [
-//     {
-//       id: "treaties-table",
-//       title: "Зведена таблиця історичних угод",
-//       description: "Повний перелік міжнародних договорів, уній та конференцій від 860 до 2015 року",
-//       component: null, // будет подставлен позже
-//     },
-//   ],
-//   // 2 - Математика (пока пусто)
-//   2: [],
-//   // 3 - Інформатика (пока пусто)
-//   3: [],
-//   // 4 - Фізика (пока пусто)
-//   4: [],
-//   // 5 - Англійська мова (пока пусто)
-//   5: [],
-//   // 6 - Українська мова (пока пусто)
-//   6: [],
-//   // 7 - Польська мова (пока пусто)
-//   7: [],
-//   // 1001 - Хімія (пока пусто)
-//   1001: [],
-// };
-
-// // Флаг, есть ли материалы для дисциплины
-// export const hasMaterials = (disciplineId: number): boolean => {
-//   const materials = disciplineMaterialsConfig[disciplineId];
-//   return materials !== undefined && materials.length > 0;
-// };
-
 import { lazy} from 'react';
 import type { ReactNode } from 'react';
 
@@ -53,6 +11,7 @@ export interface MaterialItem {
 
 // Ленивая загрузка компонентов
 export const TreatiesTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/TreatiesTable'));
+export const PersonsTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/PersonsTable'));
 // Для будущих материалов:
 // const MathFormulas = lazy(() => import('../../components/UsefulMaterials/MathFormulas'));
 // const PhysicsFormulas = lazy(() => import('../../components/UsefulMaterials/PhysicsFormulas'));
@@ -68,6 +27,16 @@ export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
       getData: async () => {
         const { treatiesData } = await import('./HistoryOfUkraine/treatiesTable');
         return treatiesData;
+      },
+    },
+    {
+      id: "persons-table",
+      title: "Зведена таблиця історичних персоналій",
+      description: "Повний перелік видатних історичних персоналій від часів Київської Русі до сучасної незалежної України",
+      component: PersonsTable,
+      getData: async () => {
+        const { personsData } = await import('./HistoryOfUkraine/personsData');
+        return personsData;
       },
     },
   ],
