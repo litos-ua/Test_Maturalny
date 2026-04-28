@@ -215,6 +215,9 @@
 //     formula: "\\int_{a}^{b} f(x) dx = F(b) - F(a)",
 //   },
 // ];
+
+
+
 // constants/UsefulMaterials/Math/formulasData.ts
 
 export interface Formula {
@@ -225,6 +228,17 @@ export interface Formula {
   formula: string;        // LaTeX формула
   description?: string;   // Пояснення (опціонально)
 }
+
+// ==================== КОНФІГУРАЦІЯ ДЛЯ PDF ====================
+export const FORMULAS_COLUMNS = [
+  { header: 'Розділ', accessor: (row: Formula) => `${row.sectionIcon || '📐'} ${row.section}`, width: 35 },
+  { header: 'Назва формули', accessor: 'title', width: 40 },
+  { header: 'Формула', accessor: 'formula', width: 50 },
+  { header: 'Опис', accessor: (row: Formula) => row.description || '', width: 'auto' },
+] as const;
+
+export const FORMULAS_SHOW_ROW_NUMBERS = false;  // Для формул нумерація не потрібна
+
 
 export const formulasData: Formula[] = [
   // ==================== 1. РАЦІОНАЛЬНІ ВИРАЗИ. ДІЇ З НИМИ ====================
@@ -999,25 +1013,28 @@ export const formulasData: Formula[] = [
     formula: "a^2 + b^2 = c^2",
   },
   {
-    id: 108,
-    section: "Прямокутний трикутник",
-    sectionIcon: "📐",
-    title: "Синус гострого кута",
-    formula: "\\sin \\alpha = \\frac{протилежний \\ катет}{гіпотенуза}",
+  id: 108,
+  section: "Прямокутний трикутник",
+  sectionIcon: "📐",
+  title: "Синус гострого кута",
+  formula: "\\sin \\alpha = \\frac{a}{c}",
+  description: "де a — протилежний катет, c — гіпотенуза",
   },
   {
     id: 109,
     section: "Прямокутний трикутник",
     sectionIcon: "📐",
     title: "Косинус гострого кута",
-    formula: "\\cos \\alpha = \\frac{прилеглий \\ катет}{гіпотенуза}",
+    formula: "\\cos \\alpha = \\frac{b}{c}",
+    description: "де b — прилеглий катет, c — гіпотенуза",
   },
   {
     id: 110,
     section: "Прямокутний трикутник",
     sectionIcon: "📐",
     title: "Тангенс гострого кута",
-    formula: "\\tg \\alpha = \\frac{протилежний \\ катет}{прилеглий \\ катет}",
+    formula: "\\tg \\alpha = \\frac{a}{b}",
+    description: "де a — протилежний катет, b — прилеглий катет",
   },
   {
     id: 111,
@@ -1071,41 +1088,41 @@ export const formulasData: Formula[] = [
 
     // ==================== 10. СТЕРЕОМЕТРІЯ ====================
   {
-    id: 118,
-    section: "Призма",
-    sectionIcon: "📦",
-    title: "Об'єм прямої призми",
-    formula: "V = S_{\\text{осн}} \\cdot h",
-    description: "S_осн — площа основи, h — висота",
+  id: 118,
+  section: "Призма",
+  sectionIcon: "📦",
+  title: "Об'єм прямої призми",
+  formula: "V = S_{base} \\cdot h",
+  description: "S_base — площа основи, h — висота",
   },
   {
     id: 119,
     section: "Призма",
     sectionIcon: "📦",
     title: "Площа бічної поверхні прямої призми",
-    formula: "S_{\\text{біч}} = P_{\\text{осн}} \\cdot h",
-    description: "P_осн — периметр основи, h — висота",
+    formula: "S_{lat} = P_{base} \\cdot h",
+    description: "P_base — периметр основи, h — висота",
   },
   {
     id: 120,
     section: "Призма",
     sectionIcon: "📦",
     title: "Площа повної поверхні призми",
-    formula: "S_{\\text{пов}} = S_{\\text{біч}} + 2S_{\\text{осн}}",
+    formula: "S_{total} = S_{lat} + 2S_{base}",
   },
   {
     id: 121,
     section: "Піраміда",
     sectionIcon: "🔺",
     title: "Об'єм піраміди",
-    formula: "V = \\frac{1}{3} S_{\\text{осн}} \\cdot h",
+    formula: "V = \\frac{1}{3} S_{base} \\cdot h",
   },
   {
     id: 122,
     section: "Піраміда",
     sectionIcon: "🔺",
     title: "Площа бічної поверхні правильної піраміди",
-    formula: "S_{\\text{біч}} = \\frac{1}{2} P_{\\text{осн}} \\cdot l",
+    formula: "S_{lat} = \\frac{1}{2} P_{base} \\cdot l",
     description: "l — апофема",
   },
   {
@@ -1113,7 +1130,7 @@ export const formulasData: Formula[] = [
     section: "Піраміда",
     sectionIcon: "🔺",
     title: "Площа повної поверхні піраміди",
-    formula: "S_{\\text{пов}} = S_{\\text{біч}} + S_{\\text{осн}}",
+    formula: "S_{total} = S_{lat} + S_{base}",
   },
   {
     id: 124,
@@ -1127,14 +1144,14 @@ export const formulasData: Formula[] = [
     section: "Циліндр",
     sectionIcon: "🧴",
     title: "Площа бічної поверхні циліндра",
-    formula: "S_{\\text{біч}} = 2\\pi R h",
+    formula: "S_{lat} = 2\\pi R h",
   },
   {
     id: 126,
     section: "Циліндр",
     sectionIcon: "🧴",
     title: "Площа повної поверхні циліндра",
-    formula: "S_{\\text{пов}} = 2\\pi R (R + h)",
+    formula: "S_{total} = 2\\pi R (R + h)",
   },
   {
     id: 127,
@@ -1148,7 +1165,7 @@ export const formulasData: Formula[] = [
     section: "Конус",
     sectionIcon: "🎩",
     title: "Площа бічної поверхні конуса",
-    formula: "S_{\\text{біч}} = \\pi R l",
+    formula: "S_{lat} = \\pi R l",
     description: "l — твірна конуса",
   },
   {
@@ -1156,7 +1173,7 @@ export const formulasData: Formula[] = [
     section: "Конус",
     sectionIcon: "🎩",
     title: "Площа повної поверхні конуса",
-    formula: "S_{\\text{пов}} = \\pi R (R + l)",
+    formula: "S_{total} = \\pi R (R + l)",
   },
   {
     id: 130,

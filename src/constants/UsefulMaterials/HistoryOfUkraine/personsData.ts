@@ -8,6 +8,17 @@ export interface Person {
   image?: string; // опціонально, якщо будуть фото
 }
 
+// ==================== КОНФІГУРАЦІЯ ДЛЯ PDF ====================
+export const PERSONS_COLUMNS = [
+  { header: 'Персоналія', accessor: 'name', width: 35 },
+  { header: 'Роки життя', accessor: 'years', width: 20 },
+  { header: 'Категорія', accessor: (row: Person) => `${row.categoryIcon || ''} ${row.category}`, width: 40 },
+  { header: 'Опис', accessor: 'description', width: 'auto' },
+] as const;
+
+export const PERSONS_SHOW_ROW_NUMBERS = true;
+
+
 export const personsData: Person[] = [
   // ==================== КИЇВСЬКА РУСЬ (860–1240) ====================
   { id: 1, name: "Аскольд", years: "?–882", category: "КИЇВСЬКА РУСЬ", categoryIcon: "🏛️", description: "Князь київський (864–882). Здійснив похід на Константинополь (860), уклав перший договір Русі з Візантією. Убитий Олегом." },

@@ -10,6 +10,18 @@ export interface HetmanOfRuins {
   description: string;
 }
 
+// ==================== КОНФІГУРАЦІЯ ДЛЯ PDF ====================
+export const HETMANS_COLUMNS = [
+  { header: 'Гетьман', accessor: 'name', width: 35 },
+  { header: 'Роки правління', accessor: 'rulingYears', width: 20 },
+  { header: 'Територія', accessor: 'territory', width: 30 },
+  { header: 'Орієнтація', accessor: 'orientation', width: 35 },
+  { header: 'Ключові угоди', accessor: 'keyTreaties', width: 50 },
+  { header: 'Характеристика', accessor: 'description', width: 'auto' },
+] as const;
+
+export const HETMANS_SHOW_ROW_NUMBERS = true;
+
 export const hetmansData: HetmanOfRuins[] = [
   {
     id: 1,

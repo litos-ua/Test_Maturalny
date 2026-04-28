@@ -10,6 +10,17 @@ export interface Woman {
   category: string;
 }
 
+// ==================== КОНФІГУРАЦІЯ ДЛЯ PDF ====================
+export const WOMEN_COLUMNS = [
+  { header: 'Персоналія', accessor: 'name', width: 35 },
+  { header: 'Роки життя', accessor: 'years', width: 20 },
+  { header: 'Період', accessor: 'period', width: 25 },
+  { header: 'Категорія', accessor: (row: Woman) => `${row.icons || ''} ${row.category || ''}`, width: 30 },
+  { header: 'Діяльність / Внесок', accessor: 'activity', width: 'auto' },
+] as const;
+
+export const WOMEN_SHOW_ROW_NUMBERS = true;
+
 export const womenData: Woman[] = [
   // ==================== РОЗДІЛ 1. КНЯЖА ДОБА ТА РАННЄ НОВОЧАССЯ ====================
   {

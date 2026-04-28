@@ -8,6 +8,17 @@ export interface Treaty {
 }
 
 
+// ==================== КОНФІГУРАЦІЯ ДЛЯ PDF ====================
+export const TREATIES_COLUMNS = [
+  { header: 'Угода', accessor: 'treaty', width: 45 },
+  { header: 'Рік', accessor: 'year', width: 15 },
+  { header: 'Сторони', accessor: 'parties', width: 50 },
+  { header: 'Опис', accessor: 'description', width: 'auto' },
+] as const;
+
+export const TREATIES_SHOW_ROW_NUMBERS = true;
+
+
 export const treatiesData = [
   // ========== РОЗДІЛ 1. КИЇВСЬКА РУСЬ (860–944 рр.) ==========
   { id: 1, section: "🏛️ КИЇВСЬКА РУСЬ (860–944 рр.)", 
