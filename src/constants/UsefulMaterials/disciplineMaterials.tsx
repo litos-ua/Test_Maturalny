@@ -1,21 +1,113 @@
-import { lazy} from 'react';
-import type { ReactNode } from 'react';
+// import { lazy} from 'react';
+// import type { ReactNode } from 'react';
 
-export interface MaterialItem {
+// export interface MaterialItem {
+//   id: string;
+//   title: string;
+//   description?: string;
+//   component: React.ComponentType<any>;  // Компонент для отображения
+//   getData?: () => Promise<any>;          // Опциональная функция для загрузки данных
+// }
+
+// // Ленивая загрузка компонентов
+// export const TreatiesTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/TreatiesTable'));
+// export const PersonsTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/PersonsTable'));
+// export const FormulasTable = lazy(() => import('../../components/UsefulMaterials/Math/FormulasTable'));
+// // Для будущих материалов:
+// // const PhysicsFormulas = lazy(() => import('../../components/UsefulMaterials/PhysicsFormulas'));
+
+// export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
+//   // Історія України (ID = 1)
+//   1: [
+//     {
+//       id: "treaties-table",
+//       title: "Зведена таблиця історичних угод",
+//       description: "Повний перелік міжнародних договорів, уній та конференцій від 860 до 2015 року",
+//       component: TreatiesTable,
+//       getData: async () => {
+//         const { treatiesData } = await import('./HistoryOfUkraine/treatiesTable');
+//         return treatiesData;
+//       },
+//     },
+//     {
+//       id: "persons-table",
+//       title: "Зведена таблиця історичних персоналій",
+//       description: "Повний перелік видатних історичних персоналій від часів Київської Русі до сучасної незалежної України",
+//       component: PersonsTable,
+//       getData: async () => {
+//         const { personsData } = await import('./HistoryOfUkraine/personsData');
+//         return personsData;
+//       },
+//     },
+//   ],
+  
+//   // Математика (ID = 2) - пока пусто
+//   2: [
+//     {
+//       id: "formulas-table",
+//       title: "Основні математичні формули",
+//       description: "Повний збірник формул з алгебри, геометрії, тригонометрії та аналізу",
+//       component: FormulasTable,
+//       getData: async () => {
+//         const { formulasData } = await import('./Math/formulasData');
+//         return formulasData;
+//       },
+//     },
+//   ],
+  
+//   // Інформатика (ID = 3) - пока пусто
+//   3: [],
+  
+//   // Фізика (ID = 4) - пока пусто
+//   4: [],
+  
+//   // Англійська мова (ID = 5) - пока пусто
+//   5: [],
+  
+//   // Українська мова (ID = 6) - пока пусто
+//   6: [],
+  
+//   // Польська мова (ID = 7) - пока пусто
+//   7: [],
+  
+//   // Хімія (ID = 1001) - пока пусто
+//   1001: [],
+// };
+
+// // Вспомогательная функция для проверки наличия материалов
+// export const hasMaterials = (disciplineId: number): boolean => {
+//   const materials = disciplineMaterialsConfig[disciplineId];
+//   return materials !== undefined && materials.length > 0;
+// };
+
+
+
+// constants/UsefulMaterials/index.ts
+
+import { lazy } from 'react';
+import type { ComponentType } from 'react';
+import type { Treaty } from './HistoryOfUkraine/treatiesTable';
+import type { Person } from './HistoryOfUkraine/personsData';
+import type { Formula } from './Math/formulasData';
+import type { HetmanOfRuins } from './HistoryOfUkraine/hetmansData';
+
+// Дженерик-интерфейс для материала
+export interface MaterialItem<T = any> {
   id: string;
   title: string;
   description?: string;
-  component: React.ComponentType<any>;  // Компонент для отображения
-  getData?: () => Promise<any>;          // Опциональная функция для загрузки данных
+  component: ComponentType<{ data: T }>;  // Компонент принимает data типа T
+  getData?: () => Promise<T>;              // Функция возвращает Promise<T>
 }
 
 // Ленивая загрузка компонентов
 export const TreatiesTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/TreatiesTable'));
 export const PersonsTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/PersonsTable'));
-// Для будущих материалов:
-// const MathFormulas = lazy(() => import('../../components/UsefulMaterials/MathFormulas'));
-// const PhysicsFormulas = lazy(() => import('../../components/UsefulMaterials/PhysicsFormulas'));
+export const FormulasTable = lazy(() => import('../../components/UsefulMaterials/Math/FormulasTable'));
+export const HetmanOfRuinsTimeTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/HetmansOfRuinTimeTable'));
+export const WomenInHistoryTable = lazy(() => import('../../components/UsefulMaterials/HistoryOfUkraine/WomenInHistoryTable'));
 
+// Конфиг с указанием конкретных типов для каждого материала
 export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
   // Історія України (ID = 1)
   1: [
@@ -23,28 +115,59 @@ export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
       id: "treaties-table",
       title: "Зведена таблиця історичних угод",
       description: "Повний перелік міжнародних договорів, уній та конференцій від 860 до 2015 року",
-      component: TreatiesTable,
+      component: TreatiesTable,  // TreatiesTable ожидает data: Treaty[]
       getData: async () => {
         const { treatiesData } = await import('./HistoryOfUkraine/treatiesTable');
-        return treatiesData;
+        return treatiesData as Treaty[];  // 👈 Явное приведение типа
       },
     },
     {
       id: "persons-table",
       title: "Зведена таблиця історичних персоналій",
-      description: "Повний перелік видатних історичних персоналій від часів Київської Русі до сучасної незалежної України",
-      component: PersonsTable,
+      description: "Повний перелік видатних історичних персоналій...",
+      component: PersonsTable,   // PersonsTable ожидает data: Person[]
       getData: async () => {
         const { personsData } = await import('./HistoryOfUkraine/personsData');
-        return personsData;
+        return personsData as Person[];
+      },
+    },
+    {
+      id: "hetmans-table",
+      title: "Гетьмани України",
+      description: "Перелік гетьманів України періоду Козацької доби та Руїни (1648–1764)",
+      component: HetmanOfRuinsTimeTable,
+      getData: async () => {
+        const { hetmansData } = await import('./HistoryOfUkraine/hetmansData');
+        return hetmansData as HetmanOfRuins[];
+      },
+    },
+    {
+      id: "women-in-history-table",
+      title: "Жінки, які вплинули на історію України",
+      description: "Видатні жінки України від княжої доби до незалежності",
+      component: WomenInHistoryTable,
+      getData: async () => {
+        const { womenData } = await import('./HistoryOfUkraine/womenData');
+        return womenData;
       },
     },
   ],
   
-  // Математика (ID = 2) - пока пусто
-  2: [],
+  // Математика (ID = 2)
+  2: [
+    {
+      id: "formulas-table",
+      title: "Основні математичні формули",
+      description: "Повний збірник формул з алгебри, геометрії, тригонометрії та аналізу",
+      component: FormulasTable,  // FormulasTable ожидает data: Formula[]
+      getData: async () => {
+        const { formulasData } = await import('./Math/formulasData');
+        return formulasData as Formula[];
+      },
+    },
+  ],
   
-  // Інформатика (ID = 3) - пока пусто
+    // Інформатика (ID = 3) - пока пусто
   3: [],
   
   // Фізика (ID = 4) - пока пусто
@@ -61,10 +184,7 @@ export const disciplineMaterialsConfig: Record<number, MaterialItem[]> = {
   
   // Хімія (ID = 1001) - пока пусто
   1001: [],
+
 };
 
-// Вспомогательная функция для проверки наличия материалов
-export const hasMaterials = (disciplineId: number): boolean => {
-  const materials = disciplineMaterialsConfig[disciplineId];
-  return materials !== undefined && materials.length > 0;
-};
+

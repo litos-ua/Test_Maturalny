@@ -10,7 +10,8 @@ import {
   Typography,
   Box,
   useTheme,
-  alpha
+  alpha,
+  CircularProgress,
 } from '@mui/material';
 
 interface Treaty {
@@ -29,8 +30,26 @@ interface TreatiesTableProps {
 export const TreatiesTable: React.FC<TreatiesTableProps> = ({ data }) => {
   const theme = useTheme();
 
-  if (!data || data.length === 0) {
-    return <Typography>Нет данных для отображения</Typography>;
+  // if (!data || data.length === 0) {
+  //   return <Typography>Нет данных для отображения</Typography>;
+  // }
+
+  // Перевірка на наявність даних
+  if (!data || !Array.isArray(data)) {
+    return (
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3, textAlign: 'center' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Завантаження даних...</Typography>
+      </Paper>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3, textAlign: 'center' }}>
+        <Typography variant="h6">📭 Немає даних для відображення</Typography>
+      </Paper>
+    );
   }
 
   const getSectionColor = (section: string): string => {
@@ -54,7 +73,7 @@ export const TreatiesTable: React.FC<TreatiesTableProps> = ({ data }) => {
           Від Київської Русі до Незалежної України (860 – 2015 рр.)
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Всього угод: {data.length}
+          Всього угод: {data.length ?? 0}
         </Typography>
       </Box>
 

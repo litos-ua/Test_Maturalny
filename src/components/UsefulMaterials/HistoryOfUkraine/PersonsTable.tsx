@@ -15,7 +15,8 @@ import {
   InputAdornment,
   Chip,
   useTheme,
-  alpha
+  alpha,
+  CircularProgress,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
@@ -41,6 +42,7 @@ const PersonsTable: React.FC<PersonsTableProps> = ({ data }) => {
 
   // Фільтрація
   const filteredData = useMemo(() => {
+    if (!data || !Array.isArray(data)) return []
     const searchLower = searchTerm.toLowerCase();
     return data.filter(person => 
       person.name.toLowerCase().includes(searchLower) ||
@@ -143,11 +145,11 @@ const PersonsTable: React.FC<PersonsTableProps> = ({ data }) => {
       {/* Інформація про кількість записів */}
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="body2" color="text.secondary">
-          📊 Загалом персоналій: {data.length} | Знайдено: {filteredData.length}
+          📊 Загалом персоналій: {data.length ?? 0} | Знайдено: {filteredData.length}
         </Typography>
         {searchTerm && (
           <Chip 
-            label={`Показано: ${filteredData.length} з ${data.length}`} 
+            label={`Показано: ${filteredData.length ?? 0} з ${data.length ?? 0}`} 
             size="small" 
             color="primary" 
             variant="outlined"

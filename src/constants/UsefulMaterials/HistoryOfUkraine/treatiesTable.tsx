@@ -1,3 +1,13 @@
+export interface Treaty {
+  id: number;
+  section: string;      // Назва розділу (з іконкою)
+  treaty: string;       // Назва договору/угоди (з іконкою)
+  year: string;         // Рік укладення
+  parties: string;      // Сторони договору
+  description: string;  // Опис та історичне значення
+}
+
+
 export const treatiesData = [
   // ========== РОЗДІЛ 1. КИЇВСЬКА РУСЬ (860–944 рр.) ==========
   { id: 1, section: "🏛️ КИЇВСЬКА РУСЬ (860–944 рр.)", 
