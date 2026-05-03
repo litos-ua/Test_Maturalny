@@ -89,7 +89,7 @@ const HetmansOfRuinTime: React.FC<HetmansOfRuinTimeProps> = ({ data }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 2, borderRadius: 3 }}>
+    <Paper elevation={3} sx={{ p: 2, borderRadius: 3, width: '100%' }}>
       {/* Заголовок */}
       <Box sx={{ mb: 3, textAlign: 'center' }}>
         <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600 }}>

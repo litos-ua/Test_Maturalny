@@ -41,10 +41,10 @@ export const TeacherImages = [
 ];
 
 export const avatars = {
-    Guest: '/assets/avatars/guest.jpg',
-    Student: '/assets/avatars/student.jpg',
-    Teacher: '/assets/avatars/teacher.jpg',
-    Admin: '/assets/avatars/admin.jpg',
+    Guest: '/avatars/guest.jpg',
+    Student: '/avatars/student.jpg',
+    Teacher: '/avatars/teacher.jpg',
+    Admin: '/avatars/admin.jpg',
   };
 
 
@@ -153,11 +153,7 @@ export const subjects = [
 ];
 
 export const AboutImages = [
-  "/about/About01.jpg",
-  "/about/About02.jpg",
-  "/about/About03.jpg",
-  // "/About04.jpg",
-  // "/About05.jpg",
-  // "/About06.jpg",
-  // "/About07.jpg",
+  "/img_about/About01.jpg",
+  "/img_about/About02.jpg",
+  "/img_about/About03.jpg",
 ];

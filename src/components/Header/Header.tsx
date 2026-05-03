@@ -37,6 +37,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import logo from "../../../public/logo/donkey_logo.jpg";
 import { getRoleString } from "../../utils";
+import { getAvatarByRole } from '../../utils'
 import { ROUTE } from "../../router";
 import {
   StyledAppBar,
@@ -155,11 +156,16 @@ export default function Header({ onToggleTheme }: Props) {
 
             {isAuthenticated ? (
               <>
+
                 <Tooltip title="Особистий кабінет">
                   <IconButton onClick={handleMenuOpen} color="inherit" sx={{ p: 0 }}>
-                    <Avatar sx={{ width: 32, height: 32, bgcolor: theme.palette.primary.main }}>
+                    <Avatar 
+                      src={getAvatarByRole(userData?.role)}  // ← добавляем src
+                      sx={{ width: 32, height: 32, bgcolor: theme.palette.primary.main }}
+                    >
+                      {/* Это будет показываться, если картинка не загрузилась */}
                       {userData?.username?.charAt(0).toUpperCase() ||
-                        userData?.email?.charAt(0).toUpperCase()}
+                      userData?.email?.charAt(0).toUpperCase()}
                     </Avatar>
                   </IconButton>
                 </Tooltip>

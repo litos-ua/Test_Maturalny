@@ -1,26 +1,61 @@
+// import type { UserRole } from "../types";
+// import { avatars } from "../constants";
+
+
+// export const getAvatarByRole = (roleValue: number | UserRole) => {
+//   // Если пришла строка (тип UserRole)
+//   if (typeof roleValue === 'string') {
+//     const avatarsRole = {
+//       Guest: avatars.Guest,
+//       Student: avatars.Student,
+//       Teacher: avatars.Teacher,
+//       Admin: avatars.Admin
+//     };
+//     return avatarsRole[roleValue] || avatars.Teacher;
+//   }
+  
+//   // Если пришло число
+//   const roleMap = {
+//     0: avatars.Guest,
+//     1: avatars.Student,
+//     2: avatars.Teacher,
+//     3: avatars.Admin
+//   };
+//   console.log(`Role: ${roleValue}, RoleMap ${roleMap[roleValue as keyof typeof roleMap]}`)
+//   return roleMap[roleValue as keyof typeof roleMap] || avatars.Teacher;
+// };
+
+
+
+// src/utils/avatarUtils.tsx
+// src/utils/avatarUtils.tsx
 import type { UserRole } from "../types";
-import { avatars } from "../constants";
+import { avatars } from "../constants/images";
 
-
-export const getAvatarByRole = (roleValue: number | UserRole) => {
-  // Если пришла строка (тип UserRole)
+export const getAvatarByRole = (roleValue: number | UserRole | undefined | null): string => {
+  // Если роль не передана или null/undefined
+  if (roleValue === undefined || roleValue === null) {
+    return avatars.Guest;
+  }
+  
+  // Если пришла строка (Guest, Student, Teacher, Admin)
   if (typeof roleValue === 'string') {
-    const avatarsRole = {
+    const avatarsRole: Record<string, string> = {
       Guest: avatars.Guest,
       Student: avatars.Student,
       Teacher: avatars.Teacher,
-      Admin: avatars.Admin
+      Admin: avatars.Admin,
     };
-    return avatarsRole[roleValue] || avatars.Teacher;
+    return avatarsRole[roleValue] || avatars.Guest;
   }
   
-  // Если пришло число
-  const roleMap = {
+  // Если пришло число (0,1,2,3)
+  const roleMap: Record<number, string> = {
     0: avatars.Guest,
     1: avatars.Student,
-    2: '/assets/avatars/teacher.jpg', //avatars.Teacher,
-    3: avatars.Admin
+    2: avatars.Teacher,
+    3: avatars.Admin,
   };
-  console.log(`Role: ${roleValue}, RoleMap ${roleMap[roleValue as keyof typeof roleMap]}`)
-  return roleMap[roleValue as keyof typeof roleMap] || avatars.Teacher;
+  
+  return roleMap[roleValue] || avatars.Guest;
 };

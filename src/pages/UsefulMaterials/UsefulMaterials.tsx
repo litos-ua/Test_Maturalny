@@ -812,10 +812,11 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { disciplineMaterialsConfig } from '../../constants/UsefulMaterials/disciplineMaterials';
 import { fetchDisciplines } from '../../api';
 import { exportTableToPDF } from '../../utils/pdfExportUniversal';
+import { useTheme } from '@mui/material';
 
 export const UsefulMaterials: React.FC = () => {
   const { slug, disciplineId } = useParams<{ slug: string; disciplineId: string }>();
-  
+  const theme = useTheme();
   const id = disciplineId ? parseInt(disciplineId) : null;
   const [disciplineName, setDisciplineName] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -865,23 +866,26 @@ export const UsefulMaterials: React.FC = () => {
       }
 
       setDataLoading(true);
-      const newData: Record<string, any> = {};
+  const newData: Record<string, any> = {};
 
-      for (const material of materials) {
-        if (material.getData) {
-          try {
-            const data = await material.getData();
-            newData[material.id] = data;
-          } catch (error) {
-            console.error(`Failed to load data for ${material.id}:`, error);
-            newData[material.id] = [];
-          }
-        }
+  for (const material of materials) {
+    if (material.getData) {
+      try {
+        // console.log(`🔄 Завантаження даних для: ${material.id}`);
+        const data = await material.getData();
+        // console.log(`✅ Дані для ${material.id}:`, data);
+        newData[material.id] = data;
+      } catch (error) {
+        // console.error(`❌ Failed to load data for ${material.id}:`, error);
+        newData[material.id] = [];
       }
+    }
+  }
 
-      setMaterialsData(newData);
-      setDataLoading(false);
-    };
+  // console.log('📦 Всі завантажені дані:', newData);
+  setMaterialsData(newData);
+  setDataLoading(false);
+};
 
     loadMaterialsData();
   }, [id, materials]);
@@ -905,16 +909,7 @@ export const UsefulMaterials: React.FC = () => {
   // Обробник експорту
   const handleExport = useCallback(async (materialId: string, title: string) => {
     const material = materials.find(m => m.id === materialId);
-    const componentData = materialsData[materialId];
-
-    // // 🔍 ДЕБАГ - подивитися що зчитується
-    // console.log('========== ЕКСПОРТ PDF ==========');
-    // console.log('materialId:', materialId);
-    // console.log('title:', title);
-    // console.log('componentData length:', componentData?.length);
-    // console.log('Перший запис:', componentData?.[0]);
-    // console.log('pdfConfig:', material?.pdfConfig);
-    // console.log('==================================');
+    let componentData = materialsData[materialId];
 
     if (!material) {
       showSnackbar('Матеріал не знайдено', 'error');
@@ -926,7 +921,28 @@ export const UsefulMaterials: React.FC = () => {
       return;
     }
     
-    if (!Array.isArray(componentData) || componentData.length === 0) {
+    // 🔥 СПЕЦІАЛЬНА ОБРОБКА ДЛЯ КАРИКАТУР (об'єднує три масиви в один)
+    let exportData = componentData;
+    if (materialId === 'cartoons-section' && componentData && !Array.isArray(componentData)) {
+      exportData = [
+        ...(componentData.preSovietData || []),
+        ...(componentData.sovietEarlyData || []),
+        ...(componentData.ww2Data || []),
+        ...(componentData.postWarData || []),     
+        ...(componentData.bureaucracyData || []),
+        ...(componentData.deficitData || []),
+        ...(componentData.serviceData || []),
+        ...(componentData.nesunyData || []),
+        ...(componentData.bezhozData || []),
+        ...(componentData.nenuzhnajaProdData || []),
+        ...(componentData.perebudovaData || []),
+        ...(componentData.ukraineData || []),
+      ];
+      console.log('🎭 Об\'єднано дані карикатур:', exportData.length);
+    }
+    
+    // Перевірка на масив
+    if (!Array.isArray(exportData) || exportData.length === 0) {
       showSnackbar('Немає даних для експорту', 'warning');
       return;
     }
@@ -940,12 +956,12 @@ export const UsefulMaterials: React.FC = () => {
     setExporting(materialId);
 
     try {
-      // 🔥 ВИКОРИСТОВУЄМО pdfConfig ЗАМІСТЬ materialId
+      // Використовуємо об'єднані дані для експорту
       await exportTableToPDF(
-        componentData, 
+        exportData, 
         disciplineName, 
         title,
-        material.pdfConfig  // 👈 Передаємо pdfConfig
+        material.pdfConfig
       );
       
       showSnackbar(`Файл "${title}.pdf" успішно завантажено!`, 'success');
@@ -964,7 +980,8 @@ export const UsefulMaterials: React.FC = () => {
 
   if (!id) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4, textAlign: "center" }}>
+      // <Container maxWidth="lg" sx={{ py: 4, textAlign: "center" }}>
+      <Container maxWidth={false} sx={{ py: 4, px: { xs: 2, sm: 3, md: 4 }, textAlign: "center" }}> 
         <Typography variant="h4" gutterBottom>
           📚 Корисні матеріали для підготовки
         </Typography>
@@ -1041,34 +1058,66 @@ export const UsefulMaterials: React.FC = () => {
                         </Typography>
                       )}
                     </Box>
-                    
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={exporting === material.id ? <CircularProgress size={18} /> : <DownloadIcon />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExport(material.id, material.title);
-                      }}
-                      disabled={exporting === material.id}
-                      sx={{ 
-                        minWidth: '100px',
-                        flexShrink: 0,
-                        ml: 2,  // 👈 Відступ зліва
-                      }}
-                    >
-                      {exporting === material.id ? 'Завантаження...' : 'Завантажити PDF'}
-                    </Button>
+                        <Box
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleExport(material.id, material.title);
+                          }}
+                          sx={{ 
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            fontWeight: 500,
+                            fontSize: '0.875rem',
+                            lineHeight: 1.75,
+                            minWidth: 64,
+                            padding: '4px 10px',
+                            borderRadius: 1,
+                            border: '1px solid',
+                            borderColor: theme.palette.mode === 'dark' ? '#5a9ad9' : '#81C3FF',  // світло-голубий бордюр
+                            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(90, 154, 217, 0.1)' : 'rgba(129, 195, 255, 0.1)',  // світло-голубий фон
+                            transition: 'all 0.2s',
+                            '& svg': {
+                              color: theme.palette.mode === 'dark' ? '#5a9ad9' : '#81C3FF',  // світло-голуба іконка
+                            },
+                            '& .MuiTypography-root': {
+                              color: theme.palette.mode === 'dark' ? '#5a9ad9' : '#81C3FF',  // світло-голубий текст
+                            },
+                            '&:hover': {
+                              backgroundColor: theme.palette.mode === 'dark' 
+                                ? 'rgba(255, 193, 7, 0.2)'   // темно-жовтий фон для темної теми
+                                : 'rgba(255, 193, 7, 0.3)',   // світло-жовтий фон для світлої теми
+                              borderColor: theme.palette.mode === 'dark' ? '#FFC107' : '#F4A460',  // жовтий бордюр (опціонально)
+                            },
+                            '&:hover svg': {
+                              color: theme.palette.mode === 'dark' ? '#FFC107' : '#F4A460',  // іконка стає жовтою (опціонально)
+                            },
+                            '&:hover .MuiTypography-root': {
+                              color: theme.palette.mode === 'dark' ? '#FFC107' : '#F4A460',  // текст стає жовтим (опціонально)
+                            }
+                          }}
+                        >
+                          {exporting === material.id ? (
+                            <CircularProgress size={18} />
+                          ) : (
+                            <DownloadIcon fontSize="small" />
+                          )}
+                          <Typography variant="body2">
+                            {exporting === material.id ? 'Завантаження...' : 'Завантажити PDF'}
+                          </Typography>
+                        </Box>
                   </Box>
                 </AccordionSummary>  
 
 
-                <AccordionDetails sx={{ p: 2, overflowX: 'auto' }}>
+                <AccordionDetails sx={{ p: 2, overflowX: 'auto', width: '100%' }}>
                   <Suspense fallback={<CircularProgress size={24} />}>
                     {materialsData[material.id] ? (
                       <material.component data={materialsData[material.id]} />
                     ) : (
-                      <Box sx={{ textAlign: 'center', py: 4 }}>
+                      <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
                         <Typography color="text.secondary">
                           Дані відсутні або не завантажились
                         </Typography>
