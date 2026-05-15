@@ -122,7 +122,7 @@ export function HomePage() {
               <strong>Зареєструйтесь, щоб розблокувати усі можливості!</strong>
             </Typography>
             
-            <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
+            {/* <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
                   mt={2} 
                   sx={{ width: '100%', ml: { xs: 1, md: 2, lg: 6, xl: 8 } }}>
                 <Button
@@ -139,7 +139,75 @@ export function HomePage() {
                 >
                   Зареєструватись
                 </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={() => navigate(ROUTE.TESTSELECTION)}
+                  sx={{ 
+                    textTransform: "none",
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                    px: { xs: 3, md: 4 },
+                    py: { xs: 1, md: 1.5 }
+                  }}
+                >
+                  Тестування
+                </Button>
+
+              </Box> */}
+              
+              <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
+                    mt={2} 
+                    sx={{ width: '100%', ml: { xs: 1, md: 2, lg: 6, xl: 8 } }}>
+                
+                <Stack 
+                  direction={{ xs: 'column', sm: 'row' }} 
+                  spacing={{ xs: 2, sm: 3, md: 4, lg: 6, xl: 18 }}
+                  sx={{ width: { xs: '100%', sm: 'auto' }, justifyContent: 'center'}}
+                >
+                  <Button
+                    variant="contained"
+                    // color="secondary"
+                    size="large"
+                    onClick={() => navigate(ROUTE.REGISTRATION)}
+                    sx={{ 
+                      textTransform: "none",
+                      fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1.1rem' },
+                      px: { xs: 2, sm: 3, md: 4 },
+                      py: { xs: 1, sm: 1.5, md: 1.5 },
+                      minWidth: { xs: '100%', sm: '180px', md: '200px' },
+                      bgcolor: theme.palette.info.main,  
+                      '&:hover': {
+                        bgcolor: theme.palette.info.dark,  
+                      }
+                    }}
+                  >
+                    Зареєструватись
+                  </Button>
+                  
+                  <Button
+                    variant="contained"
+                    // color="success"  
+                    size="large"
+                    onClick={() => navigate(ROUTE.TESTSELECTION)}
+                    sx={{ 
+                      textTransform: "none",
+                      fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1.1rem' },
+                      px: { xs: 2, sm: 3, md: 4 },
+                      py: { xs: 1, sm: 1.5, md: 1.5 },
+                      minWidth: { xs: '100%', sm: '180px', md: '200px' },
+                      bgcolor: theme.palette.secondary.main,  
+                      '&:hover': {
+                        bgcolor: theme.palette.secondary.dark,  
+                      }
+                    }}
+                  >
+                    Тестування
+                  </Button>
+                </Stack>
               </Box>
+
           </Grid>
 
           {/* Правая часть */}
