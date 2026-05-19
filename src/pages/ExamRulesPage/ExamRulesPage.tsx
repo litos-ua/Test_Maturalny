@@ -45,8 +45,8 @@ const questionTypes: QuestionType[] = [
   },
   {
     type: "MultiChoice",
-    title: "Выбор нескольких опций",
-    short: "Выберите несколько правильных ответов (от 3 и более).",
+    title: "Вибір кількох опцій",
+    short: "Виберіть кілька правильних відповідей (від 3 і більше).",
     details: `
       Оцінювання:
       - За кожну правильну відповідь: +1 бал. 
@@ -95,7 +95,7 @@ export function ExamRulesPage() {
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
-        Правила проведения ЗНО / НМТ
+        Правила проведення ЗНО / НМТ
       </Typography>
 
       <Typography variant="body1" mb={2}>
@@ -116,7 +116,7 @@ export function ExamRulesPage() {
                   {q.short}
                 </Typography>
                 <Button variant="outlined" onClick={() => handleOpen(q)}>
-                  Подробнее об оценивании
+                  Докладніше про оцінювання
                 </Button>
               </CardContent>
             </Card>
@@ -126,7 +126,7 @@ export function ExamRulesPage() {
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {activeType?.title} — Правила оценивания
+          {activeType?.title} — Правила оцінювання
         </DialogTitle>
         <DialogContent>
           <Typography variant="body1" whiteSpace="pre-line">

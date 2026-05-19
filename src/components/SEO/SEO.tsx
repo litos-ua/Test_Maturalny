@@ -29,7 +29,7 @@ export function SEO({
       <meta property="og:url" content={url} />
       <meta property="og:site_name" content="Платформа знань" />
       <meta property="og:locale" content="uk_UA" />
-      <meta property="og:image" content="https://zno-nmt.com.ua/og-image.png" /> {/* Добавьте картинку */}
+      <meta property="og:image" content="https://zno-nmt.com.ua/preview.webp" /> 
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />

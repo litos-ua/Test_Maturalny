@@ -11,6 +11,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import { fetchDisciplines } from "../../api";
+import { translit } from '../../utils';
 
 interface DisciplineMenuMobileProps {
   /** Базовый путь для навигации, например "/test" или "/usefulmaterials" */
@@ -25,15 +26,16 @@ interface DisciplineMenuMobileProps {
 
 // Стандартная функция slugify
 const defaultSlugify = (name: string): string => {
-  return name
-    .toLowerCase()
-    .replace(/і/g, "i")
-    .replace(/ї/g, "i")
-    .replace(/є/g, "e")
-    .replace(/ґ/g, "g")
-    .replace(/[^a-zа-яё0-9]+/gi, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+  // return name
+  //   .toLowerCase()
+  //   .replace(/і/g, "i")
+  //   .replace(/ї/g, "i")
+  //   .replace(/є/g, "e")
+  //   .replace(/ґ/g, "g")
+  //   .replace(/[^a-zа-яё0-9]+/gi, "-")
+  //   .replace(/-+/g, "-")
+  //   .replace(/^-|-$/g, "");
+  return translit(name);
 };
 
 export function DisciplineMenuMobile({

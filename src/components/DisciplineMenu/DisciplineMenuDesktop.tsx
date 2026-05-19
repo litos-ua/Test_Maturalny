@@ -9,6 +9,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useNavigate } from "react-router-dom";
 import { fetchDisciplines } from "../../api";
+import { translit } from '../../utils';
 
 interface DisciplineMenuDesktopProps {
   /** Базовый путь для навигации, например "/test" или "/usefulmaterials" */
@@ -21,15 +22,16 @@ interface DisciplineMenuDesktopProps {
 
 // Стандартная функция slugify
 const defaultSlugify = (name: string): string => {
-  return name
-    .toLowerCase()
-    .replace(/і/g, "i")
-    .replace(/ї/g, "i")
-    .replace(/є/g, "e")
-    .replace(/ґ/g, "g")
-    .replace(/[^a-zа-яё0-9]+/gi, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+  // return name
+  //   .toLowerCase()
+  //   .replace(/і/g, "i")
+  //   .replace(/ї/g, "i")
+  //   .replace(/є/g, "e")
+  //   .replace(/ґ/g, "g")
+  //   .replace(/[^a-zа-яё0-9]+/gi, "-")
+  //   .replace(/-+/g, "-")
+  //   .replace(/^-|-$/g, "");
+  return translit(name);
 };
 
 export function DisciplineMenuDesktop({

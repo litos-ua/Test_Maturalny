@@ -1,4 +1,4 @@
-import { get, post, put, del, handleAuthError } from "./authClient";
+import { get, post, put, del, handleAuthError } from "./";
 import type { UserDto, CreateUserDto, UpdateUserDto } from "../types";
 
 export const fetchUsers = async (): Promise<UserDto[]> => {

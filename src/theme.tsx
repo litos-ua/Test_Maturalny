@@ -86,8 +86,12 @@ export const getAppTheme = (darkMode: boolean) => {
       contrastText: "#000000",
     },
     background: {
-      default: "#f5f6f8", // светло-серый фон
-      paper: "#ffffff",
+      //default: "#f5f6f8", // светло-серый фон
+      //default: "#C5EAFF", // еще светлее светло-серый фон
+      //default: "#E2F4FF", // еще немного светлее светло-серый фон
+      default: "#FFF5E0", // слоновая кость
+      //paper: "#ffffff",
+      paper: "#e8f5e9",
     },
     text: {
       primary: "#1e1e1e",
@@ -200,9 +204,9 @@ export const getAppTheme = (darkMode: boolean) => {
   return createTheme({
     palette: darkMode ? darkPalette : lightPalette,
     typography: {
-      fontFamily: "'Inter', 'Segoe UI', sans-serif",
-      h1: { fontWeight: 700 },
-      h2: { fontWeight: 600 },
+      fontFamily: "'Clash Display', 'Inter', 'Segoe UI', sans-serif",
+      h1: { fontWeight: 700, fontFamily: "'Gambetta', 'Inter', sans-serif", },
+      h2: { fontWeight: 600, fontFamily: "'Clash Display', 'Inter', sans-serif", },
       body1: { fontSize: "1rem" },
     },
     components: {

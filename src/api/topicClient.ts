@@ -1,7 +1,6 @@
 import axios from "axios";
 import { configObj } from "../constants";
 
-//const baseURL = "https://localhost:7283/api/Topics";
 const baseURL = configObj.axiosUrl + "Topics";
 
 const httpTopicClient = axios.create({

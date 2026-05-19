@@ -29,7 +29,8 @@ export const imageStyles: SxProps = {
   width: "100%",
   height: "100%",
   objectFit: "contain",
-  objectPosition: "top center",
+  //objectPosition: "top center",
+  objectPosition: "center",
   borderRadius: 2,
   zIndex: 2,
   pointerEvents: "none"

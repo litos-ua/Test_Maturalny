@@ -1,4 +1,6 @@
+// // Адаптация к различным экранам
 // // components/PersonsTable/PersonsTable.tsx
+
 // import React, { useState, useMemo } from 'react';
 // import {
 //   Table,
@@ -16,7 +18,6 @@
 //   Chip,
 //   useTheme,
 //   alpha,
-//   CircularProgress,
 // } from '@mui/material';
 // import { Search as SearchIcon } from '@mui/icons-material';
 
@@ -27,7 +28,7 @@
 //   category: string;
 //   categoryIcon: string;
 //   description: string;
-//   image?: string; // опціонально, якщо будуть фото
+//   image?: string;
 // }
 
 // interface PersonsTableProps {
@@ -40,9 +41,8 @@
 //   const [rowsPerPage, setRowsPerPage] = useState(25);
 //   const [searchTerm, setSearchTerm] = useState('');
 
-//   // Фільтрація
 //   const filteredData = useMemo(() => {
-//     if (!data || !Array.isArray(data)) return []
+//     if (!data || !Array.isArray(data)) return [];
 //     const searchLower = searchTerm.toLowerCase();
 //     return data.filter(person => 
 //       person.name.toLowerCase().includes(searchLower) ||
@@ -52,7 +52,6 @@
 //     );
 //   }, [data, searchTerm]);
 
-//   // Пагінація
 //   const paginatedData = filteredData.slice(
 //     page * rowsPerPage,
 //     page * rowsPerPage + rowsPerPage
@@ -67,7 +66,6 @@
 //     setPage(0);
 //   };
 
-//   // Кольори для категорій
 //   const getCategoryColor = (category: string): string => {
 //     if (category.includes('КИЇВСЬКА')) return '#2E7D32';
 //     if (category.includes('ЛИТОВСЬКО-ПОЛЬСЬКА')) return '#6A1B9A';
@@ -87,7 +85,6 @@
 //     return '#37474F';
 //   };
 
-//   // Отримання повної назви категорії для відображення
 //   const getCategoryDisplay = (category: string, icon: string): string => {
 //     const fullNames: Record<string, string> = {
 //       'КИЇВСЬКА РУСЬ': `${icon} Київська Русь (860–1240)`,
@@ -111,10 +108,9 @@
 //   };
 
 //   return (
-//     <Paper elevation={3} sx={{ p: 2, borderRadius: 3, width: '100%' }}>
-//       {/* Заголовок */}
+//     <Paper elevation={3} sx={{ p: 2, borderRadius: 3, width: '100%', overflowX: 'auto' }}>
 //       <Box sx={{ mb: 3, textAlign: 'center' }}>
-//         <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600 }}>
+//         <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600, fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' } }}>
 //           👤 Історичні персоналії України
 //         </Typography>
 //         <Typography variant="subtitle1" color="text.secondary">
@@ -122,7 +118,6 @@
 //         </Typography>
 //       </Box>
 
-//       {/* Пошук */}
 //       <TextField
 //         fullWidth
 //         variant="outlined"
@@ -142,7 +137,6 @@
 //         }}
 //       />
 
-//       {/* Інформація про кількість записів */}
 //       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 //         <Typography variant="body2" color="text.secondary">
 //           📊 Загалом персоналій: {data.length ?? 0} | Знайдено: {filteredData.length}
@@ -157,15 +151,14 @@
 //         )}
 //       </Box>
 
-//       {/* Таблиця */}
 //       <TableContainer sx={{ maxHeight: 600, overflow: 'auto' }}>
-//         <Table stickyHeader size="small">
+//         <Table stickyHeader size="small" sx={{ minWidth: { xs: 600, sm: 700, md: 800 }, tableLayout: 'fixed', width: '100%' }}>
 //           <TableHead>
 //             <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#2d2d3a' : '#f5f5f5' }}>
-//               <TableCell sx={{ fontWeight: 700, minWidth: 200 }}>👤 Персоналія</TableCell>
-//               <TableCell sx={{ fontWeight: 700, width: 100 }}>📅 Роки життя</TableCell>
-//               <TableCell sx={{ fontWeight: 700, width: 220 }}>🏷️ Категорія</TableCell>
-//               <TableCell sx={{ fontWeight: 700, minWidth: 400 }}>📜 Основна діяльність / Внесок</TableCell>
+//               <TableCell sx={{ fontWeight: 700, width: { xs: 140, sm: 160, md: 180 } }}>👤 Персоналія</TableCell>
+//               <TableCell sx={{ fontWeight: 700, width: { xs: 95, sm: 100, md: 105 } }}>📅 Роки життя</TableCell>
+//               <TableCell sx={{ fontWeight: 700, width: { xs: 180, sm: 200, md: 220 } }}>🏷️ Категорія</TableCell>
+//               <TableCell sx={{ fontWeight: 700, minWidth: { xs: 250, sm: 300, md: 350 }, width: 'auto' }}>📜 Основна діяльність / Внесок</TableCell>
 //             </TableRow>
 //           </TableHead>
 //           <TableBody>
@@ -201,7 +194,6 @@
 //         </Table>
 //       </TableContainer>
 
-//       {/* Пагінація */}
 //       <TablePagination
 //         rowsPerPageOptions={[15, 25, 50, 100]}
 //         component="div"
@@ -220,8 +212,12 @@
 // export default PersonsTable;
 
 
-// Адаптация к различным экранам
-// components/PersonsTable/PersonsTable.tsx
+
+// components/UsefulMaterials/HistoryOfUkraine/PersonTable.tsx
+// ============================================================================
+// КОМПОНЕНТ ТАБЛИЦІ ІСТОРИЧНИХ ПЕРСОНАЛІЙ УКРАЇНИ
+// ============================================================================
+// 
 
 import React, { useState, useMemo } from 'react';
 import {
@@ -242,6 +238,7 @@ import {
   alpha,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
+import { Helmet } from 'react-helmet-async';
 
 interface Person {
   id: number;
@@ -329,105 +326,128 @@ const PersonsTable: React.FC<PersonsTableProps> = ({ data }) => {
     return fullNames[category] || `${icon} ${category}`;
   };
 
+  // 👇 СТРУКТУРОВАНІ ДАНІ ДЛЯ ІСТОРИЧНИХ ПЕРСОНАЛІЙ.
+
+  const personsStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Історичні персоналії України",
+  "description": "Повний перелік видатних історичних персоналій України для підготовки до НМТ.",
+  "numberOfItems": data.length,
+  "itemListElement": data.slice(0, 50).map((person, idx) => ({
+    "@type": "ListItem",
+    "position": idx + 1,
+    "name": person.name,
+    "description": `${person.years} | ${person.category} | ${person.description.substring(0, 200)}`
+  }))
+};
+
   return (
-    <Paper elevation={3} sx={{ p: 2, borderRadius: 3, width: '100%', overflowX: 'auto' }}>
-      <Box sx={{ mb: 3, textAlign: 'center' }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600, fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' } }}>
-          👤 Історичні персоналії України
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Для підготовки до НМТ з історії України
-        </Typography>
-      </Box>
+    <>
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(personsStructuredData)}
+          </script>
+        </Helmet>
+        <Paper elevation={3} sx={{ p: 2, borderRadius: 3, width: '100%', overflowX: 'auto' }}>
+          <Box sx={{ mb: 3, textAlign: 'center' }}>
+            <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600, fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' } }}>
+              👤 Історичні персоналії України
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Для підготовки до НМТ з історії України
+            </Typography>
+          </Box>
 
-      <TextField
-        fullWidth
-        variant="outlined"
-        placeholder="🔍 Пошук за іменем, роками, категорією або описом..."
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          setPage(0);
-        }}
-        sx={{ mb: 3 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon color="action" />
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="body2" color="text.secondary">
-          📊 Загалом персоналій: {data.length ?? 0} | Знайдено: {filteredData.length}
-        </Typography>
-        {searchTerm && (
-          <Chip 
-            label={`Показано: ${filteredData.length ?? 0} з ${data.length ?? 0}`} 
-            size="small" 
-            color="primary" 
+          <TextField
+            fullWidth
             variant="outlined"
+            placeholder="🔍 Пошук за іменем, роками, категорією або описом..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(0);
+            }}
+            sx={{ mb: 3 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
           />
-        )}
-      </Box>
 
-      <TableContainer sx={{ maxHeight: 600, overflow: 'auto' }}>
-        <Table stickyHeader size="small" sx={{ minWidth: { xs: 600, sm: 700, md: 800 }, tableLayout: 'fixed', width: '100%' }}>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#2d2d3a' : '#f5f5f5' }}>
-              <TableCell sx={{ fontWeight: 700, width: { xs: 140, sm: 160, md: 180 } }}>👤 Персоналія</TableCell>
-              <TableCell sx={{ fontWeight: 700, width: { xs: 95, sm: 100, md: 105 } }}>📅 Роки життя</TableCell>
-              <TableCell sx={{ fontWeight: 700, width: { xs: 180, sm: 200, md: 220 } }}>🏷️ Категорія</TableCell>
-              <TableCell sx={{ fontWeight: 700, minWidth: { xs: 250, sm: 300, md: 350 }, width: 'auto' }}>📜 Основна діяльність / Внесок</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedData.map((person) => (
-              <TableRow
-                key={person.id}
-                sx={{
-                  '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.05) },
-                  borderLeft: `4px solid ${getCategoryColor(person.category)}`
-                }}
-              >
-                <TableCell>
-                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                    {person.name}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Chip label={person.years} size="small" variant="outlined" />
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
-                    {getCategoryDisplay(person.category, person.categoryIcon)}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
-                    {person.description}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              📊 Загалом персоналій: {data.length ?? 0} | Знайдено: {filteredData.length}
+            </Typography>
+            {searchTerm && (
+              <Chip 
+                label={`Показано: ${filteredData.length ?? 0} з ${data.length ?? 0}`} 
+                size="small" 
+                color="primary" 
+                variant="outlined"
+              />
+            )}
+          </Box>
 
-      <TablePagination
-        rowsPerPageOptions={[15, 25, 50, 100]}
-        component="div"
-        count={filteredData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Рядків на сторінці:"
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} з ${count}`}
-      />
-    </Paper>
+          <TableContainer sx={{ maxHeight: 600, overflow: 'auto' }}>
+            <Table stickyHeader size="small" sx={{ minWidth: { xs: 600, sm: 700, md: 800 }, tableLayout: 'fixed', width: '100%' }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#2d2d3a' : '#f5f5f5' }}>
+                  <TableCell sx={{ fontWeight: 700, width: { xs: 140, sm: 160, md: 180 } }}>👤 Персоналія</TableCell>
+                  <TableCell sx={{ fontWeight: 700, width: { xs: 95, sm: 100, md: 105 } }}>📅 Роки життя</TableCell>
+                  <TableCell sx={{ fontWeight: 700, width: { xs: 180, sm: 200, md: 220 } }}>🏷️ Категорія</TableCell>
+                  <TableCell sx={{ fontWeight: 700, minWidth: { xs: 250, sm: 300, md: 350 }, width: 'auto' }}>📜 Основна діяльність / Внесок</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedData.map((person) => (
+                  <TableRow
+                    key={person.id}
+                    sx={{
+                      '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.05) },
+                      borderLeft: `4px solid ${getCategoryColor(person.category)}`
+                    }}
+                  >
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {person.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={person.years} size="small" variant="outlined" />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
+                        {getCategoryDisplay(person.category, person.categoryIcon)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                        {person.description}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            rowsPerPageOptions={[15, 25, 50, 100]}
+            component="div"
+            count={filteredData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Рядків на сторінці:"
+            labelDisplayedRows={({ from, to, count }) => `${from}-${to} з ${count}`}
+          />
+        </Paper>
+    </>
   );
 };
 

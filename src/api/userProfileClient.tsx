@@ -1,4 +1,4 @@
-import { get, post } from "./authClient";
+import { get, post } from "./";
 import type { ProfileSessionDto, ProfileSessionQuestionDetailDto, PagedResult } from "../types";
 
 export const userProfileClient = {

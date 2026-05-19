@@ -14,11 +14,20 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, type LinkProps as RouterLinkProps } from "react-router-dom";
 
+// export const StyledAppBar = styled(AppBar)(({ theme }) => ({
+//   position: "sticky",
+//   color: "default",
+//   elevation: 1,
+//   backgroundColor: theme.palette.background.paper,
+// }));
+
 export const StyledAppBar = styled(AppBar)(({ theme }) => ({
   position: "sticky",
-  color: "default",
-  elevation: 1,
-  backgroundColor: theme.palette.background.paper,
+  elevation: 0,  // прибираємо тінь
+  backgroundColor: theme.palette.background.default,  // ← використовуємо той самий фон, що й сторінка
+  borderBottom: `1px solid ${theme.palette.divider}`,  // ← легка рамка для відділення
+  // або замість рамки - легка тінь знизу:
+  // boxShadow: `0 1px 2px ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
 }));
 
 export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -28,7 +37,6 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: theme.spacing(1, 2),
 }));
 
-// Типизируем компонент с пропсами Typography
 export const LogoWrapper = styled(Typography)<TypographyProps>(() => ({
   textDecoration: "none",
   display: "flex",

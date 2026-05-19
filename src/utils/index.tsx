@@ -5,3 +5,5 @@ export * from "./shuffleArray";
 export * from "./avatarUtils";
 export * from "./roles";
 export * from "./pdfExportUniversal";
+export * from "./formatText";
+export * from "./translit";

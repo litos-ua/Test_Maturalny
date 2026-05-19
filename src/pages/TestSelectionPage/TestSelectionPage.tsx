@@ -3,18 +3,19 @@ import { Button, CircularProgress, Typography, Box, Grid, useTheme } from "@mui/
 import { useNavigate } from "react-router-dom";
 import { fetchDisciplines } from "../../api";
 import { bannerExam, type Banner } from "../../constants";
+import { translit } from '../../utils';
 
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/і/g, "i")
-    .replace(/ї/g, "i")
-    .replace(/є/g, "e")
-    .replace(/ґ/g, "g")
-    .replace(/[^a-zа-яё0-9]+/gi, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+// function slugify(name: string): string {
+//   return name
+//     .toLowerCase()
+//     .replace(/і/g, "i")
+//     .replace(/ї/g, "i")
+//     .replace(/є/g, "e")
+//     .replace(/ґ/g, "g")
+//     .replace(/[^a-zа-яё0-9]+/gi, "-")
+//     .replace(/-+/g, "-")
+//     .replace(/^-|-$/g, "");
+// }
 
 
 
@@ -36,7 +37,8 @@ export function TestSelectionPage() {
   }, []);
 
   const handleSelect = (name: string, id: number) => {
-    const slug = slugify(name);
+    // const slug = slugify(name);
+    const slug = translit(name);
     navigate(`/test/${slug}/${id}`);
   };
 
