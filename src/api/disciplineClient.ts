@@ -1,8 +1,6 @@
 import axios from "axios";
 import { configObj } from "../constants";
 
-//const baseURL = "https://localhost:7283/api/Disciplines";
-//const baseURL = "http://192.168.43.91:5000/api/Disciplines"
 const baseURL = configObj.axiosUrl + "Disciplines";
 
 const httpDisciplineClient = axios.create({
