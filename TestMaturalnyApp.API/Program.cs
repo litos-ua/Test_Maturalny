@@ -260,25 +260,29 @@
 
 
 
-using TestMaturalnyApp.Data;
-using TestMaturalnyApp.Infrastructure.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
+using TestMaturalnyApp.API.Extensions;
+using TestMaturalnyApp.API.Middleware;
+using TestMaturalnyApp.Data;
 using TestMaturalnyApp.Data.Interfaces;
+using TestMaturalnyApp.Data.Interfaces.Admin;
 using TestMaturalnyApp.Data.Repositories;
 using TestMaturalnyApp.Data.Repositories.Admin;
+using TestMaturalnyApp.Infrastructure.Logging;
 using TestMaturalnyApp.Services.Interfaces;
 using TestMaturalnyApp.Services.Interfaces.Admin;
+using TestMaturalnyApp.Services.Interfaces.AI;
 using TestMaturalnyApp.Services.Interfaces.Auth;
 using TestMaturalnyApp.Services.Services;
 using TestMaturalnyApp.Services.Services.Admin;
+using TestMaturalnyApp.Services.Services.AI;
+using TestMaturalnyApp.Services.Services.AI.Providers;
 using TestMaturalnyApp.Services.Services.Auth;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using TestMaturalnyApp.API.Middleware;
-using TestMaturalnyApp.API.Extensions;
-using TestMaturalnyApp.Data.Interfaces.Admin;
 
 
 
@@ -412,6 +416,53 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 
+// ========== AI Services ADD TO PRODUCTION ==========
+builder.Services.Configure<AiOptions>(builder.Configuration.GetSection("AI"));
+
+// Регистрация провайдеров
+builder.Services.AddHttpClient<GroqProvider>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+    var config = options.Providers.GetValueOrDefault("Groq");
+    if (config?.Enabled == true && !string.IsNullOrEmpty(config.ApiKey))
+    {
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.ApiKey}");
+    }
+});
+
+builder.Services.AddHttpClient<GeminiProvider>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+    var config = options.Providers.GetValueOrDefault("Gemini");
+    // Gemini использует API ключ в URL, не в заголовке
+});
+
+builder.Services.AddHttpClient<OpenAiProvider>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+    var config = options.Providers.GetValueOrDefault("OpenAI");
+    if (config?.Enabled == true && !string.IsNullOrEmpty(config.ApiKey))
+    {
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.ApiKey}");
+    }
+});
+
+builder.Services.AddHttpClient<OllamaProvider>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+    var config = options.Providers.GetValueOrDefault("Ollama");
+    // Ollama не требует авторизации
+});
+
+// Регистрация всех провайдеров как IAiProvider
+builder.Services.AddScoped<IAiProvider, GroqProvider>();
+builder.Services.AddScoped<IAiProvider, GeminiProvider>();
+builder.Services.AddScoped<IAiProvider, OpenAiProvider>();
+builder.Services.AddScoped<IAiProvider, OllamaProvider>();
+
+// Основной сервис
+builder.Services.AddScoped<IAiExplanationService, AiExplanationService>();
+//==============================================================
 
 
 
@@ -488,8 +539,6 @@ if (!Directory.Exists(logDirectory))
 
 builder.Logging.ClearProviders(); // Optional: remove default providers
 builder.Logging.AddProvider(new FileLoggerProvider(logPath));
-
-
 
 
 var app = builder.Build();
@@ -652,6 +701,58 @@ app.Run();
 
 //builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 //builder.Services.AddScoped<IMessageService, MessageService>();
+
+
+//// ========== AI Services ADD TO PRODUCTION ==========
+//builder.Services.Configure<AiOptions>(builder.Configuration.GetSection("AI"));
+
+//// Регистрация провайдеров
+//builder.Services.AddHttpClient<GroqProvider>((serviceProvider, client) =>
+//{
+//    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+//    var config = options.Providers.GetValueOrDefault("Groq");
+//    if (config?.Enabled == true && !string.IsNullOrEmpty(config.ApiKey))
+//    {
+//        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.ApiKey}");
+//    }
+//});
+
+//builder.Services.AddHttpClient<GeminiProvider>((serviceProvider, client) =>
+//{
+//    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+//    var config = options.Providers.GetValueOrDefault("Gemini");
+//    // Gemini использует API ключ в URL, не в заголовке
+//});
+
+//builder.Services.AddHttpClient<OpenAiProvider>((serviceProvider, client) =>
+//{
+//    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+//    var config = options.Providers.GetValueOrDefault("OpenAI");
+//    if (config?.Enabled == true && !string.IsNullOrEmpty(config.ApiKey))
+//    {
+//        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.ApiKey}");
+//    }
+//});
+
+//builder.Services.AddHttpClient<OllamaProvider>((serviceProvider, client) =>
+//{
+//    var options = serviceProvider.GetRequiredService<IOptions<AiOptions>>().Value;
+//    var config = options.Providers.GetValueOrDefault("Ollama");
+//    // Ollama не требует авторизации
+//});
+
+//// Регистрация всех провайдеров как IAiProvider
+//builder.Services.AddScoped<IAiProvider, GroqProvider>();
+//builder.Services.AddScoped<IAiProvider, GeminiProvider>();
+//builder.Services.AddScoped<IAiProvider, OpenAiProvider>();
+//builder.Services.AddScoped<IAiProvider, OllamaProvider>();
+
+//// Основной сервис
+//builder.Services.AddScoped<IAiExplanationService, AiExplanationService>();
+////==============================================================
+
+
+
 
 //// JWT Authentication
 //var jwtKey = builder.Configuration["Jwt:Key"];
