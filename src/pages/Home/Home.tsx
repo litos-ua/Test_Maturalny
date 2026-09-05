@@ -9,6 +9,7 @@ import { Box, Typography, Grid, Paper, Stack, Button,Chip, useTheme, alpha } fro
 import HeroSection from "../../components/HeroSection/HeroSection";
 import {RotatingImages} from "../../components/RotatingImages";
 import SchoolIcon from "@mui/icons-material/School";
+import AndroidIcon from '@mui/icons-material/Android';
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import QuizIcon from "@mui/icons-material/Quiz";
 import { TypographyDualAnimator} from "../../components/TypographyDualAnimator";
@@ -122,43 +123,9 @@ export function HomePage() {
               <strong>Зареєструйтесь, щоб розблокувати усі можливості!</strong>
             </Typography>
             
-            {/* <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
-                  mt={2} 
-                  sx={{ width: '100%', ml: { xs: 1, md: 2, lg: 6, xl: 8 } }}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  onClick={() => navigate(ROUTE.REGISTRATION)}
-                  sx={{ 
-                    textTransform: "none",
-                    fontSize: { xs: '0.9rem', sm: '1rem' },
-                    px: { xs: 3, md: 4 },
-                    py: { xs: 1, md: 1.5 }
-                  }}
-                >
-                  Зареєструватись
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  onClick={() => navigate(ROUTE.TESTSELECTION)}
-                  sx={{ 
-                    textTransform: "none",
-                    fontSize: { xs: '0.9rem', sm: '1rem' },
-                    px: { xs: 3, md: 4 },
-                    py: { xs: 1, md: 1.5 }
-                  }}
-                >
-                  Тестування
-                </Button>
-
-              </Box> */}
               
-              <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }} 
-                    mt={2} 
+              <Box display="flex" justifyContent={{ xs: 'center', md: 'flex-start' }}  
+                    mb={2}
                     sx={{ width: '100%', ml: { xs: 1, md: 2, lg: 6, xl: 8 } }}>
                 
                 <Stack 
@@ -208,7 +175,7 @@ export function HomePage() {
                 </Stack>
               </Box>
 
-          </Grid>
+        </Grid>
 
           {/* Правая часть */}
           <Grid size = {{xs:12, md: 6}} sx={{ textAlign: "center", position: "relative" }}>
@@ -247,12 +214,11 @@ export function HomePage() {
         
       </Box>
 
-        {/* <Typography variant="h4" fontWeight={700} gutterBottom>
-          Переваги нашої платформи
-        </Typography> */}
+    <Grid container spacing={3} alignItems="center">
+    {/* Ліва частина - текст */}
+      <Grid size={{ xs: 12, md: 7 }} marginTop={5}>
         <Typography 
           variant="h4"
-          gutterBottom
           sx={{
             fontWeight: 700,
             fontSize: {
@@ -260,7 +226,9 @@ export function HomePage() {
               sm: '1.75rem',  
               md: '2rem',     
               lg: '2.125rem', 
-              xl: '2.125rem'  
+              xl: '2.125rem', 
+              marginTop: { xs: 1, sm: 2, md: 3, lg: 3, xl: 4}, 
+              marginBottom: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5}, 
             },
           }}
         >
@@ -268,8 +236,105 @@ export function HomePage() {
         </Typography>
 
         <Typography variant="body1" sx={{ maxWidth: 800, mb: 4 }}>
-          Підготуйтеся до іспитів та тестів з різних дисциплін за допомогою інтерактивних завдань, реальних питань та автоматичної перевірки відповідей. Ідеально підходить для школярів, студентів та викладачів.
+          Можливість підготися до іспитів та тестів з різних дисциплін за допомогою інтерактивних завдань, реальних питань та автоматичної перевірки відповідей. Ідеально підходить для школярів, студентів та викладачів.
         </Typography>
+      </Grid>
+
+      {/* Права частина - завантаження Android додатку */}
+      <Grid size={{ xs: 12, md: 5 }} sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5}, 
+        marginBottom: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5}, 
+      }}>
+        <Paper
+          elevation={2}
+          sx={{
+            p: { xs: 2, sm: 3, md: 4 }, 
+            borderRadius: 3,
+            backgroundColor: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.divider}`,
+            width: { 
+              xs: '100%', 
+              sm: '80%', 
+              md: '100%', 
+              lg: '90%' 
+            },
+            maxWidth: { 
+              xs: '100%', 
+              sm: '400px', 
+              md: '320px', 
+              lg: '360px' 
+            },
+          }}
+        >
+          <Stack spacing={{ xs: 1, sm: 1.5, md: 2 }} alignItems="center">
+            <Typography 
+              variant="subtitle1" 
+              fontWeight={600} 
+              color="text.primary"
+              sx={{ 
+                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+              }}
+            >
+              📱 Завантажте додаток
+            </Typography>
+
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              sx={{ 
+                textAlign: 'center',
+                fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' }
+              }}
+            >
+              Для Android
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              startIcon={<AndroidIcon />} 
+              component="a"
+              href="/download/com.companyname.testmaturalnymobapp-Signed.apk" 
+              download
+              sx={{
+                textTransform: 'none',
+                fontWeight: 600,
+                px: { xs: 2, sm: 3, md: 4 },
+                py: { xs: 1, sm: 1.25, md: 1.5 },
+                borderRadius: 2,
+                backgroundColor: theme.palette.success.main,
+                fontSize: { xs: '0.75rem', sm: '0.85rem', md: '0.9rem' },
+                width: { xs: '100%', sm: 'auto' },
+                '&:hover': {
+                  backgroundColor: theme.palette.success.dark,
+                },
+              }}
+            >
+              Завантажити APK
+            </Button>
+
+            <Typography 
+              variant="caption" 
+              color="text.secondary"
+              sx={{ 
+                fontSize: { xs: '0.6rem', sm: '0.65rem', md: '0.7rem' }
+              }}
+            >
+              Версія 1.0.12 • 45 MB
+            </Typography>
+          </Stack>
+        </Paper>
+      </Grid>
+    </Grid>
+
+
+        {/* <Typography variant="body1" sx={{ maxWidth: 800, mb: 4 }}>
+          Підготуйтеся до іспитів та тестів з різних дисциплін за допомогою інтерактивних завдань, реальних питань та автоматичної перевірки відповідей. Ідеально підходить для школярів, студентів та викладачів.
+        </Typography> */}
 
         <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
           <Grid size = {{xs:12, sm:6, md:4, lg:4, xl:4}}>

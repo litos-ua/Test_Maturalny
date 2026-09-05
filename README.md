@@ -132,7 +132,7 @@ const fetchUserOption = async (userId?: number) => {
 
 
 
-2025.08.12   
+2026.08.12   
   Повторение типов  в src/user/types.tsx корректировка
 // export const UserRoles = {
 const UserRoles = {
@@ -148,3 +148,57 @@ const UserRoles = {
 
 
 Опции пользователя не подгружаются с первого раза.
+
+
+2026.09.02
+
+Виправлення оцінювання тестів у навчальному режимі по темах
+Проблема
+При проходженні тестів у режимі "Тестування за темами" (маршрут /test/topic-session/:topicId/:topicName) питання типу Matching (на встановлення відповідності) оцінювалися некоректно — навіть за повністю правильних відповідей користувач отримував 0 балів.
+
+При цьому в стандартному навчальному тесті (маршрут /test/session/:id/:name) оцінювання працювало коректно.
+
+Причина
+У тесті по темах не передавався ідентифікатор дисципліни (disciplineId) до модуля оцінювання. Через це:
+
+Не застосовувались правила часткових балів для математики
+
+Для Matching використовувалась логіка, що вимагала всі 5 пар правильними (хоча в питанні лише 4 правильні + 1 зайвий варіант)
+
+Як наслідок — навіть 4 правильні пари давали 0 балів
+
+Що було зроблено
+Маршрутизація
+Додано параметр :disciplineId до маршруту тесту по темах:
+
+ts
+// router.ts
+TOPIC_SESSION: "/test/topic-session/:topicId/:topicName/:disciplineId"
+Навігація
+Оновлено перехід до тесту по темі — тепер disciplineId передається як частина URL:
+
+tsx
+navigate(`/test/topic-session/${topic.id}/${encodedName}/${discipline.id}`)
+Отримання параметрів
+У компоненті TestSessionPage розширено useParams() для отримання disciplineId:
+
+tsx
+const { id, name, topicId, topicName, disciplineId } = useParams();
+Передача в оцінювання
+Виправлено передачу disciplineId у хук useTestAnswersCombined:
+
+tsx
+const finalDisciplineId = disciplineId 
+  ? parseInt(disciplineId) 
+  : (id ? parseInt(id) : undefined);
+
+useTestAnswersCombined(..., finalDisciplineId?.toString())
+Результат
+До виправлення	Після виправлення
+disciplineId = undefined	disciplineId = 2 (для математики)
+allowPartialScore = false	allowPartialScore = true
+4 правильні пари → 0 балів ❌	4 правильні пари → 3 бали ✅
+Matching не працював у тестах по темах	Matching працює однаково в усіх режимах
+
+2026.09.05
+Коригування maxScore в питаннях типу Matching

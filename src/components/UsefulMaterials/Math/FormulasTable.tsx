@@ -199,9 +199,6 @@
 
 
 // Добавлено SEO для индексации
-// components/UsefulMaterials/Math/FormulasTable.tsx
-
-// components/UsefulMaterials/Math/FormulasTable.tsx
 
 import React, { useState, useMemo } from 'react';
 import {

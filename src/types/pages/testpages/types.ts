@@ -24,6 +24,7 @@ export const QuestionType = {
   Matching: 2,
   DoubleChoice: 3,
   CorrectSequence: 4,
+  OpenAnswer: 5,
 } as const;
 
 export type QuestionType = typeof QuestionType[keyof typeof QuestionType];

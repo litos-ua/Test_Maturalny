@@ -31,7 +31,8 @@ import { useEffect, useRef, useState } from 'react';
 import { configObj, switchToFallback, switchToPrimary, checkApiHealth } from '../constants/config';
 
 export const useApiFallback = () => {
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    // const intervalRef = useRef<NodeJS.Timeout | null>(null); // NodeJS вызывал ошибку, т.к. не установлен
+    const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);  // 🔥 ИСПРАВЛЕНО
     const isCheckingRef = useRef(false);
 
     const checkAndSwitch = async () => {

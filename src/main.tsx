@@ -40,9 +40,11 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import "./index.css";
+import 'katex/dist/katex.min.css';
 import { AuthProvider } from "./context/AuthContext"; 
 import { HelmetProvider } from "react-helmet-async";
-import { useApiFallback } from "./hooks/useApiFallback"; // 🔥 импорт хука
+import { useApiFallback } from "./hooks/useApiFallback"; 
+
 
 // 🔥 Компонент-обёртка для инициализации fallback
 const ApiFallbackInitializer = () => {
@@ -54,7 +56,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HelmetProvider>
       <AuthProvider>
-        <ApiFallbackInitializer />  {/* 🔥 добавьте эту строку */}
+        <ApiFallbackInitializer />  
         <RouterProvider router={router} />
       </AuthProvider>
     </HelmetProvider>

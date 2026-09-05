@@ -1,4 +1,4 @@
-// Адаптьивний LayOut
+// Адаптивний LayOut
 
 import { createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute, AppWithoutLayout } from "../components";
@@ -45,7 +45,7 @@ export const ROUTE = {
   TESTEXAMRULES: "exam-rules",
   TESTSELECTION: "test-selection",
   TESTSESSION: "/test/session/:id/:name",
-  TOPIC_SESSION: "/test/topic-session/:topicId/:topicName",
+  TOPIC_SESSION: "/test/topic-session/:topicId/:topicName/:disciplineId", // Добавили "disciplineId"
   USEFULMATERIALS: "/usefulmaterials/:slug/:disciplineId",
 
   // Admin routes

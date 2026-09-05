@@ -85,7 +85,7 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
       try {
         let data: Question[] = [];
         
-        // НОВОЕ: если есть topicId — загружаем ВСЕ вопросы по теме
+        // если есть topicId — загружаем ВСЕ вопросы по теме
         if (topicId) {
           console.log(`📚 Загружаем вопросы по теме ID: ${topicId}`);
           data = await getQuestionsByTopic(topicId);
@@ -103,6 +103,7 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
               ...q,
               options: shuffleArray(q.options),
             }));
+
             setShuffledQuestions(shuffled);
             
             // Устанавливаем время: 2 минуты на вопрос

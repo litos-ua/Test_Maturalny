@@ -9,6 +9,7 @@ interface MathFormulaProps {
 }
 
 export const MathFormula: React.FC<MathFormulaProps> = ({ formula, displayMode = false }) => {
+  // console.log('MathFormula received:', formula);
   const html = katex.renderToString(formula, {
     throwOnError: false,
     displayMode,

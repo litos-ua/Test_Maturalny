@@ -72,6 +72,57 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     initialize();
   }, []);
 
+  // // Использует refresh токен для восстановления
+  // useEffect(() => {
+  //   const initialize = async () => {
+  //     try {
+  //       const accessToken = tokenService.getAccessToken();
+  //       const refreshToken = tokenService.getRefreshToken();
+        
+  //       // Если нет ни одного токена — выходим
+  //       if (!accessToken && !refreshToken) {
+  //         return;
+  //       }
+        
+  //       // Если есть refresh token — пробуем обновить access token (на случай, если он истёк)
+  //       if (refreshToken) {
+  //         try {
+  //           const refreshed = await authService.refresh();
+  //           if (refreshed?.accessToken) {
+  //             tokenService.setAccessToken(refreshed.accessToken);
+  //             if (refreshed.refreshToken) {
+  //               tokenService.setRefreshToken(refreshed.refreshToken);
+  //             }
+  //           }
+  //         } catch (refreshError) {
+  //           console.error('Token refresh failed:', refreshError);
+  //           // Если refresh не сработал — очищаем токены и выходим
+  //           tokenService.clearTokens();
+  //           return;
+  //         }
+  //       }
+        
+  //       // Получаем данные пользователя (теперь токен точно валидный)
+  //       const user = await userService.getCurrentUser();
+  //       setUserData(user);
+  //       setAuthUser({
+  //         id: user.id,
+  //         email: user.email,
+  //         role: user.role,
+  //         emailVerified: user.emailVerified,
+  //       });
+  //       await fetchUserOption(user.id);
+        
+  //     } catch (err) {
+  //       console.error("Failed to initialize user:", err);
+  //       tokenService.clearTokens();
+  //       logout();
+  //     }
+  //   };
+    
+  //   initialize();
+  // }, []);
+
   const login = async (email: string, passwordHash: string) => {
     const loggedUser = await authService.login({ email, passwordHash });
     setAuthUser(loggedUser);

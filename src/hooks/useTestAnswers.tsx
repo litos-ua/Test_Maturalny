@@ -27,7 +27,9 @@ export function useTestAnswers(
 
   
   const calculateResults = (): TestResult => {
-  return calculateTestResults(questions, answers, leftItemsMap);
+
+
+  return calculateTestResults(questions, answers, leftItemsMap, disciplineId);
 };
 
 

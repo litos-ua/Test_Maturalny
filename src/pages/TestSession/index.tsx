@@ -5,5 +5,6 @@ export * from "./QuestionMatching";
 export * from "./testSessionStyles";
 export * from "./TestNavigation";
 export * from "./QuestionDoubleChoice";
-export * from "./QuestionCorrectSequence"
+export * from "./QuestionCorrectSequence";
+export * from "./QuestionOpenAnswer";
 export * from "./TestResultsDialog";

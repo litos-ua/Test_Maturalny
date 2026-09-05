@@ -1,4 +1,5 @@
-// // Работает с опциями в виде картинок
+// // ✅ Используем ZoomableImage вместо Box component="img"
+
 // import { useEffect } from "react";
 // import {
 //   Grid,
@@ -12,6 +13,7 @@
 //   Box,
 // } from "@mui/material";
 // import type { Question } from "../../types/pages/testpages/types";
+// import { ZoomableImage } from "../../components";
 
 // interface Props {
 //   question: Question;
@@ -20,14 +22,12 @@
 // }
 
 // export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Props) {
-//   // Добавляем groupKey в структуру опций
 //   const leftItems = question.options.map((item) => ({
 //     id: item.id,
 //     text: item.text,
 //     groupKey: item.groupKey,
 //   }));
 
-//   // Инициализация savedAnswer при первом рендере
 //   useEffect(() => {
 //     if (!savedAnswer || savedAnswer.length !== leftItems.length) {
 //       const initial = Array(leftItems.length).fill(undefined);
@@ -36,7 +36,11 @@
 //   }, [savedAnswer, leftItems.length, onAnswer, question.id]);
 
 //   const handleChange = (leftIndex: number, value: number) => {
-//     const updated = savedAnswer ? [...savedAnswer] : Array(leftItems.length).fill(undefined);
+//     const updated =
+//       savedAnswer && savedAnswer.length
+//         ? [...savedAnswer]
+//         : Array(leftItems.length).fill(undefined);
+
 //     updated[leftIndex] = value;
 //     onAnswer(question.id, updated);
 //   };
@@ -44,9 +48,26 @@
 //   return (
 //     <Grid container spacing={1}>
 //       <Grid size={{ xs: 12 }}>
-//         <Typography variant="h6" gutterBottom>
-//           {question.text}
+
+//         <Typography
+//           variant="h6"
+//           gutterBottom
+//           sx={{ whiteSpace: "pre-line" }}
+//         >
+//           {question.text.replace(/<br>/g, "\n")}
 //         </Typography>
+
+//         {/* Если есть изображение вопроса */}
+//         {question.imageUrl && (
+//           <Box sx={{ textAlign: "center", mt: 2 }}>
+//             <ZoomableImage
+//               src={question.imageUrl}
+//               alt="Зображення до питання"
+//               maxWidth="100%"
+//               maxHeight={300}
+//             />
+//           </Box>
+//         )}
 
 //         <List>
 //           {leftItems.map((item, index) => (
@@ -58,24 +79,15 @@
 //                 gap: 2,
 //               }}
 //             >
-//               {/* Опция — текст или изображение */}
+//               {/* Опция */}
 //               <Box sx={{ flexGrow: 1, maxWidth: "100%" }}>
 //                 {item.groupKey?.toLowerCase().startsWith("img") ||
 //                 item.groupKey?.toLowerCase().startsWith("image") ? (
-//                   <Box
-//                     component="img"
+//                   <ZoomableImage
 //                     src={item.text}
-//                     alt={`Опция ${String.fromCharCode(65 + index)}`}
-//                     sx={{
-//                       maxWidth: "100%",
-//                       maxHeight: 150,
-//                       borderRadius: 1,
-//                       objectFit: "contain",
-//                       bgcolor: "#f5f5f5",
-//                     }}
-//                     onError={(e) => {
-//                       (e.target as HTMLImageElement).src = "/no-image.png";
-//                     }}
+//                     alt={`Опція ${String.fromCharCode(65 + index)}`}
+//                     maxHeight={150}
+//                     maxWidth="100%"
 //                   />
 //                 ) : (
 //                   <Typography variant="body1">
@@ -84,7 +96,7 @@
 //                 )}
 //               </Box>
 
-//               {/* Select для выбора позиции */}
+//               {/* Select */}
 //               <FormControl
 //                 size="small"
 //                 sx={{
@@ -102,7 +114,9 @@
 //                       ? savedAnswer[index]
 //                       : ""
 //                   }
-//                   onChange={(e) => handleChange(index, Number(e.target.value))}
+//                   onChange={(e) =>
+//                     handleChange(index, Number(e.target.value))
+//                   }
 //                 >
 //                   {leftItems.map((_, num) => (
 //                     <MenuItem key={num + 1} value={num + 1}>
@@ -120,8 +134,7 @@
 // }
 
 
-
-// ✅ Используем ZoomableImage вместо Box component="img"
+// Адаптировано для работы с математическими формулами
 
 import { useEffect } from "react";
 import {
@@ -136,13 +149,42 @@ import {
   Box,
 } from "@mui/material";
 import type { Question } from "../../types/pages/testpages/types";
-import { ZoomableImage } from "../../components";
+import { ZoomableImage, MathFormula } from "../../components";
 
 interface Props {
   question: Question;
   savedAnswer: number[];
   onAnswer: (questionId: number, optionIds: number[]) => void;
 }
+
+// 🔥 НОВА ФУНКЦІЯ: перевірка на LaTeX
+const isLatex = (text: string): boolean => {
+  if (!text) return false;
+  return text.includes('$') || text.includes('\\(') || text.includes('\\[');
+};
+
+// 🔥 НОВА ФУНКЦІЯ: парсинг тексту з математичними формулами
+const renderTextWithMath = (text: string): React.ReactNode => {
+  if (!text) return text;
+  
+  // Якщо це LaTeX через MathFormula
+  if (isLatex(text)) {
+    return <MathFormula formula={text} />;
+  }
+  
+  // Якщо є роздільники ` `, парсимо
+  if (text.includes('`')) {
+    const parts = text.split(/`(.*?)`/g);
+    return parts.map((part, idx) => {
+      if (idx % 2 === 1) {
+        return <MathFormula key={idx} formula={part} />;
+      }
+      return part;
+    });
+  }
+  
+  return text;
+};
 
 export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Props) {
   const leftItems = question.options.map((item) => ({
@@ -177,7 +219,7 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
           gutterBottom
           sx={{ whiteSpace: "pre-line" }}
         >
-          {question.text.replace(/<br>/g, "\n")}
+          {renderTextWithMath(question.text.replace(/<br>/g, "\n"))}
         </Typography>
 
         {/* Если есть изображение вопроса */}
@@ -214,7 +256,7 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
                   />
                 ) : (
                   <Typography variant="body1">
-                    {String.fromCharCode(65 + index)}. {item.text}
+                    {String.fromCharCode(65 + index)}. {renderTextWithMath(item.text)}
                   </Typography>
                 )}
               </Box>

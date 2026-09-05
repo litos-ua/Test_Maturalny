@@ -561,23 +561,23 @@ export function TestPage() {
                 },
               }}
             >
-              {/* ========== 🔥 ИЗМЕНЕНО: Добавлены onClick и стили курсора ========== */}
+              
               <ListItem 
                 sx={{ 
                   ...styles.listItem,
-                  cursor: "pointer",  // ← ДОБАВЛЕНО: меняем курсор на указатель
-                  transition: "all 0.2s ease",  // ← ДОБАВЛЕНО: плавный переход
+                  cursor: "pointer",  
+                  transition: "all 0.2s ease",  
                   "&:hover": {
-                    backgroundColor: "action.hover",  // ← ДОБАВЛЕНО: подсветка при наведении
-                    transform: "translateX(4px)",  // ← ДОБАВЛЕНО: небольшой сдвиг
+                    backgroundColor: "action.hover",  
+                    transform: "translateX(4px)",  
                   }
                 }}
-                onClick={() => {  // ← ДОБАВЛЕНО: обработчик клика
-                  const encodedName = encodeURIComponent(topic.title);
-                  navigate(`/test/topic-session/${topic.id}/${encodedName}`);
+                onClick={() => {  // ← обработчик клика
+                  const encodedName = encodeURIComponent(topic.title); 
+                  navigate(`/test/topic-session/${topic.id}/${encodedName}/${discipline.id}`); // Додаємо disciplineId в URL
                 }}
               >
-                {/* ========== КОНЕЦ ИЗМЕНЕНИЙ ========== */}
+                
                 <ListItemText
                   primaryTypographyProps={{
                     fontSize: {
@@ -590,7 +590,7 @@ export function TestPage() {
                   }}
                   primary={`${index + 1}. ${topic.title}`}
                 />
-                {/* ========== 🔥 НОВОЕ: Индикатор кликабельности ========== */}
+                {/* ========== 🔥 Индикатор кликабельности ========== */}
                 <Typography 
                   variant="caption" 
                   sx={{ 
@@ -602,7 +602,7 @@ export function TestPage() {
                 >
                   ▶
                 </Typography>
-                {/* ========== КОНЕЦ НОВОГО ========== */}
+                
               </ListItem>
             </Tooltip>
           ))}

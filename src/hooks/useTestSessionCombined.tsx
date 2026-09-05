@@ -26,8 +26,9 @@ export function useTestSessionCombined(
   testType: string,
   userId?: number,
   disciplineId?: number,
-  topicId?: number  // НОВЫЙ опциональный параметр
+  topicId?: number  
 ) {
+
   if (testType === "real") {
     // 🔹 Реальный тест НЕ МЕНЯЕТСЯ (всегда по дисциплине)
     return useTestSessionReal(

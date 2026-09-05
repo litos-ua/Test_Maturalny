@@ -21,3 +21,53 @@ export function App() {
 
 export default App;
 
+
+// import { useMemo, useState, useEffect } from "react";
+// import { CssBaseline, ThemeProvider } from "@mui/material";
+// import { getAppTheme } from "./theme";
+// import Layout from "./components/Layout/Layout";
+// import { SEO } from "./components/SEO";
+// import { tokenService } from "./services/tokenService";
+// import { apiClient } from "./api/apiClient";
+// import { useAuth } from "./context/AuthContext";
+
+// export function App() {
+//   const [darkMode, setDarkMode] = useState(false);
+//   const { setUser, setIsLoading } = useAuth();
+//   const theme = useMemo(() => getAppTheme(darkMode), [darkMode]);
+
+//   // 🔥 Восстановление сессии при загрузке приложения
+//   useEffect(() => {
+//     const restoreSession = async () => {
+//       const token = tokenService.getAccessToken();
+//       if (!token) {
+//         setIsLoading?.(false);
+//         return;
+//       }
+
+//       try {
+//         const response = await apiClient.get('/auth/me');
+//         setUser?.(response.data);
+//       } catch (error) {
+//         console.error('Session restore failed:', error);
+//         tokenService.clearTokens();
+//         setUser?.(null);
+//       } finally {
+//         setIsLoading?.(false);
+//       }
+//     };
+
+//     restoreSession();
+//   }, []);
+
+//   return (
+//     <ThemeProvider theme={theme}>
+//       <CssBaseline />
+//       <SEO />
+//       <Layout onToggleTheme={() => setDarkMode((prev) => !prev)} />
+//     </ThemeProvider>
+//   );
+// }
+
+// export default App;
+
