@@ -184,7 +184,7 @@
 // Используем параметры константы для количества опций в зависимости от выбранной дисциплины
 import type { Question, TestResult, QuestionResult } from "../types/pages/testpages/types";
 import { QuestionType } from "../types/pages/testpages/types";
-import { getDisciplineConfig, isPartialScoreAllowed, getRequiredAnswerCount } from "./testConfigHelpers";
+import { getDisciplineConfig, isPartialScoreAllowed, getRequiredAnswerCount, getOpenAnswerRules } from "./testConfigHelpers";
 
 export function calculateTestResults(
   questions: Question[],
@@ -199,7 +199,7 @@ export function calculateTestResults(
     const userAnswer = answers[q.id] || [];
     const correctAnswer = q.options.filter(opt => opt.isCorrect).map(opt => opt.id);
     
-    // 🔥 Отримуємо необхідну кількість відповідей з конфігурації
+    // Отримуємо необхідну кількість відповідей з конфігурації
     const requiredCount = getRequiredAnswerCount(disciplineId, q.type, q.options);
 
     let isCorrect = false;
@@ -250,10 +250,6 @@ export function calculateTestResults(
       case QuestionType.Matching:
         let matchScore = 0;
         const leftItemsMatching = leftItemsMap[q.id] || [];
-
-        // console.log(`🔍 Оцінювання Matching (питання ${q.id}):`);
-        // console.log('  leftItemsMatching:', leftItemsMatching.map(o => o.id));
-        // console.log('  userAnswer:', userAnswer);
 
         leftItemsMatching.forEach((leftOpt, idx) => {
           const selectedId = userAnswer[idx];
@@ -358,6 +354,53 @@ export function calculateTestResults(
           isCorrect = isPerfectMatch;
         }
         break;
+
+      case QuestionType.OpenAnswer:
+          // 🔑 НОВА ЛОГІКА
+          const userTextAnswer = userAnswer.length > 0 ? String(userAnswer[0]) : "";
+          const correctOption = q.options.find(o => o.isCorrect === true);
+          const correctTextAnswer = correctOption ? correctOption.text : "";
+
+          const openAnswerRules = getOpenAnswerRules(disciplineId);
+          
+          if (!openAnswerRules.enabled) {
+            score = 0;
+            isCorrect = false;
+            break;
+          }
+
+          const normalizeText = (text: string) => {
+            return text.trim().replace(/\s+/g, ' ').toLowerCase();
+          };
+          
+          const normalizedUser = normalizeText(userTextAnswer);
+          const normalizedCorrect = normalizeText(correctTextAnswer);
+
+          const isMathOpen = getDisciplineConfig(disciplineId)?.disciplineName === "Математика";
+          
+          if (isMathOpen) {
+            if (normalizedUser === normalizedCorrect && normalizedUser.length > 0) {
+              score = openAnswerRules.maxScore;
+              isCorrect = true;
+            } else {
+              score = 0;
+              isCorrect = false;
+            }
+          } else {
+            if (normalizedUser === normalizedCorrect && normalizedUser.length > 0) {
+              score = 1;
+              isCorrect = true;
+            } else {
+              score = 0;
+              isCorrect = false;
+            }
+        }
+        break;
+
+      default:
+        console.warn(`Unknown question type: ${q.type}`);
+        score = 0;
+        isCorrect = false;
     }
 
     totalScore += score;

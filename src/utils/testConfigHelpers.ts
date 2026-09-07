@@ -52,3 +52,19 @@ export const isPartialScoreAllowed = (
   const config = getQuestionTypeConfig(disciplineId, questionType);
   return config?.allowPartialScore ?? false;
 };
+
+export function getOpenAnswerRules(disciplineId?: number | string): {
+  enabled: boolean;
+  maxScore: number;
+} {
+  const config = getDisciplineConfig(disciplineId);
+  if (!config) return { enabled: false, maxScore: 0 };
+  
+  const typeConfig = config.questionTypes[QuestionType.OpenAnswer];
+  if (!typeConfig) return { enabled: false, maxScore: 0 };
+  
+  return {
+    enabled: true,
+    maxScore: typeConfig.defaultMaxScore || 2,
+  };
+}

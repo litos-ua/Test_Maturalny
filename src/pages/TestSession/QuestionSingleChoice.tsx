@@ -16,7 +16,6 @@ const isLatex = (text: string) => text.includes('$') || text.includes('\\(');
 const isImage = (groupKey?: string) => groupKey?.toLowerCase().startsWith('img') || 
       groupKey?.toLowerCase().startsWith('image');
 
-// 🔥 ЗАМІНІТЬ extractFormula на цю функцію
 const parseTextWithMath = (text: string): React.ReactNode => {
   if (!text) return text;
   
