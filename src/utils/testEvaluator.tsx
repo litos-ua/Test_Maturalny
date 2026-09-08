@@ -352,49 +352,61 @@ export function calculateTestResults(
         } else {
           score = isPerfectMatch ? q.maxScore : 0;
           isCorrect = isPerfectMatch;
-        }
-        break;
+      }
+      break;
 
+      // 🔑 НОВАЯ ЛОГИКА (возможно несколько ответов)
       case QuestionType.OpenAnswer:
-          // 🔑 НОВА ЛОГІКА
-          const userTextAnswer = userAnswer.length > 0 ? String(userAnswer[0]) : "";
-          const correctOption = q.options.find(o => o.isCorrect === true);
-          const correctTextAnswer = correctOption ? correctOption.text : "";
-
-          const openAnswerRules = getOpenAnswerRules(disciplineId);
-          
-          if (!openAnswerRules.enabled) {
-            score = 0;
-            isCorrect = false;
-            break;
-          }
-
-          const normalizeText = (text: string) => {
-            return text.trim().replace(/\s+/g, ' ').toLowerCase();
-          };
-          
-          const normalizedUser = normalizeText(userTextAnswer);
-          const normalizedCorrect = normalizeText(correctTextAnswer);
-
-          const isMathOpen = getDisciplineConfig(disciplineId)?.disciplineName === "Математика";
-          
-          if (isMathOpen) {
-            if (normalizedUser === normalizedCorrect && normalizedUser.length > 0) {
-              score = openAnswerRules.maxScore;
-              isCorrect = true;
-            } else {
-              score = 0;
-              isCorrect = false;
-            }
-          } else {
-            if (normalizedUser === normalizedCorrect && normalizedUser.length > 0) {
-              score = 1;
-              isCorrect = true;
-            } else {
-              score = 0;
-              isCorrect = false;
-            }
+        // 🔑 Отримуємо відповіді (можуть бути як числа, так і рядки)
+        const rawAnswers = Array.isArray(userAnswer) ? userAnswer : [];
+        const correctOptions = q.options.filter(o => o.isCorrect === true);
+        
+        if (correctOptions.length === 0) {
+          score = 0;
+          isCorrect = false;
+          break;
         }
+
+        const openAnswerRules = getOpenAnswerRules(disciplineId);
+        
+        if (!openAnswerRules.enabled) {
+          score = 0;
+          isCorrect = false;
+          break;
+        }
+
+        // 🔑 Підраховуємо правильні відповіді
+        let correctCount = 0;
+        
+        correctOptions.forEach((opt, index) => {
+          // 🔑 Беремо значення з масиву (може бути рядок або число)
+          const rawValue = rawAnswers[index];
+          
+          // 🔑 Перетворюємо на число (якщо це рядок)
+          const userValue = typeof rawValue === 'string' 
+            ? parseFloat(rawValue) 
+            : (typeof rawValue === 'number' ? rawValue : NaN);
+          
+          const correctValue = parseFloat(opt.text);
+          
+          // Перевіряємо, чи обидва значення є числами і чи вони рівні
+          if (!isNaN(userValue) && !isNaN(correctValue) && userValue === correctValue) {
+            correctCount++;
+          }
+        });
+
+        const totalCorrect = correctOptions.length;
+
+        // 2 бали за кожну правильну відповідь
+        const scorePerAnswer = 2;
+        const calculatedScore = correctCount * scorePerAnswer;
+
+        // Максимальний бал: мінімум з q.maxScore та totalCorrect * 2
+        const maxPossibleScore = q.maxScore || (totalCorrect * scorePerAnswer);
+
+        // Оцінка: не більше q.maxScore
+        score = Math.min(calculatedScore, maxPossibleScore);
+        isCorrect = (correctCount === totalCorrect);
         break;
 
       default:
