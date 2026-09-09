@@ -47,7 +47,7 @@ export const DISCIPLINE_TEST_CONFIGS: Record<number, DisciplineTestConfig> = {
     },
   },
 
-  // ========== 2. Математика (приклад) ==========
+  // ========== 2. Математика ==========
   2: {
     disciplineId: 2,
     disciplineName: "Математика",
@@ -109,14 +109,24 @@ export const DISCIPLINE_TEST_CONFIGS: Record<number, DisciplineTestConfig> = {
         defaultMaxScore: 1,
       },
       [QuestionType.MultipleChoice]: {
-        requiredAnswerCount: 2,
+        requiredAnswerCount: 2,        // наприклад, 2 правильні з 5
         allowPartialScore: true,
         defaultMaxScore: 2,
       },
-      [QuestionType.DoubleChoice]: {
-        requiredAnswerCount: 2,
+      [QuestionType.Matching]: {       // 5 пар тільки 4 правильні
+        requiredAnswerCount: 5,
+        allowPartialScore: true,
+        defaultMaxScore: 3,
+      },
+      [QuestionType.CorrectSequence]: {
+        requiredAnswerCount: 3,
         allowPartialScore: true,
         defaultMaxScore: 2,
+      },
+      [QuestionType.OpenAnswer]: {
+        requiredAnswerCount: 1,        
+        defaultMaxScore: 2,
+        allowPartialScore: false,           
       },
     },
   },

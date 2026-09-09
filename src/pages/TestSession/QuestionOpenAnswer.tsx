@@ -164,6 +164,7 @@
 import { Box, Typography, TextField, Grid, Alert } from "@mui/material";
 import type { Question } from "../../types/pages/testpages/types";
 import { ZoomableImage, MathFormula } from "../../components";
+import { parseTextWithMath } from "../../utils";
 import { useState } from "react";
 
 interface Props {
@@ -174,18 +175,19 @@ interface Props {
 
 const isLatex = (text: string) => text.includes('$') || text.includes('\\(');
 
-const parseTextWithMath = (text: string): React.ReactNode => {
-  if (!text) return text;
+// Перенесли в утилиты
+// const parseTextWithMath = (text: string): React.ReactNode => {
+//   if (!text) return text;
   
-  const parts = text.split(/`(.*?)`/g);
+//   const parts = text.split(/`(.*?)`/g);
   
-  return parts.map((part, index) => {
-    if (index % 2 === 1) {
-      return <MathFormula key={index} formula={part} />;
-    }
-    return part;
-  });
-};
+//   return parts.map((part, index) => {
+//     if (index % 2 === 1) {
+//       return <MathFormula key={index} formula={part} />;
+//     }
+//     return part;
+//   });
+// };
 
 export function QuestionOpenAnswer({ question, savedAnswer, onAnswer }: Props) {
   // Кількість відповідей = кількість правильних опцій

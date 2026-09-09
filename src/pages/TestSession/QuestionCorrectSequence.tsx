@@ -150,6 +150,7 @@ import {
 } from "@mui/material";
 import type { Question } from "../../types/pages/testpages/types";
 import { ZoomableImage, MathFormula } from "../../components";
+import { parseTextWithMath } from "../../utils";
 
 interface Props {
   question: Question;
@@ -163,28 +164,28 @@ const isLatex = (text: string): boolean => {
   return text.includes('$') || text.includes('\\(') || text.includes('\\[');
 };
 
-// 🔥 НОВА ФУНКЦІЯ: парсинг тексту з математичними формулами
-const renderTextWithMath = (text: string): React.ReactNode => {
-  if (!text) return text;
+// // НОВА ФУНКЦІЯ: парсинг тексту з математичними формулами
+// const renderTextWithMath = (text: string): React.ReactNode => {
+//   if (!text) return text;
   
-  // Якщо це LaTeX через MathFormula
-  if (isLatex(text)) {
-    return <MathFormula formula={text} />;
-  }
+//   // Якщо це LaTeX через MathFormula
+//   if (isLatex(text)) {
+//     return <MathFormula formula={text} />;
+//   }
   
-  // Якщо є роздільники ` `, парсимо
-  if (text.includes('`')) {
-    const parts = text.split(/`(.*?)`/g);
-    return parts.map((part, idx) => {
-      if (idx % 2 === 1) {
-        return <MathFormula key={idx} formula={part} />;
-      }
-      return part;
-    });
-  }
+//   // Якщо є роздільники ` `, парсимо
+//   if (text.includes('`')) {
+//     const parts = text.split(/`(.*?)`/g);
+//     return parts.map((part, idx) => {
+//       if (idx % 2 === 1) {
+//         return <MathFormula key={idx} formula={part} />;
+//       }
+//       return part;
+//     });
+//   }
   
-  return text;
-};
+//   return text;
+// };
 
 export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Props) {
   const leftItems = question.options.map((item) => ({
@@ -219,7 +220,7 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
           gutterBottom
           sx={{ whiteSpace: "pre-line" }}
         >
-          {renderTextWithMath(question.text.replace(/<br>/g, "\n"))}
+          {parseTextWithMath(question.text.replace(/<br>/g, "\n"))}
         </Typography>
 
         {/* Если есть изображение вопроса */}
@@ -256,7 +257,7 @@ export function QuestionCorrectSequence({ question, savedAnswer, onAnswer }: Pro
                   />
                 ) : (
                   <Typography variant="body1">
-                    {String.fromCharCode(65 + index)}. {renderTextWithMath(item.text)}
+                    {String.fromCharCode(65 + index)}. {parseTextWithMath(item.text)}
                   </Typography>
                 )}
               </Box>

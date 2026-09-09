@@ -90,6 +90,7 @@ import { Box, Typography, FormGroup, FormControlLabel, Checkbox, Grid } from "@m
 import type { ChangeEvent } from "react";
 import type { Question } from "../../types/pages/testpages/types";
 import { ZoomableImage, MathFormula } from "../../components";
+import { parseTextWithMath } from "../../utils"; 
 
 interface Props {
   question: Question;
@@ -101,21 +102,22 @@ const isLatex = (text: string) => text.includes('$') || text.includes('\\(');
 const isImage = (groupKey?: string) => groupKey?.toLowerCase().startsWith('img') || 
       groupKey?.toLowerCase().startsWith('image');
 
-// Функція парсингу тексту з роздільниками ``
-const parseTextWithMath = (text: string): React.ReactNode => {
-  if (!text) return text;
+// // Перенесли в утилиты
+// // Функція парсингу тексту з роздільниками ``
+// const parseTextWithMath = (text: string): React.ReactNode => {
+//   if (!text) return text;
   
-  const parts = text.split(/`(.*?)`/g);
+//   const parts = text.split(/`(.*?)`/g);
   
-  return parts.map((part, index) => {
-    if (index % 2 === 1) {
-      // Це формула (між ` `)
-      return <MathFormula key={index} formula={part} />;
-    }
-    // Це звичайний текст
-    return part;
-  });
-};
+//   return parts.map((part, index) => {
+//     if (index % 2 === 1) {
+//       // Це формула (між ` `)
+//       return <MathFormula key={index} formula={part} />;
+//     }
+//     // Це звичайний текст
+//     return part;
+//   });
+// };
 
 export function QuestionMultipleChoice({ question, savedAnswer, onAnswer }: Props) {
 

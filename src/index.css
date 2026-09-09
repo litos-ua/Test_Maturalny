@@ -59,15 +59,21 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+/* Для збереження пробілів у формулах при копіюванні */
+.math-formula {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.math-formula .katex .mathnormal {
+  white-space: pre-wrap;
+}
+
+.math-formula .katex .mord {
+  white-space: pre-wrap;
+}
+
+/* 🔑 Для текстових режимів у LaTeX */
+.math-formula .katex .text {
+  white-space: pre-wrap;
+}

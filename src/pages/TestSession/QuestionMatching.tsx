@@ -349,6 +349,7 @@ import { Grid, Typography, List, ListItem, Select, MenuItem, FormControl, InputL
 import type { Question } from "../../types/pages/testpages/types";
 import { shuffleArray } from "../../utils/shuffleArray";
 import { ZoomableImage, MathFormula } from "../../components";
+import { parseTextWithMath } from "../../utils";
 
 interface Props {
   question: Question;
@@ -388,34 +389,34 @@ const isImageUrl = (url?: string): boolean => {
   );
 };
 
-// 🔥 НОВА ФУНКЦІЯ: перевірка на LaTeX
+// Перевірка на LaTeX
 const isLatex = (text: string): boolean => {
   if (!text) return false;
   return text.includes('$') || text.includes('\\(') || text.includes('\\[');
 };
 
-// 🔥 НОВА ФУНКЦІЯ: парсинг тексту з математичними формулами
-const renderTextWithMath = (text: string): React.ReactNode => {
-  if (!text) return text;
+// // НОВА ФУНКЦІЯ: парсинг тексту з математичними формулами
+// const renderTextWithMath = (text: string): React.ReactNode => {
+//   if (!text) return text;
   
-  // Якщо це LaTeX через MathFormula
-  if (isLatex(text)) {
-    return <MathFormula formula={text} />;
-  }
+//   // Якщо це LaTeX через MathFormula
+//   if (isLatex(text)) {
+//     return <MathFormula formula={text} />;
+//   }
   
-  // Якщо є роздільники ` `, парсимо
-  if (text.includes('`')) {
-    const parts = text.split(/`(.*?)`/g);
-    return parts.map((part, idx) => {
-      if (idx % 2 === 1) {
-        return <MathFormula key={idx} formula={part} />;
-      }
-      return part;
-    });
-  }
+//   // Якщо є роздільники ` `, парсимо
+//   if (text.includes('`')) {
+//     const parts = text.split(/`(.*?)`/g);
+//     return parts.map((part, idx) => {
+//       if (idx % 2 === 1) {
+//         return <MathFormula key={idx} formula={part} />;
+//       }
+//       return part;
+//     });
+//   }
   
-  return text;
-};
+//   return text;
+// };
 
 export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
   const leftItems = useMemo(() => 
@@ -494,7 +495,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
       {/* Левая колонка — вопросы */}
       <Grid size={{ xs: 12, md: question.imageUrl ? 4 : 7 }}>
         <Typography variant="h6" gutterBottom sx={{ whiteSpace: "pre-line" }}>
-          {renderTextWithMath(question.text.replace(/<br\s*\/?>/g, "\n"))}
+          {parseTextWithMath(question.text.replace(/<br\s*\/?>/g, "\n"))}
         </Typography>
 
         <List>
@@ -535,7 +536,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
                         }),
                       }}
                     >
-                      {index + 1}. {renderTextWithMath(item.text)}
+                      {index + 1}. {parseTextWithMath(item.text)}
                     </Typography>
                   )}
                 </Box>
@@ -674,7 +675,7 @@ export function QuestionMatching({ question, savedAnswer, onAnswer }: Props) {
                       }),
                     }}
                   >
-                    {renderTextWithMath(item.matchLabel || '')}
+                    {parseTextWithMath(item.matchLabel || '')}
                   </Typography>
                 )}
               </ListItem>

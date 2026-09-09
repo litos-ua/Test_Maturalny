@@ -7,6 +7,9 @@ export default defineConfig({
     rollupOptions: {
       maxParallelFileOps: 2
     }
+  },
+    preview: {
+    port: 5173
   }
 });
 

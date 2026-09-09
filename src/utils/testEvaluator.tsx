@@ -265,16 +265,7 @@ export function calculateTestResults(
 
         const allowPartialMatching = isPartialScoreAllowed(disciplineId, QuestionType.Matching);
         
-        // // Вариант когда неправильная только одна пара
-        // if (allowPartialMatching) {
-        //   score = Math.min(matchScore, q.maxScore);
-        //   isCorrect = (matchScore === leftItemsMatching.length-1);
-        // } else {
-        //   const allPairsMatched = (matchScore === leftItemsMatching.length);
-        //   score = allPairsMatched ? q.maxScore : 0;
-        //   isCorrect = allPairsMatched;
-        // }
-        // 🔑 Отримуємо реальну кількість правильних пар
+        // Отримуємо реальну кількість правильних пар
         const correctPairsCount = q.options.filter(o => 
           o.matchLabel !== null && 
           o.matchLabel !== undefined && 
@@ -313,7 +304,7 @@ export function calculateTestResults(
         const isPerfectMatch = userAnswer.length === correctSequence.length &&
                               userAnswer.every((val, idx) => val === correctSequence[idx]);
         
-        // 🔥 ВИЗНАЧАЄМО, ЯКА ОПЦІЯ Є ПЕРШОЮ (matchLabel = 1) ТА ОСТАННЬОЮ (matchLabel = max)
+        // ВИЗНАЧАЄМО, ЯКА ОПЦІЯ Є ПЕРШОЮ (matchLabel = 1) ТА ОСТАННЬОЮ (matchLabel = max)
         const maxLabel = Math.max(...correctSequence);
         
         // Знаходимо індекси (позиції в UI), де знаходяться перша та остання події
@@ -355,9 +346,9 @@ export function calculateTestResults(
       }
       break;
 
-      // 🔑 НОВАЯ ЛОГИКА (возможно несколько ответов)
+      // НОВАЯ ЛОГИКА открытых вопросов (возможно несколько ответов)
       case QuestionType.OpenAnswer:
-        // 🔑 Отримуємо відповіді (можуть бути як числа, так і рядки)
+        // Отримуємо відповіді (можуть бути як числа, так і рядки)
         const rawAnswers = Array.isArray(userAnswer) ? userAnswer : [];
         const correctOptions = q.options.filter(o => o.isCorrect === true);
         

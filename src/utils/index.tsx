@@ -7,3 +7,4 @@ export * from "./roles";
 export * from "./pdfExportUniversal";
 export * from "./formatText";
 export * from "./translit";
+export * from "./parseTextWithMath";
