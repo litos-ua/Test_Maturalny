@@ -251,3 +251,349 @@ Matching не працював у тестах по темах	Matching прац
 - Оновлено компоненти QuestionSingleChoice, QuestionMultipleChoice, QuestionMatching, QuestionOpenAnswer, QuestionCorrectSequence,   
   QuestionDoubleChoice для використання єдиної утиліти
 - Додано перевірку валідності LaTeX у MathFormula — невалідний код відображається як звичайний текст замість помилки.
+
+# 2026.09.18
+
+Повний список змін для підтримки OpenAnswer на сервері
+1️⃣ ENUM QuestionType
+Файл: TestMaturalnyApp.Domain/Entities/Enums/QuestionType.cs
+
+csharp
+public enum QuestionType
+{
+    SingleChoice = 0,
+    MultipleChoice = 1,
+    Matching = 2,
+    DoubleChoice = 3,
+    CorrectSequence = 4,
+    OpenAnswer = 5,  // 🔑 ДОДАНО
+}
+2️⃣ DTO CreateUserAnswerDto
+Файл: TestMaturalnyApp.Domain/Entities/DTOs/Create/CreateUserAnswerDto.cs
+
+csharp
+public class CreateUserAnswerDto
+{
+    public int QuestionId { get; set; }
+    public string? Explanation { get; set; }
+    public double Score { get; set; } = 0;
+    public int AnswerInt { get; set; }
+    public List<int> SelectedOptionIds { get; set; } = new();
+    public List<string>? GroupeLabel { get; set; }  // 🔑 ДОДАНО для OpenAnswer
+    public int? TestSessionId { get; set; }
+}
+Призначення: Приймає текстові відповіді з UI (groupeLabel).
+
+3️⃣ DTO EvaluateTestRequestDto
+Файл: TestMaturalnyApp.Domain/Entities/DTOs/EvaluateTestRequestDto.cs
+
+csharp
+public class EvaluateTestRequestDto
+{
+    public int TestSessionId { get; set; }
+    public Dictionary<int, List<int>> Answers { get; set; } = new();
+    public Dictionary<int, List<string>>? TextAnswers { get; set; }  // 🔑 ДОДАНО
+}
+Призначення: Передає текстові відповіді в сервіс оцінювання.
+
+4️⃣ DTO QuestionResultDto
+Файл: TestMaturalnyApp.Domain/Entities/DTOs/QuestionResultDto.cs
+
+csharp
+public class QuestionResultDto
+{
+    public int QuestionId { get; set; }
+    public List<int> SelectedOptionIds { get; set; } = new();
+    public List<int> CorrectOptionIds { get; set; } = new();
+    public bool IsCorrect { get; set; }
+    public bool IsPartiallyCorrect { get; set; }
+    public double Score { get; set; }
+    public int QuestionOrder { get; set; }
+    public string QuestionText { get; set; } = "";
+    public string QuestionType { get; set; } = "";
+    public List<string>? SelectedTextAnswers { get; set; }  // 🔑 ДОДАНО
+    public List<string>? CorrectTextAnswers { get; set; }   // 🔑 ДОДАНО
+}
+Призначення: Повертає текстові відповіді для відображення в UI.
+
+ 
+5️⃣ Мапер CreateUserAnswerDtoMapper
+Файл: TestMaturalnyApp.Services/Mapping/Dto/Create/CreateUserAnswerDtoMapper.cs
+
+csharp
+using System.Text.Json;
+using TestMaturalnyApp.Domain.Entities;
+using TestMaturalnyApp.Domain.Entities.DTOs.Create;
+
+namespace TestMaturalnyApp.Services.Mapping.Dto.Create
+{
+    public static class CreateUserAnswerDtoMapper
+    {
+        public static UserAnswer MapToDomain(CreateUserAnswerDto dto)
+        {
+            var userAnswer = new UserAnswer
+            {
+                ..............
+            };
+
+            // 🔑 Для OpenAnswer: зберігаємо текстові відповіді як JSON-рядок
+            if (dto.GroupeLabel != null && dto.GroupeLabel.Count > 0)
+            {
+                userAnswer.GroupeLabel = JsonSerializer.Serialize(dto.GroupeLabel);
+            }
+
+            return userAnswer;
+        }
+    }
+}
+6️⃣ Хелпер QuestionEvaluationHelper
+Файл: TestMaturalnyApp.Services/Services/Utils/QuestionEvaluationHelper.cs
+
+csharp
+using TestMaturalnyApp.Domain.Entities;
+using TestMaturalnyApp.Domain.Entities.Enums;
+
+namespace TestMaturalnyApp.Services.Services.Utils
+{
+    public static class QuestionEvaluationHelper
+    {
+        // ============================================================
+        // 🔑 ІСНУЮЧИЙ МЕТОД (БЕЗ ЗМІН)
+        // ============================================================
+        public static (bool IsCorrect, double Score) EvaluateQuestion(
+            Question question,
+            List<int> userAnswerIds,
+            List<int> correctAnswerIds,
+            List<string>? userTextAnswers = null)  // 🔑 зарезервовано
+        {
+            bool isCorrect = false;
+            double score = 0;
+
+            switch (question.Type)
+            {
+                case QuestionType.SingleChoice:
+                    // ... без змін
+                    break;
+                ..........
+                case QuestionType.CorrectSequence:
+                    // ... без змін
+                    break;
+                
+                // ❌ case OpenAnswer — ЗАКОМЕНТОВАНО
+                // (винесено в окремий метод EvaluateOpenAnswer)
+                
+                default:
+                    throw new ArgumentOutOfRangeException($"Unsupported question type: {question.Type}");
+            }
+
+            return (isCorrect, score);
+        }
+
+        // ============================================================
+        // 🔑 НОВИЙ МЕТОД ДЛЯ OPENANSWER
+        // ============================================================
+        public static (bool IsCorrect, double Score) EvaluateOpenAnswer(
+            Question question,
+            List<string> userTextAnswers)
+        {
+            if (question.Type != QuestionType.OpenAnswer)
+                return (false, 0);
+
+            .................................
+
+            var score = Math.Min(calculatedScore, maxScore);
+            var isCorrect = correctCount == correctOptions.Count;
+
+            return (isCorrect, score);
+        }
+
+        // ============================================================
+        // 🔑 ДОПОМІЖНИЙ МЕТОД
+        // ============================================================
+        private static string NormalizeText(string text)
+        {
+            return text.Trim().Replace(',', '.').Replace(" ", "").ToLowerInvariant();
+        }
+    }
+}
+Логіка оцінювання:
+
+2 бали за кожну правильну відповідь
+
+Обмеження MaxScore питання
+
+Нормалізація тексту (кома → крапка, пробіли, регістр)
+
+Підтримка чисел і тексту
+
+7️⃣ Сервіс TestEvaluationService
+Файл: TestMaturalnyApp.Services/Services/TestEvaluationService.cs
+
+EvaluateAsync — гілка для OpenAnswer
+csharp
+// 🔑 ГІЛКА ДЛЯ OPENANSWER
+if (domainQuestion.Type == QuestionType.OpenAnswer)
+{
+    // 🔑 Отримуємо текстові відповіді
+    var userTextAnswers = request.TextAnswers?
+        .GetValueOrDefault(domainQuestion.Id) ?? new List<string>();
+
+    var (isCorrectOA, scoreOA) = QuestionEvaluationHelper.EvaluateOpenAnswer(
+        domainQuestion, userTextAnswers);
+
+    maxTotalScore += domainQuestion.MaxScore;
+    totalScore += scoreOA;
+
+    var validTexts = userTextAnswers
+        .Where(t => !string.IsNullOrWhiteSpace(t))
+        .ToList();
+
+    // 🔑 Зберігаємо в БД
+    var uaDataOA = new Data.Entities.UserAnswer
+    {
+        UserId = session.UserId,
+        QuestionId = domainQuestion.Id,
+        SubmittedAt = DateTime.UtcNow,
+        Score = scoreOA,
+        TestSessionId = session.Id,
+        SelectedOptionJson = "[]",
+        GroupeLabel = JsonSerializer.Serialize(validTexts)
+    };
+
+    await _answerRepo.CreateAsync(uaDataOA);
+
+    results.Add(new QuestionResultDto
+    {
+        QuestionId = domainQuestion.Id,
+        SelectedTextAnswers = validTexts,
+        CorrectTextAnswers = domainQuestion.Options
+            .Where(o => o.IsCorrect)
+            .Select(o => o.Text)
+            .ToList(),
+        Score = scoreOA,
+        IsCorrect = isCorrectOA
+    });
+
+    continue;  // 🔑 Пропускаємо звичайну логіку
+}
+EvaluateShuffleAsync — аналогічна гілка
+Той самий код, що й у EvaluateAsync (з uaDataOA).
+
+8️⃣ Контролер TestSessionController
+Файл: TestMaturalnyApp.API/Controllers/TestSessionController.cs
+
+У методі EndSession — передача TextAnswers
+csharp
+var evaluationResult = await _testEvaluationService.EvaluateShuffleAsync(new EvaluateTestRequestDto
+{
+    TestSessionId = sessionId,
+    Answers = request.Answers
+        .GroupBy(a => a.QuestionId)
+        .ToDictionary(
+            g => g.Key,
+            g => g.SelectMany(a => a.SelectedOptionIds).ToList()
+        ),
+    // 🔑 ДОДАНО: передача текстових відповідей
+    TextAnswers = request.Answers
+        .Where(a => a.GroupeLabel != null && a.GroupeLabel.Count > 0)
+        .ToDictionary(a => a.QuestionId, a => a.GroupeLabel!)
+});
+CompleteTestSessionRequest
+csharp
+public class CompleteTestSessionRequest
+{
+    public SessionEndReason Reason { get; set; }
+    public List<CreateUserAnswerDto> Answers { get; set; } = new();
+}
+Змін не потребує — GroupeLabel вже є в CreateUserAnswerDto.
+
+📊 ЗВЕДЕНА ТАБЛИЦЯ ЗМІН
+#	Файл	Тип	Зміна
+1	QuestionType.cs	Enum	+OpenAnswer = 5
+2	CreateUserAnswerDto.cs	DTO	+GroupeLabel: List<string>?
+3	EvaluateTestRequestDto.cs	DTO	+TextAnswers: Dictionary<int, List<string>>?
+4	QuestionResultDto.cs	DTO	+SelectedTextAnswers, +CorrectTextAnswers
+5	CreateUserAnswerDtoMapper.cs	Mapper	Обробка GroupeLabel → JSON
+6	QuestionEvaluationHelper.cs	Helper	+EvaluateOpenAnswer, +NormalizeText
+7	TestEvaluationService.cs	Service	+Гілка OpenAnswer (2 методи)
+8	TestSessionController.cs	Controller	Передача TextAnswers
+9	Міграція	БД	ALTER COLUMN GroupeLabel
+🔄 ПОВНИЙ ЛАНЦЮЖОК ДАНИХ
+text
+┌─────────────────────────────────────────────────────────────────────┐
+│ UI (QuestionOpenAnswer)                                            │
+│   ↓ groupeLabel: ["4.5"]                                          │
+│                                                                     │
+│ JSON на сервер                                                      │
+│   ↓ { questionId, selectedOptionIds: [], groupeLabel: ["4.5"] }   │
+│                                                                     │
+│ CreateUserAnswerDto                                                │
+│   ↓ GroupeLabel = ["4.5"]                                         │
+│                                                                     │
+│ CreateUserAnswerDtoMapper.MapToDomain()                            │
+│   ↓ userAnswer.GroupeLabel = "[\"4.5\"]"                          │
+│                                                                     │
+│ Domain.UserAnswer                                                  │
+│   ↓ GroupeLabel = "[\"4.5\"]"                                     │
+│                                                                     │
+│ TestSessionController.EndSession()                                 │
+│   ↓ TextAnswers = { 14996: ["4.5"] }                              │
+│                                                                     │
+│ EvaluateTestRequestDto                                             │
+│   ↓ TextAnswers = { 14996: ["4.5"] }                              │
+│                                                                     │
+│ TestEvaluationService.EvaluateShuffleAsync()                       │
+│   ↓ userTextAnswers = ["4.5"]                                     │
+│                                                                     │
+│ QuestionEvaluationHelper.EvaluateOpenAnswer()                      │
+│   ↓ correctCount = 1 → score = 2                                  │
+│                                                                     │
+│ QuestionResultDto                                                  │
+│   ↓ SelectedTextAnswers = ["4.5"], Score = 2                      │
+│                                                                     │
+│ UI отримує результат                                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+# 2026.09.21
+
+Реалізовано можливість видалення завершених сесій тестування з особистого кабінету користувача.
+Серверна частина (ASP.NET Core):
+Додано метод DeleteAsync у ITestSessionRepository та TestSessionRepository (каскадне видалення сесії разом з відповідями)
+Додано метод DeleteAsync у ITestSessionService та TestSessionService
+Додано ендпоінт DELETE /api/testsession/{sessionId} у TestSessionController
+Реалізовано перевірку прав: користувач може видаляти лише свої сесії
+Клієнтська частина (React):
+Додано метод deleteSession у testSessionClient та testSessionService
+У таблицю сесій (ProfileResultsSession) додано колонку з кнопкою видалення 🗑️
+Додано діалог підтвердження видалення (MUI Dialog)
+Реалізовано оновлення списку сесій після видалення
+Адаптовано відображення для мобільних пристроїв
+
+┌─────────────────────────────────────────────────────────────────┐
+│ Користувач клікає 🗑️                                            │
+│         ↓                                                       │
+│ setDeleteSessionId(8106)                                        │
+│         ↓                                                       │
+│ deleteSessionId = 8106                                          │
+│         ↓                                                       │
+│ React перерендерює                                              │
+│         ↓                                                       │
+│ <Dialog open={8106 !== null}> → open = true                    │
+│         ↓                                                       │
+│ Діалог відкривається                                            │
+│         ↓                                                       │
+│ Користувач клікає "Видалити"                                    │
+│         ↓                                                       │
+│ handleDeleteSession()                                           │
+│         ↓                                                       │
+│ testSessionService.deleteSession(8106)                          │
+│         ↓                                                       │
+│ API: DELETE /api/testsession/8106                               │
+│         ↓                                                       │
+│ Сервер видаляє сесію                                            │
+│         ↓                                                       │
+│ Оновлення списку                                                │
+│         ↓                                                       │
+│ setDeleteSessionId(null) → діалог закривається                  │
+└─────────────────────────────────────────────────────────────────┘

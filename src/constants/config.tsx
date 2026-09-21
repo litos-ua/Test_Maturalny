@@ -48,9 +48,12 @@ export const configObj = {
     fallbackApiUrl: FALLBACK_API_URL,
     timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 10000,
     healthCheckInterval: Number(import.meta.env.VITE_API_HEALTH_CHECK_INTERVAL) || 30000,
-    
-    // Статус
-    isUsingFallback: isUsingFallback,
+    isUsingFallback: isUsingFallback, // Статус
+    // Пагінація
+    pagination: {
+       startPage: 1,
+       pageSize: 10,
+    },
 };
 
 // Функции для переключения API
@@ -75,24 +78,6 @@ export const switchToPrimary = () => {
         localStorage.removeItem('api_using_fallback');
     }
 };
-
-// Проверка доступности API
-// export const checkApiHealth = async (url: string): Promise<boolean> => {
-//     try {
-//         const controller = new AbortController();
-//         const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-//         const response = await fetch(`${url}disciplines`, {
-//             method: 'HEAD',
-//             signal: controller.signal
-//         });
-        
-//         clearTimeout(timeoutId);
-//         return response.ok;
-//     } catch {
-//         return false;
-//     }
-// };
 
 // Проверка доступности API
 export const checkApiHealth = async (url: string): Promise<boolean> => {

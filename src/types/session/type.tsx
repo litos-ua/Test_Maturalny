@@ -98,11 +98,30 @@ export interface RealTestSessionResult {
   questions: QuestionDto[];
 }
 
+// export interface QuestionDto {
+//   id: number;
+//   text: string;
+//   imageUrl?: string;
+//   type: QuestionType;
+//   options: AnswerOptionDto[];
+// }
+
+// export interface AnswerOptionDto {
+//   id: number;
+//   questionId: number;
+//   text: string;
+//   groupKey?: string;
+//   matchLabel?: string
+// }
+
 export interface QuestionDto {
   id: number;
   text: string;
   imageUrl?: string;
   type: QuestionType;
+  maxScore: number;
+  difficulty: number;
+  topicId: number;
   options: AnswerOptionDto[];
 }
 
@@ -112,6 +131,7 @@ export interface AnswerOptionDto {
   text: string;
   groupKey?: string;
   matchLabel?: string
+  isCorrect?: boolean;
 }
 //----------------------------------
 

@@ -34,6 +34,10 @@ export const testSessionService = {
     return await testSessionClient.finishSession(sessionId, dto);
   },
 
+  async deleteSession(sessionId: number): Promise<void> {
+    return await testSessionClient.deleteSession(sessionId);
+  },
+
   async getSessionById(id: number): Promise<TestSessionDto> {
     return await testSessionClient.getSessionById(id);
   },

@@ -17,11 +17,12 @@ import {
   useMediaQuery
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { userProfileService } from "../../services";
+import { userProfileService, testSessionService } from "../../services";
 import type { ProfileSessionDto, ProfileSessionQuestionDetailDto, PagedResult } from "../../types";
 import { useAuth } from "../../context";
 import * as commonStyles from "./ProfileStyles";
 import * as styles from "./profileResultsStyles";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { configObj } from "../../constants"
 
 export const ProfileResultsSession = () => {
@@ -37,6 +38,7 @@ export const ProfileResultsSession = () => {
   const [selectedResult, setSelectedResult] = useState<ProfileSessionQuestionDetailDto[] | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState<number | null>(null);
   const [currentSessionScore, setCurrentSessionScore] = useState<number | null>(null);
+  const [deleteSessionId, setDeleteSessionId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -67,6 +69,24 @@ export const ProfileResultsSession = () => {
     return `${h}г ${parseInt(m)}хв`;
   };
 
+  const handleDeleteSession = async () => {   // Удаление ненужных сессий
+    if (!deleteSessionId || !userId) return;
+
+    try {
+      await testSessionService.deleteSession(deleteSessionId);
+      
+      // 🔑 Обновляем список сессий
+      const updated = await userProfileService.getCompletedSessions(userId, page, pageSize);
+      setPagedSessions(updated);
+      
+      // 🔑 Закриваем диалог
+      setDeleteSessionId(null);
+    } catch (error) {
+      console.error("Помилка видалення сесії:", error);
+      alert("Не вдалося видалити сесію");
+    }
+  };
+
   return (
     <Box sx={styles.resultsWrapper}>
       <Typography 
@@ -85,13 +105,14 @@ export const ProfileResultsSession = () => {
           {/* Заголовки - скрываем на мобильных */}
           {!isMobile && (
             <Grid size = {{xs:12}}>
-              <Paper sx={styles.headerPaper}> {/* ← ВАШ СТИЛЬ */}
+              <Paper sx={styles.headerPaper}> 
                 <Box sx={{ ...styles.cell, flex: { xs: 2, md: 1 } }}>Номер</Box>
                 <Box sx={{ ...styles.cell, flex: { xs: 3, md: 2 }, display: { xs: 'none', sm: 'block' } }}>Предмет</Box>
                 <Box sx={{ ...styles.cell, flex: { xs: 3, md: 2 } }}>Початок</Box>
                 <Box sx={{ ...styles.cell, flex: { xs: 2, md: 2 }, display: { xs: 'none', md: 'block' } }}>Час</Box>
                 <Box sx={{ ...styles.cell, flex: 1 }}>Бал</Box>
-                <Box sx={{ flex: 1 }} />
+                <Box sx={{ flex: 1 }} />  {/* для "Деталі" */}
+                <Box sx={{ flex: 1 }} />  {/* КОЛОНКА для DEL */}
               </Paper>
             </Grid>
           )}
@@ -116,7 +137,8 @@ export const ProfileResultsSession = () => {
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                       Час: {formatDuration(s.duration)}
                     </Typography>
-                    <Button 
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Button 
                         variant="outlined" 
                         size="small" 
                         fullWidth
@@ -125,9 +147,17 @@ export const ProfileResultsSession = () => {
                           setCurrentSessionScore(s.totalScore);
                           userProfileService.getSessionResults(s.sessionId).then(setSelectedResult);
                         }}
-                        >
-                      Деталі
-                    </Button>
+                      >
+                        Деталі
+                      </Button>
+                      <IconButton 
+                        color="error" 
+                        size="small"
+                        onClick={() => setDeleteSessionId(s.sessionId)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
                   </>
                 ) : (
                   // Десктопная версия
@@ -153,6 +183,15 @@ export const ProfileResultsSession = () => {
                           >
                             Деталі
                       </Button>
+                    </Box>
+                    <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>  {/* Кнопка DEL */}
+                      <IconButton 
+                        color="error" 
+                        size="small"
+                        onClick={() => setDeleteSessionId(s.sessionId)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </Box>
                   </>
                 )}
@@ -267,6 +306,31 @@ export const ProfileResultsSession = () => {
             size={isMobile ? "small" : "medium"}
           >
             Закрити
+          </Button>
+        </DialogActions>
+      </Dialog>
+            {/* ДИАЛОГ ДЛЯ DEL */}
+      <Dialog
+        open={deleteSessionId !== null}
+        onClose={() => setDeleteSessionId(null)}
+      >
+        <DialogTitle>Підтвердження видалення</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Ви впевнені, що хочете видалити сесію №{deleteSessionId}?
+            Цю дію не можна скасувати.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteSessionId(null)}>
+            Скасувати
+          </Button>
+          <Button 
+            onClick={handleDeleteSession} 
+            color="error" 
+            variant="contained"
+          >
+            Видалити
           </Button>
         </DialogActions>
       </Dialog>

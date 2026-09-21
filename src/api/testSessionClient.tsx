@@ -1,4 +1,4 @@
-import { get, post } from "./";
+import { get, post, del } from "./";
 import type {
   CreateTestSessionDto,
   TestSessionDto,
@@ -44,6 +44,16 @@ export const testSessionClient = {
       throw error
     }
   },
+
+  async deleteSession(sessionId: number): Promise<void> {
+    try {
+      await del(`/testsession/${sessionId}`);
+    } catch (error) {
+      console.error(`Ошибка при удалении сессии ${sessionId}:`, error);
+      throw error;
+    }
+  },
+
 
   async getSessionById(id: number): Promise<TestSessionDto> {
     try {

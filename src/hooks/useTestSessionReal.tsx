@@ -5,7 +5,7 @@ import { testSessionParameters } from "../constants";
 import type {
   RealTestSessionResult,
   StartExamRequestDto,
-  //QuestionDto,
+  QuestionDto,
   Question,
   //AnswerOptionDto,
   //QuestionType,
@@ -26,12 +26,21 @@ export function useTestSessionReal(
   //console.log (`Hook useTestSessionReal is starting`);
 
   useEffect(() => {
+    // 🔑 ОЧИЩУЄМО ПРИ МОНТУВАННІ (захист від "залипання")
+    sessionStorage.removeItem("testSessionCreating");
+    console.log('🔍 useEffect start');
+    
     if (!userId || !disciplineId) return;
     const alreadyCreating = sessionStorage.getItem("testSessionCreating");
-    if (alreadyCreating) return;
+    //if (alreadyCreating) return;
+      if (alreadyCreating) {
+        console.log('⚠️ Test session already creating, skipping...');
+        return;
+      }
 
     const load = async () => {
       try {
+        console.log('🔍 Starting load...');
         sessionStorage.setItem("testSessionCreating", "true");
 
         const dto: StartExamRequestDto = {
@@ -40,23 +49,37 @@ export function useTestSessionReal(
           description,
           timeLimitSeconds,
         };
-
+        console.log('🔍 Sending request:', dto);
         const result: RealTestSessionResult = await testSessionService.startRealTest(dto);
-
+        console.log('✅ Result:', result);
         setSessionId(result.sessionId);
 
-        // ✅ Маппинг из QuestionDto[] в Question[]
+        // //✅ Маппинг из QuestionDto[] в Question[]
+        // const mappeddQuestions: Question[] = result.questions.map((q) => ({
+        //   id: q.id,
+        //   text: q.text,
+        //   imageUrl: q.imageUrl,
+        //   type: q.type,
+        //   topicId: 2,         // или q.topicId, если есть
+        //   difficulty: 1,      // или q.difficulty, если есть
+        //   maxScore: 1,        // или q.maxScore, если есть
+        //   options: q.options.map((opt) => ({
+        //     ...opt,
+        //     isCorrect: false,    // добавляем обязательное поле
+        //   })),
+        // }));
+
         const mappeddQuestions: Question[] = result.questions.map((q) => ({
           id: q.id,
           text: q.text,
           imageUrl: q.imageUrl,
           type: q.type,
-          topicId: 2,         // или q.topicId, если есть
-          difficulty: 1,      // или q.difficulty, если есть
-          maxScore: 1,        // или q.maxScore, если есть
+          topicId: q.topicId ?? 2,              // 🔑 З СЕРВЕРА
+          difficulty: q.difficulty ?? 1,        // 🔑 З СЕРВЕРА
+          maxScore: q.maxScore ?? 1,            // 🔑 З СЕРВЕРА
           options: q.options.map((opt) => ({
             ...opt,
-            isCorrect: false,    // добавляем обязательное поле
+            isCorrect: opt.isCorrect ?? false,  // 🔑 З СЕРВЕРА 
           })),
         }));
 
