@@ -9,5 +9,6 @@ namespace TestMaturalnyApp.Domain.Entities.Enums
         Matching = 2,
         DoubleChoice = 3,
         CorrectSequence = 4,
+        OpenAnswer = 5,
     }
 }

@@ -12,6 +12,9 @@
         public int QuestionOrder { get; set; }
         public string QuestionText { get; set; } = "";
         public string QuestionType { get; set; } = "";
+        
+        public List<string>? SelectedTextAnswers { get; set; } // для OpenAnswer
+        public List<string>? CorrectTextAnswers { get; set; } // для OpenAnswer
     }
 
 

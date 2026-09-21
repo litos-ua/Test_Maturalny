@@ -235,12 +235,15 @@ namespace TestMaturalnyApp.API.Controllers
                 var evaluationResult = await _testEvaluationService.EvaluateShuffleAsync(new EvaluateTestRequestDto
                 {
                     TestSessionId = sessionId,
-                    Answers = request.Answers
+                    Answers = request.Answers      // для SingleChoice, MultipleChoice, Matching, DoubleChoice, CorrectSequence
                         .GroupBy(a => a.QuestionId)
                         .ToDictionary(
                             g => g.Key,
                             g => g.SelectMany(a => a.SelectedOptionIds).ToList()
-                        )
+                        ),
+                    TextAnswers = request.Answers   // для OpenAnswer
+                        .Where(a => a.GroupeLabel != null && a.GroupeLabel.Count > 0)
+                        .ToDictionary(a => a.QuestionId, a => a.GroupeLabel!)
                 });
 
                 // Вставляем Score из оценки

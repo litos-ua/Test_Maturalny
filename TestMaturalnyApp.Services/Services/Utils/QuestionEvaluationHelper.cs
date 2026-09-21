@@ -11,7 +11,9 @@ namespace TestMaturalnyApp.Services.Services.Utils
         public static (bool IsCorrect, double Score) EvaluateQuestion(
             Question question,
             List<int> userAnswerIds,
-            List<int> correctAnswerIds)
+            List<int> correctAnswerIds,
+            List<string>? userTextAnswers = null)  // List<string>? userTextAnswers = null  параметр для вопросов типа OpenAnswer
+
         {
             bool isCorrect = false;
             double score = 0;
@@ -48,7 +50,8 @@ namespace TestMaturalnyApp.Services.Services.Utils
                         var uniqueUserAnswers = userAnswerIds.Distinct().ToList();
                         int numCorrect = correctAnswerIds.Count;
 
-                        if (uniqueUserAnswers.Count != userAnswerIds.Count || uniqueUserAnswers.Count != numCorrect)
+                        //if (uniqueUserAnswers.Count != userAnswerIds.Count || uniqueUserAnswers.Count != numCorrect) // баллов если отвечены не все опции
+                        if (uniqueUserAnswers.Count != userAnswerIds.Count) // Не 0 баллов если отвечены не все опции
                         {
                             score = 0;
                             isCorrect = false;
@@ -136,11 +139,136 @@ namespace TestMaturalnyApp.Services.Services.Utils
                         break;
                     }
 
+                //// 🔑 ДЛЯ СОХРАНЕНИЯ СИГНАТУРЫ ДЛЯ OPENANSWER ИСПОЛЬЗУЕМ ОТДЕЛЬНЫЙ МЕТОД
+                //case QuestionType.OpenAnswer:
+                //    {
+                //        // 🔑 Якщо текстові відповіді не передані - 0 балів
+                //        if (userTextAnswers == null || userTextAnswers.Count == 0)
+                //        {
+                //            isCorrect = false;
+                //            score = 0;
+                //            break;
+                //        }
+
+                //        // 🔑 Отримуємо правильні опції
+                //        var correctOptions = question.Options
+                //            .Where(o => o.IsCorrect)
+                //            .ToList();
+
+                //        if (correctOptions.Count == 0)
+                //        {
+                //            isCorrect = false;
+                //            score = 0;
+                //            break;
+                //        }
+
+                //        // 🔑 Підрахунок правильних відповідей
+                //        int correctCount = 0;
+
+                //        for (int i = 0; i < correctOptions.Count; i++)
+                //        {
+                //            var userValue = (i < userTextAnswers.Count)
+                //                ? userTextAnswers[i]?.Trim()
+                //                : "";
+                //            var correctValue = correctOptions[i].Text?.Trim() ?? "";
+
+                //            if (string.IsNullOrEmpty(userValue) || string.IsNullOrEmpty(correctValue))
+                //                continue;
+
+                //            var normalizedUser = NormalizeText(userValue);
+                //            var normalizedCorrect = NormalizeText(correctValue);
+
+                //            if (double.TryParse(normalizedUser, out var userNum) &&
+                //                double.TryParse(normalizedCorrect, out var correctNum))
+                //            {
+                //                if (Math.Abs(userNum - correctNum) < 0.0001)
+                //                    correctCount++;
+                //            }
+                //            else if (normalizedUser == normalizedCorrect)
+                //            {
+                //                correctCount++;
+                //            }
+                //        }
+
+                //        // 🔑 2 бали за кожну правильну відповідь
+                //        const int scorePerAnswer = 2;
+                //        var calculatedScore = correctCount * scorePerAnswer;
+
+                //        var maxScore = question.MaxScore > 0
+                //            ? question.MaxScore
+                //            : correctOptions.Count * scorePerAnswer;
+
+                //        score = Math.Min(calculatedScore, maxScore);
+                //        isCorrect = correctCount == correctOptions.Count;
+                //        break;
+                //    }
+
+
                 default:
                     throw new ArgumentOutOfRangeException($"Unsupported question type: {question.Type}");
             }
 
             return (isCorrect, score);
+        }
+
+        // 🔑 ОКРЕМИЙ МЕТОД
+        public static (bool IsCorrect, double Score) EvaluateOpenAnswer(
+            Question question,
+            List<string> userTextAnswers)
+        {
+            if (question.Type != QuestionType.OpenAnswer)
+                return (false, 0);
+
+            var correctOptions = question.Options
+                .Where(o => o.IsCorrect)
+                .ToList();
+
+            if (correctOptions.Count == 0)
+                return (false, 0);
+
+            int correctCount = 0;
+
+            for (int i = 0; i < correctOptions.Count; i++)
+            {
+                var userValue = (i < userTextAnswers.Count)
+                    ? userTextAnswers[i]?.Trim()
+                    : "";
+                var correctValue = correctOptions[i].Text?.Trim() ?? "";
+
+                if (string.IsNullOrEmpty(userValue) || string.IsNullOrEmpty(correctValue))
+                    continue;
+
+                var normalizedUser = NormalizeText(userValue);
+                var normalizedCorrect = NormalizeText(correctValue);
+
+                if (double.TryParse(normalizedUser, out var userNum) &&
+                    double.TryParse(normalizedCorrect, out var correctNum))
+                {
+                    if (Math.Abs(userNum - correctNum) < 0.0001)
+                        correctCount++;
+                }
+                else if (normalizedUser == normalizedCorrect)
+                {
+                    correctCount++;
+                }
+            }
+
+            const int scorePerAnswer = 2;
+            var calculatedScore = correctCount * scorePerAnswer;
+
+            var maxScore = question.MaxScore > 0
+                ? question.MaxScore
+                : correctOptions.Count * scorePerAnswer;
+
+            var score = Math.Min(calculatedScore, maxScore);
+            var isCorrect = correctCount == correctOptions.Count;
+
+            return (isCorrect, score);
+        }
+
+        private static string NormalizeText(string text)
+        {
+            return text.Trim().Replace(',', '.').Replace(" ", "").ToLowerInvariant();
         }
     }
 }

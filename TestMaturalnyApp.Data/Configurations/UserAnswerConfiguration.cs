@@ -48,7 +48,7 @@
                     .HasColumnType("nvarchar(300)")
                     .HasDefaultValue("[]");
 
-            // Резервное текстовое поле
+            // Резервное текстовое поле (Задействовано под массив текстових ответов для OpenAnswer)
             builder.Property(u => u.GroupeLabel)
                    .HasMaxLength(100) 
                    .IsRequired(false)
