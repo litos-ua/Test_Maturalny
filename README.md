@@ -597,3 +597,323 @@ text
 │         ↓                                                       │
 │ setDeleteSessionId(null) → діалог закривається                  │
 └─────────────────────────────────────────────────────────────────┘
+
+
+
+# 2026.09.21
+На данный момент
+📚 УЧБОВИЙ ТЕСТ
+1. UI → Хук useTestSession
+Файл: hooks/useTestSession.ts
+
+typescript
+export function useTestSession(disciplineId?: string, topicId?: number) {
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      let data: Question[] = [];
+      
+      // 🔑 Варіант A: тест по темі
+      if (topicId) {
+        data = await getQuestionsByTopic(topicId);
+      }
+      // 🔑 Варіант B: тест по дисципліні
+      else if (disciplineId) {
+        data = await getRandomQuestionsByDiscipline(
+          Number(disciplineId), 
+          testSessionParameters.numberOfQuestions
+        );
+      }
+      
+      // Перемішування опцій
+      const shuffled = data.map(q => ({
+        ...q,
+        options: shuffleArray(q.options),
+      }));
+      
+      setShuffledQuestions(shuffled);
+    };
+    
+    fetchQuestions();
+  }, [disciplineId, topicId]);
+}
+2. API-клієнт questionClient
+Файл: api/questionClient.ts
+
+typescript
+const baseURL = configObj.axiosUrl + "Questions";
+
+const httpQuestionClient = axios.create({ baseURL });
+
+// 🔑 Для тесту по дисципліні
+export const getRandomQuestionsByDiscipline = async (
+  disciplineId: number, 
+  totalCount: number
+) => {
+  const response = await httpQuestionClient.get(
+    `/random/by-discipline/${disciplineId}/${totalCount}`
+  );
+  return response.data;
+};
+
+// 🔑 Для тесту по темі
+export const getQuestionsByTopic = async (topicId: number) => {
+  const response = await httpQuestionClient.get(`/by-topic/${topicId}`);
+  return response.data;
+};
+3. Сервер QuestionsController
+Файл: TestMaturalnyApp.API/Controllers/QuestionsController.cs
+
+Для тесту по дисципліні:
+csharp
+[HttpGet("random/by-discipline/{disciplineId}/{totalCount}")]
+public async Task<IActionResult> GetRandomByDiscipline(int disciplineId, int totalCount)
+{
+    var questions = await _service.GetRandomByDisciplineAsync(disciplineId, totalCount);
+    return Ok(questions);
+}
+Для тесту по темі:
+csharp
+[HttpGet("by-topic/{topicId}")]
+public async Task<IActionResult> GetByTopic(int topicId)
+{
+    var questions = await _service.GetByTopicIdAsync(topicId);
+    return Ok(questions);
+}
+4. Сервіс QuestionService
+csharp
+public async Task<IEnumerable<Question>> GetRandomByDisciplineAsync(
+    int disciplineId, int totalCount)
+{
+    var discipline = await _disciplineRepository.GetByIdAsync(disciplineId);
+    
+    switch (discipline.Name)
+    {
+        case "Історія України":
+            // 🔑 Спеціальна логіка для історії
+            var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20);
+            var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4);
+            // ...
+            return singleChoice.Concat(matching)...
+            
+        default:
+            // 🔑 Стандартна логіка
+            var dataEntities = await _questionRepository
+                .GetRandomByDisciplineAsync(disciplineId, totalCount);
+            return dataEntities.Select(QuestionMapper.MapToDomain).ToList();
+    }
+}
+🎯 РЕАЛЬНИЙ ТЕСТ
+1. UI → Хук useTestSessionReal
+Файл: hooks/useTestSessionReal.ts
+
+typescript
+export function useTestSessionReal(
+  userId?: number,
+  disciplineId?: number,
+  description: string = "",
+  timeLimitSeconds: number = testSessionParameters.totalCount
+) {
+  useEffect(() => {
+    const load = async () => {
+      // 🔑 Один запит — старт сесії + отримання питань
+      const dto: StartExamRequestDto = {
+        userId,
+        disciplineId,
+        description,
+        timeLimitSeconds,
+      };
+
+      const result: RealTestSessionResult = await testSessionService.startRealTest(dto);
+      
+      setSessionId(result.sessionId);
+      setQuestions(result.questions);
+    };
+    
+    load();
+  }, [userId, disciplineId]);
+}
+2. Сервіс testSessionService
+Файл: services/testSessionService.ts
+
+typescript
+async startRealTest(data: StartExamRequestDto): Promise<RealTestSessionResult> {
+  return await testSessionClient.startRealTest(data);
+}
+3. API-клієнт testSessionClient
+Файл: api/testSessionClient.ts
+
+typescript
+async startRealTest(dto: StartExamRequestDto): Promise<RealTestSessionResult> {
+  return await post<RealTestSessionResult>("/testsession/exam/start", dto);
+}
+4. Сервер TestSessionController
+Файл: TestMaturalnyApp.API/Controllers/TestSessionController.cs
+
+csharp
+[HttpPost("exam/start")]
+[Authorize]
+public async Task<IActionResult> StartExamSession([FromBody] StartExamRequestDto request)
+{
+    // 🔑 Перевірка userId
+    var userId = _currentUserService.UserId;
+    if (request.UserId != userId) return Unauthorized();
+    
+    // 🔑 Конфіг
+    int configTimeLimit = _configuration.GetValue<int>("TestSessionSettings:TimeLimitSeconds", 3600);
+    int totalCount = _configuration.GetValue<int>("QuestionSettings:NumberOfTestQuestions", 30);
+    
+    // 🔑 СТВОРЕННЯ СЕСІЇ + ПИТАНЬ + МАСКИ
+    var result = await _testSessionService.CreateRandomRealTestAsync(
+        request.DisciplineId,
+        totalCount,
+        userId.Value,
+        configTimeLimit,
+        request.Description
+    );
+    
+    return Ok(result);
+}
+5. Сервіс TestSessionService.CreateRandomRealTestAsync
+csharp
+public async Task<CreatedTestSessionDto> CreateRandomRealTestAsync(
+    int disciplineId, int totalCount, int userId, 
+    int? timeLimitSeconds, string? description)
+{
+    // 🔑 1. Отримуємо питання
+    var domainQuestions = await GetQuestionsForRealTestAsync(disciplineId, totalCount);
+    
+    // 🔑 2. Створюємо ShuffleMask
+    var mask = new ShuffleMask
+    {
+        Questions = new List<int>(),
+        Options = new Dictionary<int, List<int>>()
+    };
+    
+    foreach (var question in domainQuestions)
+    {
+        mask.Questions.Add(question.Id);
+        var shuffledOptions = question.Options.OrderBy(_ => rng.Next()).ToList();
+        mask.Options[question.Id] = shuffledOptions.Select(o => o.Id).ToList();
+        question.Options = shuffledOptions;
+    }
+    
+    // 🔑 3. Створюємо сесію з маскою
+    var domainSession = new Domain.Entities.TestSession
+    {
+        UserId = userId,
+        JsonMask = JsonSerializer.Serialize(mask),
+        StartedAt = DateTime.UtcNow,
+        TimeLimitSeconds = timeLimitSeconds,
+        Description = description
+    };
+    
+    // 🔑 4. Зберігаємо в БД
+    var dataSession = TestSessionMapper.MapToData(domainSession);
+    await _sessionRepository.CreateAsync(dataSession);
+    
+    // 🔑 5. Повертаємо питання з маскою
+    return new CreatedTestSessionDto
+    {
+        SessionId = dataSession.Id,
+        Questions = domainQuestions.Select(QuestionDtoMapper.MapToDto).ToList()
+    };
+}
+📊 ПОРІВНЯННЯ
+Аспект	Учбовий тест	Реальний тест
+Ендпоінт	GET /api/Questions/...	POST /api/TestSession/exam/start
+Хук	useTestSession	useTestSessionReal
+Сервіс	questionClient	testSessionService
+Клієнт	httpQuestionClient	testSessionClient
+Контролер	QuestionsController	TestSessionController
+Сервіс (бекенд)	QuestionService	TestSessionService
+Створення сесії	❌ Немає	✅ Так
+ShuffleMask	❌ Немає	✅ Так
+Збереження в БД	❌ Немає	✅ Так (сесія)
+Кількість питань	З запиту	З конфігу (30)
+Час	data.length * 120	З конфігу (3600)
+🎯 ПОВНА СХЕМА
+Учбовий тест:
+text
+UI (useTestSession)
+  ↓ getRandomQuestionsByDiscipline(disciplineId, 30)
+  ↓ GET /api/Questions/random/by-discipline/2/30
+
+QuestionsController.GetRandomByDiscipline
+  ↓ QuestionService.GetRandomByDisciplineAsync
+  ↓ QuestionRepository.GetRandomByDisciplineAsync
+  ↓ БД → повертає 30 питань
+
+UI → shuffleArray(q.options) → setShuffledQuestions
+Реальний тест:
+text
+UI (useTestSessionReal)
+  ↓ testSessionService.startRealTest(dto)
+  ↓ POST /api/TestSession/exam/start
+
+TestSessionController.StartExamSession
+  ↓ TestSessionService.CreateRandomRealTestAsync
+  ↓ GetQuestionsForRealTestAsync (30 питань)
+  ↓ Створення ShuffleMask
+  ↓ TestSessionRepository.CreateAsync (збереження сесії)
+  ↓ Повертає { sessionId, questions }
+
+UI → setSessionId, setQuestions
+🔑 КЛЮЧОВІ ВІДМІННОСТІ
+Що	Учбовий	Реальний
+Сесія в БД	❌ Ні	✅ Так
+ShuffleMask	❌ Ні (тільки в UI)	✅ Так (на сервері)
+Оцінювання	UI	Сервер
+Збереження результатів	❌ Ні	✅ Так
+🎯 ПІДСУМОК
+Питання	Учбовий	Реальний
+Де формуються питання?	useTestSession	useTestSessionReal
+Який ендпоінт?	GET /api/Questions/...	POST /api/TestSession/exam/start
+Чи створюється сесія?	❌ Ні	✅ Так
+Де shuffle?	UI (shuffleArray)	Сервер (ShuffleMask)
+Де оцінювання?	UI	Сервер
+Учбовий тест — легкий, без сесії. Реальний тест — повний, з сесією, маскою та серверним оцінюванням. 
+
+КОРЕГУЄМО ВИДАЧУ ПИТАННЬ З УРАХУВАННЯМ МАТЕМАТИКИ ТА ФІЗИКИ.
+
+При УЧБОВОМУ ТЕСТІ:
+
+UI (useTestSession)
+  ↓ getRandomQuestionsByDiscipline(disciplineId, 30)
+  ↓ GET /api/Questions/random/by-discipline/2/30
+
+QuestionsController.GetRandomByDiscipline
+  ↓ QuestionService.GetRandomByDisciplineAsync
+  ↓ switch (discipline.Name)
+  ↓ case "Математика":
+       ├─ GetAndLogQuestionsAsync(SingleChoice, 15)
+       ├─ GetAndLogQuestionsAsync(Matching, 3)
+       └─ GetAndLogQuestionsAsync(OpenAnswer, 4)
+  ↓ Повертає 22 питання
+
+UI → shuffleArray(q.options) → setShuffledQuestions
+
+Робим коригування в TestMaturalnyApp.Services/Services/QuestionService.cs
+
+При РЕАЛЬНОМУ ТЕСТІ:
+
+UI (useTestSessionReal)
+  ↓ POST /api/TestSession/exam/start
+  ↓ { disciplineId: 4 (Фізика), userId, ... }
+
+TestSessionController.StartExamSession
+  ↓ int totalCount = config.GetValue<int>("QuestionSettings:NumberOfTestQuestions", 30)
+  ↓ TestSessionService.CreateRandomRealTestAsync(disciplineId, 30, ...)
+  ↓ GetQuestionsForRealTestAsync(disciplineId, 30)
+  ↓ switch (discipline.Name)
+  ↓ case "Фізика":
+       ├─ GetAndLogQuestionsAsync(SingleChoice, 14)
+       ├─ GetAndLogQuestionsAsync(Matching, 2)
+       └─ GetAndLogQuestionsAsync(OpenAnswer, 6)
+  ↓ Повертає 22 питання
+  ↓ Створює ShuffleMask
+  ↓ Зберігає сесію в БД
+  ↓ Повертає { sessionId, questions }
+
+UI → setSessionId, setQuestions
+
+Робим коригування в TestMaturalnyApp.Services/Services/TestSessionService.cs
