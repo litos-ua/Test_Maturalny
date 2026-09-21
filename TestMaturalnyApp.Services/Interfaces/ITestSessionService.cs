@@ -14,6 +14,7 @@ namespace TestMaturalnyApp.Services.Interfaces
         Task<TestSessionDto> CreateAsync(CreateTestSessionDto dto);
         Task<TestSessionDto?> EndSessionAsync(int sessionId, SessionEndReason reason);
         Task<CreatedTestSessionDto> CreateRandomRealTestAsync(int disciplineId, int totalCount, int userId, int? timeLimitSeconds, string? description);
+        Task<bool> DeleteAsync(int sessionId);
     }
 
 }

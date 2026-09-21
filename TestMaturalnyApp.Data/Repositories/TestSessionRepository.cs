@@ -227,6 +227,31 @@ namespace TestMaturalnyApp.Data.Repositories
                 _logger.LogError(ex, "Error saving changes to context");
                 throw;
             }
-        }  
+        }
+
+        public async Task<bool> DeleteAsync(int sessionId)
+        {
+            try
+            {
+                var session = await _context.TestSessions
+                    .Include(s => s.UserAnswers)
+                    .FirstOrDefaultAsync(s => s.Id == sessionId);
+
+                if (session == null)
+                {
+                    _logger.LogWarning("Attempt to delete non-existent session with id: {SessionId}", sessionId);
+                    return false;
+                }
+
+                _context.TestSessions.Remove(session);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting session with id: {SessionId}", sessionId);
+                throw;
+            }
+        }
     }
    }

@@ -19,6 +19,7 @@ namespace TestMaturalnyApp.Data.Interfaces
         Task<TestSession> UpdateAsync(TestSession session);
         Task<TestSession?> EndSessionAsync(int sessionId, DateTime endTime, SessionEndReason reason);
         Task SaveChangesAsync();
+        Task<bool> DeleteAsync(int sessionId);
     }
 
 }

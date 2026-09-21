@@ -126,59 +126,6 @@ namespace TestMaturalnyApp.Services.Services
             }
         }
 
-        //public async Task<CreatedTestSessionDto> CreateRandomRealTestAsync(
-        //    int disciplineId,
-        //    int totalCount,
-        //    int userId,
-        //    int? timeLimitSeconds,
-        //    string? description)
-        //{
-        //    try
-        //    {
-        //        if (totalCount <= 0 || totalCount > 100)
-        //            throw new ArgumentException("Invalid number of questions.");
-
-        //        var dataQuestions = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
-        //        var domainQuestions = dataQuestions.Select(QuestionMapper.MapToDomain).ToList();
-
-        //        var rng = new Random();
-        //        var mask = new ShuffleMask
-        //        {
-        //            Questions = new List<int>(),
-        //            Options = new Dictionary<int, List<int>>()
-        //        };
-
-        //        foreach (var question in domainQuestions)
-        //        {
-        //            mask.Questions.Add(question.Id);
-        //            var shuffledOptions = question.Options.OrderBy(_ => rng.Next()).ToList();
-        //            mask.Options[question.Id] = shuffledOptions.Select(o => o.Id).ToList();
-        //            question.Options = shuffledOptions;
-        //        }
-
-        //        var domainSession = new Domain.Entities.TestSession
-        //        {
-        //            UserId = userId,
-        //            JsonMask = JsonSerializer.Serialize(mask),
-        //            StartedAt = DateTime.UtcNow,
-        //            TimeLimitSeconds = timeLimitSeconds ?? null,
-        //        };
-
-        //        var dataSession = TestSessionMapper.MapToData(domainSession);
-        //        await _sessionRepository.CreateAsync(dataSession);
-
-        //        return new CreatedTestSessionDto
-        //        {
-        //            SessionId = dataSession.Id,
-        //            Questions = domainQuestions.Select(QuestionDtoMapper.MapToDto).ToList()
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error while creating a random real test for user {UserId} in discipline {DisciplineId}", userId, disciplineId);
-        //        throw;
-        //    }
-        //}
 
         public async Task<CreatedTestSessionDto> CreateRandomRealTestAsync(
             int disciplineId,
@@ -232,6 +179,19 @@ namespace TestMaturalnyApp.Services.Services
                 _logger.LogError(ex,
                     "Error while creating a random real test for user {UserId} in discipline {DisciplineId}",
                     userId, disciplineId);
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int sessionId)
+        {
+            try
+            {
+                return await _sessionRepository.DeleteAsync(sessionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting test session {SessionId}", sessionId);
                 throw;
             }
         }

@@ -275,6 +275,37 @@ namespace TestMaturalnyApp.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Видалення сесії тестування (тільки своєї).
+        /// </summary>
+        [HttpDelete("{sessionId}")]
+        public async Task<IActionResult> DeleteSession(int sessionId)
+        {
+            try
+            {
+                var userId = _currentUserService.UserId;
+                if (userId == null)
+                    return Unauthorized();
 
+                var session = await _testSessionService.GetByIdAsync(sessionId);
+                if (session == null)
+                    return NotFound("Test session not found");
+
+                // 🔑 Перевірка: чи це сесія поточного користувача?
+                if (session.UserId != userId)
+                    return Forbid("You can only delete your own sessions");
+
+                var deleted = await _testSessionService.DeleteAsync(sessionId);
+                if (!deleted)
+                    return NotFound("Test session not found");
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting test session {SessionId}", sessionId);
+                return StatusCode(500, "An error occurred while deleting the session");
+            }
+        }
     }
 }
