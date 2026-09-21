@@ -196,7 +196,43 @@ namespace TestMaturalnyApp.Services.Services
             }
         }
 
-        private async Task<List<Domain.Entities.Question>> GetQuestionsForRealTestAsync(int disciplineId, int totalCount)
+        //private async Task<List<Domain.Entities.Question>> GetQuestionsForRealTestAsync(int disciplineId, int totalCount)
+        //{
+        //    var discipline = await _disciplineRepository.GetByIdAsync(disciplineId);
+        //    if (discipline == null)
+        //        throw new ServiceException($"Discipline with ID {disciplineId} not found.");
+
+        //    switch (discipline.Name)
+        //    {
+        //        case "Історія України":
+        //            var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20, discipline.Name);
+        //            var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4, discipline.Name);
+        //            var correctSequence = await GetAndLogQuestionsAsync(disciplineId, QuestionType.CorrectSequence, 3, discipline.Name);
+        //            var multipleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.MultipleChoice, 3, discipline.Name);
+
+        //            return singleChoice
+        //                .Concat(matching)
+        //                .Concat(correctSequence)
+        //                .Concat(multipleChoice)
+        //                .ToList();
+
+
+        //        default:
+        //            var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+        //            if (dataEntities.Count() < totalCount)
+        //            {
+        //                _logger.LogWarning(
+        //                    "Discipline {DisciplineName}: Not enough random questions. Expected {Expected}, got {Actual}.",
+        //                    discipline.Name, totalCount, dataEntities.Count());
+        //            }
+
+        //            return dataEntities.Select(QuestionMapper.MapToDomain).ToList();
+        //    }
+        //}
+
+
+        private async Task<List<Domain.Entities.Question>> GetQuestionsForRealTestAsync(
+    int disciplineId, int totalCount)
         {
             var discipline = await _disciplineRepository.GetByIdAsync(disciplineId);
             if (discipline == null)
@@ -204,29 +240,68 @@ namespace TestMaturalnyApp.Services.Services
 
             switch (discipline.Name)
             {
+                // ============================================================
+                // 📚 ІСТОРІЯ УКРАЇНИ — 30 питань
+                // ============================================================
                 case "Історія України":
-                    var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20, discipline.Name);
-                    var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4, discipline.Name);
-                    var correctSequence = await GetAndLogQuestionsAsync(disciplineId, QuestionType.CorrectSequence, 3, discipline.Name);
-                    var multipleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.MultipleChoice, 3, discipline.Name);
-
-                    return singleChoice
-                        .Concat(matching)
-                        .Concat(correctSequence)
-                        .Concat(multipleChoice)
-                        .ToList();
-
-
-                default:
-                    var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
-                    if (dataEntities.Count() < totalCount)
                     {
-                        _logger.LogWarning(
-                            "Discipline {DisciplineName}: Not enough random questions. Expected {Expected}, got {Actual}.",
-                            discipline.Name, totalCount, dataEntities.Count());
+                        var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 20, discipline.Name);
+                        var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 4, discipline.Name);
+                        var correctSequence = await GetAndLogQuestionsAsync(disciplineId, QuestionType.CorrectSequence, 3, discipline.Name);
+                        var multipleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.MultipleChoice, 3, discipline.Name);
+
+                        return singleChoice
+                            .Concat(matching)
+                            .Concat(correctSequence)
+                            .Concat(multipleChoice)
+                            .ToList();
                     }
 
-                    return dataEntities.Select(QuestionMapper.MapToDomain).ToList();
+                // ============================================================
+                // 📐 МАТЕМАТИКА — 22 питання
+                // ============================================================
+                case "Математика":
+                    {
+                        var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 15, discipline.Name);
+                        var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 3, discipline.Name);
+                        var openAnswer = await GetAndLogQuestionsAsync(disciplineId, QuestionType.OpenAnswer, 4, discipline.Name);
+
+                        return singleChoice
+                            .Concat(matching)
+                            .Concat(openAnswer)
+                            .ToList();
+                    }
+
+                // ============================================================
+                // ⚛️ ФІЗИКА — 22 питання
+                // ============================================================
+                case "Фізика":
+                    {
+                        var singleChoice = await GetAndLogQuestionsAsync(disciplineId, QuestionType.SingleChoice, 14, discipline.Name);
+                        var matching = await GetAndLogQuestionsAsync(disciplineId, QuestionType.Matching, 2, discipline.Name);
+                        var openAnswer = await GetAndLogQuestionsAsync(disciplineId, QuestionType.OpenAnswer, 6, discipline.Name);
+
+                        return singleChoice
+                            .Concat(matching)
+                            .Concat(openAnswer)
+                            .ToList();
+                    }
+
+                // ============================================================
+                // 🔄 ІНШІ ДИСЦИПЛІНИ — стандартна логіка
+                // ============================================================
+                default:
+                    {
+                        var dataEntities = await _questionRepository.GetRandomByDisciplineAsync(disciplineId, totalCount);
+                        if (dataEntities.Count() < totalCount)
+                        {
+                            _logger.LogWarning(
+                                "Discipline {DisciplineName}: Not enough random questions. Expected {Expected}, got {Actual}.",
+                                discipline.Name, totalCount, dataEntities.Count());
+                        }
+
+                        return dataEntities.Select(QuestionMapper.MapToDomain).ToList();
+                    }
             }
         }
 
