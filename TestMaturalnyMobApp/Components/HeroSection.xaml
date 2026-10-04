@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMaturalnyMobApp.Components.HeroSection">
+
+    <!-- Фоновое изображение с затемнением -->
+    <Grid>
+        <!-- Фоновое изображение -->
+        <Image Source="hero_bg.jpg"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"/>
+
+        <!-- Затемнение (overlay) -->
+        <BoxView BackgroundColor="#99000000"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"/>
+
+        <!-- Контент поверх фона -->
+        <VerticalStackLayout Spacing="12"
+                             Padding="10,20"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+            <!-- Заголовок -->
+            <Label Text="Платформа знань"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="White"/>
+
+            <!-- Подзаголовок -->
+            <Label Text="Знайди тести, теми та ресурси для студентів та випускників"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="White"/>
+
+            <!-- Кнопки -->
+            <HorizontalStackLayout Spacing="15"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center">
+
+                <Button Text="Зареєструватись"
+                        Command="{Binding GoRegisterCommand}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                        FontSize="14"
+                        CornerRadius="8"
+                        Padding="20,12"
+                        HeightRequest="44"/>
+
+                <Button Text="Тестування"
+                        Command="{Binding GoTestCommand}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonBg}, Dark={StaticResource DarkSecondaryButtonBg}}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonText}, Dark={StaticResource DarkSecondaryButtonText}}"
+                        FontSize="14"
+                        CornerRadius="8"
+                        Padding="20,12"
+                        HeightRequest="44"/>
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentView>

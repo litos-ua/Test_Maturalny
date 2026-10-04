@@ -1,0 +1,121 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:TestMaturalnyMobApp.Components"
+             x:Class="TestMaturalnyMobApp.Views.Auth.RegisterPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightAuthBackground}, Dark={StaticResource DarkAuthBackground}}"
+             Title="Реєстрація">
+
+    <views:LayoutView>
+        <views:LayoutView.PageContent>
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="12" VerticalOptions="Center">
+
+                    <Label Text="Реєстрація"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Ошибка -->
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="Red"
+                           IsVisible="{Binding HasError}"
+                           HorizontalOptions="Center"/>
+
+                    <!-- Успех -->
+                    <Label Text="{Binding SuccessMessage}"
+                           TextColor="Green"
+                           IsVisible="{Binding HasSuccess}"
+                           HorizontalOptions="Center"/>
+
+                    <!-- Логин -->
+                    <Entry Placeholder="Логін"
+                           Text="{Binding Username}"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Email -->
+                    <Entry Placeholder="Email"
+                           Text="{Binding Email}"
+                           Keyboard="Email"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Пароль -->
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry Grid.Column="0"
+                               Placeholder="Пароль"
+                               Text="{Binding Password}"
+                               IsPassword="{Binding ShowPassword, Converter={StaticResource InverseBoolConverter}}"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                        <ImageButton Grid.Column="1"
+                                     Source="eye_icon.png"
+                                     Command="{Binding TogglePasswordVisibilityCommand}"
+                                     WidthRequest="40"
+                                     HeightRequest="40"/>
+                    </Grid>
+
+                    <!-- Подтверждение пароля -->
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry Grid.Column="0"
+                               Placeholder="Підтвердження пароля"
+                               Text="{Binding ConfirmPassword}"
+                               IsPassword="{Binding ShowConfirmPassword, Converter={StaticResource InverseBoolConverter}}"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                        <ImageButton Grid.Column="1"
+                                     Source="eye_icon.png"
+                                     Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
+                                     WidthRequest="40"
+                                     HeightRequest="40"/>
+                    </Grid>
+
+                    <!-- Полное имя (необязательно) -->
+                    <Entry Placeholder="Повне ім'я (необов'язково)"
+                           Text="{Binding Fullname}"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Адреса (необязательно) -->
+                    <Entry Placeholder="Адреса (необов'язково)"
+                           Text="{Binding Address}"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Телефон (необязательно) -->
+                    <Entry Placeholder="Телефон (необов'язково)"
+                           Text="{Binding PhoneNumber}"
+                           Keyboard="Telephone"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Согласие -->
+                    <CheckBox IsChecked="{Binding AgreeToTerms}"
+                              HorizontalOptions="Start"/>
+                    <Label Text="Я погоджуюсь з умовами використання"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                    <!-- Кнопка регистрации -->
+                    <Button Text="Зареєструватися"
+                            Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding IsNotLoading}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                            CornerRadius="8"
+                            HeightRequest="50"/>
+
+                    <!-- Ссылки -->
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Button Text="Вже маєте акаунт? Увійти"
+                                Command="{Binding NavigateToLoginCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"/>
+                    </HorizontalStackLayout>
+
+                    <Button Text="На головну"
+                            Command="{Binding NavigateToHomeCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </views:LayoutView.PageContent>
+    </views:LayoutView>
+</ContentPage>

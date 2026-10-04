@@ -1,0 +1,50 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:TestMaturalnyMobApp.Components"
+             x:Class="TestMaturalnyMobApp.Views.AboutPage"
+             Title="About"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}">
+
+    <!-- ✅ КНОПКА "НАЗАД" В NAVBAR
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="←" 
+                     Clicked="OnNavigateBack"
+                     Order="Primary" 
+                     Priority="0" />
+    </ContentPage.ToolbarItems>
+     -->
+
+    <views:LayoutView>
+        <views:LayoutView.PageContent>
+            <VerticalStackLayout Spacing="20" Padding="20">
+
+                <Label Text="Про платформу"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                <Label Text="Це тестова платформа для підготовки до НМТ"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                <Label Text="{Binding AppVersion}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/> 
+
+                <Button Text="Назад"
+                        Clicked="OnNavigateBack"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                        TextColor="White"
+                        FontSize="16"
+                        CornerRadius="10"
+                        Padding="20,10"
+                        HeightRequest="50"
+                        HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </views:LayoutView.PageContent>
+    </views:LayoutView>
+</ContentPage>

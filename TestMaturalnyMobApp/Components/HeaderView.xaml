@@ -1,0 +1,92 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMaturalnyMobApp.Components.HeaderView">
+
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightHeaderBackgroundColor}, Dark={StaticResource DarkHeaderBackgroundColor}}"
+          HeightRequest="52"
+          Padding="6,0">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ✅ КНОПКА "НАЗАД" — ВИДИМАЯ -->
+        <Button Grid.Column="0"
+                x:Name="BackButton"
+                Text="◀"
+                FontSize="18"
+                FontAttributes="Bold"
+                BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#333333}"
+                TextColor="{AppThemeBinding Light={StaticResource LightHeaderTextColor}, Dark={StaticResource DarkHeaderTextColor}}"
+                Clicked="OnBackClicked"
+                WidthRequest="34" HeightRequest="34"
+                CornerRadius="17"
+                Padding="0"
+                IsVisible="{Binding IsBackVisible}"/>
+
+        <!-- Logo -->
+        <ImageButton Grid.Column="1"
+                     x:Name="LogoImage"
+                     Source="{AppThemeBinding Light=donkey_logo_light.jpg, Dark=donkey_logo_dark.jpg}"
+                     Command="{Binding GoHomeCommand}"
+                     WidthRequest="28" HeightRequest="28"
+                     Margin="4,0,4,0"/>
+
+        <!-- Title -->
+        <Label Grid.Column="2"
+               x:Name="TitleLabel"
+               Text="Платформа знань"
+               FontSize="14"
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource LightHeaderTextColor}, Dark={StaticResource DarkHeaderTextColor}}"
+               VerticalTextAlignment="Center"
+               HorizontalTextAlignment="Start"
+               MaxLines="1"/>
+
+        <!-- Иконки справа -->
+        <Grid Grid.Column="3" ColumnSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+        <!-- Иконки справа -->
+
+            <Button Grid.Column="0"
+                    x:Name="MenuButton"   
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ToggleMenuCommand}"
+                    WidthRequest="28" HeightRequest="28"
+                    Padding="0"/>
+
+            <Button Grid.Column="1"
+                    x:Name="ThemeButton"                   
+                    BackgroundColor="Transparent"
+                    FontSize="16"                   
+                    Command="{Binding ToggleThemeCommand}"
+                    WidthRequest="28" HeightRequest="28"
+                    Padding="0"/>
+            <Button Grid.Column="2"
+                    
+                    x:Name="LoginButton"
+                    BackgroundColor="Transparent"
+                    FontSize="14"                    
+                    Command="{Binding GoLoginCommand}"
+                    WidthRequest="28" HeightRequest="28"
+                    Padding="0"/>
+
+            <Button Grid.Column="3"
+                    x:Name="RegisterButton"                   
+                    BackgroundColor="Transparent"
+                    FontSize="14"                    
+                    Command="{Binding GoRegisterCommand}"
+                    WidthRequest="28" HeightRequest="28"
+                    Padding="0"/>
+        </Grid>
+    </Grid>
+</ContentView>

@@ -1,0 +1,73 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:TestMaturalnyMobApp.Components"
+             x:Class="TestMaturalnyMobApp.Views.SubjectsPage"
+             Title="📚 Предмети"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}">
+
+    <components:LayoutView>
+        <components:LayoutView.PageContent>
+            <ScrollView>
+                <VerticalStackLayout Padding="16" Spacing="20">
+
+                    <!-- Заголовок -->
+                    <Label Text="Обов'язкові предмети НМТ"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Список обязательных -->
+                    <CollectionView ItemsSource="{Binding MandatorySubjects}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="12" Margin="0,6"
+                                       BackgroundColor="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}"
+                                       BorderColor="{AppThemeBinding Light={StaticResource LightDividerColor}, Dark={StaticResource DarkDividerColor}}">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+                                        <Label Text="{Binding Description}" 
+                                               FontSize="14"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Заголовок необязательных -->
+                    <Label Text="Необов'язкові дисципліни (оберіть одну)"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           Margin="0,20,0,0"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Список необязательных -->
+                    <CollectionView ItemsSource="{Binding OptionalSubjects}"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnOptionalSelected">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="12" Margin="0,6"
+                                       BackgroundColor="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}"
+                                       BorderColor="{AppThemeBinding Light={StaticResource LightDividerColor}, Dark={StaticResource DarkDividerColor}}">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+                                        <Label Text="{Binding Description}" 
+                                               FontSize="14"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </components:LayoutView.PageContent>
+    </components:LayoutView>
+</ContentPage>

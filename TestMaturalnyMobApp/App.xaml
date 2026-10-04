@@ -1,0 +1,27 @@
+﻿<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TestMaturalnyMobApp"
+             xmlns:converters="clr-namespace:TestMaturalnyMobApp.Converters"
+             x:Class="TestMaturalnyMobApp.App">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Светлая тема -->
+                <ResourceDictionary Source="Resources/Styles/LightColors.xaml" />
+                <!-- Тёмная тема -->
+                <ResourceDictionary Source="Resources/Styles/DarkColors.xaml" />
+                <!-- Общие стили -->
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:ThemeIconConverter x:Key="ThemeIconConverter" />
+            <converters:IndexToColorConverter x:Key="IndexToColorConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:QuestionToViewConverter x:Key="QuestionToViewConverter" />
+            <converters:RelativeToAbsoluteUrlConverter x:Key="RelativeToAbsoluteUrlConverter" />
+            <converters:MathTextConverter x:Key="MathTextConverter" />
+            <converters:PositionColorConverter x:Key="PositionColorConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

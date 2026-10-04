@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+	<!-- ========== СВЕТЛАЯ ТЕМА (из React) ========== -->
+
+	<!-- Фоны -->
+	<Color x:Key="LightBackgroundColor">#FFF5E0</Color>
+	<Color x:Key="LightPageBackgroundColor">#FFF5E0</Color>
+	<Color x:Key="LightCardBackgroundColor">#FFFFFF</Color>
+	<Color x:Key="LightSurfaceColor">#FFFFFF</Color>
+
+	<!-- Текст -->
+	<Color x:Key="LightTextPrimaryColor">#1E1E1E</Color>
+	<Color x:Key="LightTextSecondaryColor">#4F4F4F</Color>
+	<Color x:Key="LightTextDisabledColor">#BDBDBD</Color>
+
+	<!-- Divider -->
+	<Color x:Key="LightDividerColor">#1F000000</Color>
+
+	<!-- Header -->
+	<Color x:Key="LightHeaderBackgroundColor">#FFFFFF</Color>
+	<Color x:Key="LightHeaderTextColor">#1E1E1E</Color>
+	<Color x:Key="LightHeaderBorderColor">#0D000000</Color>
+
+	<!-- Footer -->
+	<Color x:Key="LightFooterBackgroundColor">#0A2F5C</Color>
+	<Color x:Key="LightFooterTextColor">#FFFFFF</Color>
+	<Color x:Key="LightFooterLinkColor">#4FC3F7</Color>
+
+	<!-- Кнопки -->
+	<Color x:Key="LightPrimaryButtonBg">#FFAB76</Color>      <!-- Оранжевый -->
+	<Color x:Key="LightPrimaryButtonText">#000000</Color>    <!-- Черный -->
+	<Color x:Key="LightSecondaryButtonBg">#81C3FF</Color>    <!-- Голубой -->
+	<Color x:Key="LightSecondaryButtonText">#000000</Color>  <!-- Черный -->
+	<!-- Опасные кнопки (Удалить, Завершить) -->
+	<Color x:Key="LightDangerButtonBg">#DC3545</Color>
+	<Color x:Key="LightDangerButtonText">#FFFFFF</Color>
+	<Color x:Key="LightDangerButtonBorder">#DC3545</Color>
+
+	<!-- Тени -->
+	<Color x:Key="LightShadowColor">#14000000</Color>
+
+	<!-- Chip (из React) -->
+	<Color x:Key="LightReactVideoLabel">#CBB7FF</Color>
+	<Color x:Key="LightReactPodcastLabel">#B0E0FF</Color>
+	<Color x:Key="LightReactQuizLabel">#FFD580</Color>
+
+	<!-- AnimatedTextBlock (из React) -->
+	<Color x:Key="LightAnimatedTexBackgroundColor">#81C3FF</Color>
+	<Color x:Key="LightHeroBackgroundColor">#FFF5E0</Color>
+
+    <!-- ========== ИНДИКАТОРЫ ВОПРОСОВ (кружки) ========== -->
+    <Color x:Key="LightQuestionAnsweredBg">#4CAF50</Color>    <!-- Зеленый (отвечено) -->
+    <Color x:Key="LightQuestionUnansweredBg">#9E9E9E</Color>  <!-- Серый (не отвечено) -->
+    <Color x:Key="LightQuestionCurrentBg">#FFAB76</Color>     <!-- Оранжевый (текущий) -->
+    <Color x:Key="LightQuestionTextColor">#FFFFFF</Color>     <!-- Белый (текст в кружке) -->
+
+	<!-- RadioButton и CheckBox ободок -->
+	<Color x:Key="LightRadioButtonColor">#4F4F4F</Color>      <!-- Серый, видимый на белом фоне -->
+
+	<!-- Для опций в светлой теме (соответствует текущему дизайну) -->
+	<Color x:Key="LightOptionsBackgroundColor">#FFFFFF</Color> <!-- Белый фон (как у всей плиты) -->
+	<Color x:Key="LightOptionsTextColor">#1E1E1E</Color>       <!-- Черный текст (как у всей плиты) -->
+	<Color x:Key="LightOptionsLabelColor">#4F4F4F</Color>      <!-- Серый для подписей -->
+
+    <!-- Auth Colors -->
+    <Color x:Key="LightAuthBackground">#FFF5E0</Color>
+    <Color x:Key="LightAuthCardBackground">#FFFFFF</Color>
+    <Color x:Key="LightAuthInputBackground">#F5F5F5</Color>
+    <Color x:Key="LightAuthBorderColor">#E0E0E0</Color>
+    <Color x:Key="LightAuthPrimaryButtonBg">#FFAB76</Color>
+    <Color x:Key="LightAuthPrimaryButtonText">#000000</Color>
+
+</ResourceDictionary>

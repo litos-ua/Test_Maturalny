@@ -1,0 +1,133 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:TestMaturalnyMobApp.Converters"
+             x:Class="TestMaturalnyMobApp.Components.ZoomableImage"
+             x:Name="this">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:RelativeToAbsoluteUrlConverter x:Key="RelativeToAbsoluteUrlConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Grid>
+        <!-- Миниатюра -->
+        <Image x:Name="ThumbnailImage"
+               Source="{Binding Source, Source={x:Reference this}, Converter={StaticResource RelativeToAbsoluteUrlConverter}}"
+               Aspect="AspectFit"
+               HeightRequest="{Binding MaxHeight, Source={x:Reference this}}"
+               WidthRequest="{Binding MaxWidth, Source={x:Reference this}}"
+               HorizontalOptions="Fill"
+               VerticalOptions="Center">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnImageTapped"/>
+            </Image.GestureRecognizers>
+        </Image>
+
+        <!-- Полноэкранный режим -->
+        <Grid x:Name="FullscreenOverlay"
+              IsVisible="False"
+              BackgroundColor="#CC000000"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnOverlayTapped"/>
+            </Grid.GestureRecognizers>
+
+            <!-- Контейнер с ограничениями -->
+            <Grid x:Name="ZoomContainer"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  HeightRequest="{OnIdiom Phone=300, Tablet=450, Desktop=600}"
+                  WidthRequest="{OnIdiom Phone=450, Tablet=650, Desktop=800}">
+
+                <Grid.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="OnPanUpdated"/>
+                </Grid.GestureRecognizers>
+                
+                <!-- Изображение с жестами -->
+                <Image x:Name="FullscreenImage"
+                       Source="{Binding Source, Source={x:Reference this}, Converter={StaticResource RelativeToAbsoluteUrlConverter}}"
+                       Aspect="AspectFit"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="{OnIdiom Phone=280, Tablet=420, Desktop=560}"
+                       WidthRequest="{OnIdiom Phone=420, Tablet=600, Desktop=750}">
+                
+
+                <Image.GestureRecognizers>
+                     <!-- ✅ ПИНЧ ДЛЯ МАСШТАБИРОВАНИЯ -->
+                        <PinchGestureRecognizer PinchUpdated="OnPinchUpdated"/>   <!-- Масштабирование -->
+                        <PanGestureRecognizer PanUpdated="OnPanUpdated"/>         <!-- Перетаскивание -->
+                    </Image.GestureRecognizers>
+
+                    <Image.Margin>
+                        <OnIdiom x:TypeArguments="Thickness">
+                             <OnIdiom.Phone>
+                              <Thickness>10,10,10,10</Thickness>
+                        </OnIdiom.Phone>
+                        <OnIdiom.Tablet>
+                              <Thickness>15,15,15,15</Thickness>
+                        </OnIdiom.Tablet>
+                        <OnIdiom.Desktop>
+                              <Thickness>20,20,20,20</Thickness>
+                        </OnIdiom.Desktop>
+                                </OnIdiom>
+                    </Image.Margin>
+                </Image>
+            </Grid>
+
+            <!-- Кнопки управления масштабом -->
+            <VerticalStackLayout HorizontalOptions="End" 
+                                 VerticalOptions="Center" 
+                                 Spacing="8" 
+                                 Margin="10">
+                <Button Text="＋" 
+                        Clicked="OnZoomInClicked"
+                        WidthRequest="44" 
+                        HeightRequest="44" 
+                        CornerRadius="22"
+                        BackgroundColor="#FFFFFF"
+                        TextColor="#000000"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                <Button Text="－" 
+                        Clicked="OnZoomOutClicked"
+                        WidthRequest="44" 
+                        HeightRequest="44" 
+                        CornerRadius="22"
+                        BackgroundColor="#FFFFFF"
+                        TextColor="#000000"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                <Button Text="⟲" 
+                        Clicked="OnResetZoomClicked"
+                        WidthRequest="44" 
+                        HeightRequest="44" 
+                        CornerRadius="22"
+                        BackgroundColor="#FFFFFF"
+                        TextColor="#000000"
+                        FontSize="18"/>
+
+                <Label Text="{Binding ScaleText}" 
+                       HorizontalOptions="Center"
+                       TextColor="White"
+                       FontSize="12"
+                       Margin="0,4,0,0"/>
+            </VerticalStackLayout>
+
+            <Button x:Name="CloseButton"
+                    Text="✕"
+                    FontSize="24"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    Margin="10"
+                    Clicked="OnCloseClicked"/>
+        </Grid>
+    </Grid>
+</ContentView>

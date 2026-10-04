@@ -1,0 +1,47 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMaturalnyMobApp.Components.TestNavigation">
+
+    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10">
+
+        <!-- Кнопка "Назад" (Вторичная) -->
+        <Button Grid.Column="0"
+                Text="◀"
+                Command="{Binding GoToPreviousCommand}"
+                IsEnabled="{Binding IsFirstQuestion, Converter={StaticResource InverseBoolConverter}}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonBg}, Dark={StaticResource DarkSecondaryButtonBg}}"
+                TextColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonText}, Dark={StaticResource DarkSecondaryButtonText}}"
+                CornerRadius="8"
+                WidthRequest="50"/>
+
+        <!-- Кнопка "Зберегти" (Основная) -->
+        <Button Grid.Column="1"
+                Text="Зберегти"
+                Command="{Binding SaveCurrentAnswerCommand}"
+                HorizontalOptions="Center"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                CornerRadius="8"
+                Padding="20,10"/>
+
+        <!-- Кнопка "Завершити" -->
+        <Button Grid.Column="2"
+                Text="Завершити"
+                Command="{Binding CompleteTestCommand}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightDangerButtonBg}, Dark={StaticResource DarkDangerButtonBg}}"
+                TextColor="{AppThemeBinding Light={StaticResource LightDangerButtonText}, Dark={StaticResource DarkDangerButtonText}}"
+                CornerRadius="8"
+                Padding="20,10"/>
+
+        <!-- Кнопка "Вперед" (Вторичная) -->
+        <Button Grid.Column="3"
+                Text="▶"
+                Command="{Binding GoToNextCommand}"
+                IsEnabled="{Binding IsLastQuestion, Converter={StaticResource InverseBoolConverter}}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonBg}, Dark={StaticResource DarkSecondaryButtonBg}}"
+                TextColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonText}, Dark={StaticResource DarkSecondaryButtonText}}"
+                CornerRadius="8"
+                WidthRequest="50"/>
+
+    </Grid>
+</ContentView>

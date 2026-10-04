@@ -1,0 +1,46 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMaturalnyMobApp.Components.TestResultDialog"
+             IsVisible="{Binding IsVisible}">
+             <!--IsVisible="{Binding IsVisible}" -->
+
+    <Grid>
+        <BoxView BackgroundColor="#80000000"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"/>
+
+        <Frame BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2A2A2A}"
+               CornerRadius="16"
+               Padding="20"
+               Margin="30"
+               VerticalOptions="Center">
+
+            <VerticalStackLayout Spacing="15">
+
+                <Label Text="Результати тесту"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                <Label Text="{Binding TestResult.TotalScore, StringFormat='Бали: {0}'}"
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                <Label Text="{Binding TestResult.MaxTotalScore, StringFormat='Максимальний: {0}'}"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                <Button Text="На головну"
+                        Command="{Binding GoHomeCommand}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                        CornerRadius="8"
+                        Padding="20,12"/>
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentView>

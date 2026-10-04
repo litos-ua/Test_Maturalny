@@ -1,0 +1,82 @@
+<components:QuestionBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:components="clr-namespace:TestMaturalnyMobApp.Components.Questions"
+                         xmlns:controls="clr-namespace:TestMaturalnyMobApp.Components"
+                         xmlns:mathControls="clr-namespace:TestMaturalnyMobApp.Controls"
+                         xmlns:converters="clr-namespace:TestMaturalnyMobApp.Converters"
+                         xmlns:models="clr-namespace:TestMaturalnyMobApp.Models"
+                         x:Class="TestMaturalnyMobApp.Components.Questions.QuestionCorrectSequence"
+                         x:Name="this">
+
+    <VerticalStackLayout Spacing="12">
+
+        <!-- ✅ ОДИН ЗАГОЛОВОК (убрал дублирование) -->
+        <Label Text="Встановіть правильну послідовність:" 
+               FontSize="16" 
+               TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+        <VerticalStackLayout BindableLayout.ItemsSource="{Binding LeftItems, Source={x:Reference this}}"
+                             Spacing="6">
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="models:SequenceItem">
+                    <Grid ColumnDefinitions="*,Auto" 
+                          ColumnSpacing="8"
+                          BackgroundColor="{Binding SelectedBackgroundColor}">
+                        <!-- Padding="8,4" -->
+                        
+                        <!-- Контент элемента -->
+                        <Grid Grid.Column="0">
+
+                            <!-- Изображение (если есть) -->
+                            <controls:ZoomableImage 
+                                IsVisible="{Binding IsImage}"
+                                Source="{Binding Text}" 
+                                MaxHeight="150"
+                                MaxWidth="200"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
+
+                            <!-- Текст с inline-формулами + ограничение высоты с прокруткой -->
+                            <ScrollView 
+                                Orientation="Vertical"
+                                IsVisible="{Binding IsImage, Converter={StaticResource InverseBoolConverter}}"
+                                MaximumHeightRequest="180"
+                                VerticalOptions="Start"
+                                HorizontalOptions="Fill">
+
+                                <mathControls:MathRichText 
+                                    Text="{Binding Text}"
+                                    TextSize="15"
+                                    BaseHeight="40"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Center"
+                                    AutoWidth="False"/>
+                            </ScrollView>   
+
+                        </Grid>
+
+                        <!-- Выбор позиции -->
+                        <Picker Grid.Column="1" 
+                                x:Name="PickerCorrectSequence"
+                                Title="Позиція"
+                                ItemsSource="{Binding Positions}"
+                                SelectedIndex="{Binding SelectedPositionIndex}"
+                                SelectedIndexChanged="OnPickerSelectedChanged"
+                                WidthRequest="70"
+                                HorizontalOptions="End"
+                                HorizontalTextAlignment="Center"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="{Binding SelectedPositionIndex, Converter={StaticResource PositionColorConverter}}"
+                                TitleColor="{AppThemeBinding Light={StaticResource LightOptionsLabelColor}, Dark={StaticResource DarkOptionsLabelColor}}"/>
+                    </Grid>
+
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+
+</components:QuestionBase>

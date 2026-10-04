@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:TestMaturalnyMobApp.Components"
+             xmlns:viewModels="clr-namespace:TestMaturalnyMobApp.ViewModels.Auth"
+             x:Class="TestMaturalnyMobApp.Views.Auth.LoginPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightAuthBackground}, Dark={StaticResource DarkAuthBackground}}"
+             Title="Вхід">
+
+    <views:LayoutView>
+        <views:LayoutView.PageContent>
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center">
+
+                    <!-- Заголовок -->
+                    <Label Text="Вхід"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Ошибка -->
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="Red"
+                           IsVisible="{Binding HasError}"
+                           HorizontalOptions="Center"/>
+
+                    <!-- Email -->
+                    <Entry Placeholder="Email"
+                           Text="{Binding LoginEmail}"
+                           Keyboard="Email"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Пароль -->
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry Grid.Column="0"
+                               Placeholder="Пароль"
+                               Text="{Binding LoginPassword}"
+                               IsPassword="{Binding ShowPassword, Converter={StaticResource InverseBoolConverter}}"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                        <ImageButton Grid.Column="1"
+                                     Source="eye_icon.png"
+                                     Command="{Binding TogglePasswordVisibilityCommand}"
+                                     WidthRequest="40"
+                                     HeightRequest="40"/>
+                    </Grid>
+
+                    <!-- Кнопка входа -->
+                    <Button Text="Увійти"
+                            Command="{Binding LoginCommand}"
+                            IsEnabled="{Binding IsNotLoading}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                            CornerRadius="8"
+                            HeightRequest="50"/>
+
+                    <!-- Ссылки -->
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Button Text="Зареєструватися"
+                                Command="{Binding NavigateToRegisterCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"/>
+
+                        <Button Text="Забули пароль?"
+                                Command="{Binding NavigateToForgotPasswordCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource LightSecondaryButtonBg}, Dark={StaticResource DarkSecondaryButtonBg}}"/>
+                    </HorizontalStackLayout>
+
+                    <!-- На главную -->
+                    <Button Text="На головну"
+                            Command="{Binding NavigateToHomeCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </views:LayoutView.PageContent>
+    </views:LayoutView>
+</ContentPage>

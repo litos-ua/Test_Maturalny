@@ -1,0 +1,70 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:TestMaturalnyMobApp.Components"
+             xmlns:converters="clr-namespace:TestMaturalnyMobApp.Converters"
+             x:Class="TestMaturalnyMobApp.Views.TestSelectionPage"
+             Title="Вибір предмета"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}">
+
+    <views:LayoutView>
+        <views:LayoutView.PageContent>
+            <ScrollView>
+                <VerticalStackLayout Spacing="20" Padding="20">
+
+                    <!-- Заголовок -->
+                    <Label Text="Виберіть дисципліну для тестування ЗНО / НМТ"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                    <!-- Картинка -->
+                    <Image Source="test_selection.jpg"
+                           Aspect="AspectFit"
+                           HeightRequest="200"
+                           HorizontalOptions="CenterAndExpand"/>
+
+                    <!-- Индикатор загрузки -->
+                    <ActivityIndicator x:Name="LoadingIndicator"
+                                       IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       HorizontalOptions="Center"/>
+
+                    <!-- Сообщение "Нет данных" -->
+                    <Label x:Name="EmptyLabel"
+                           Text="Немає доступних дисциплін"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"
+                           IsVisible="{Binding IsEmpty}"/>
+
+                    <!-- Список дисциплин -->
+                    <CollectionView x:Name="DisciplinesCollection"
+                                    ItemsSource="{Binding Disciplines}"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnDisciplineSelected">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,4">
+                                    <Button Text="{Binding Name}"
+                                            BackgroundColor="{Binding Index, Converter={StaticResource IndexToColorConverter}}"
+                                            TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"
+                                            CornerRadius="10"
+                                            Padding="20,16"
+                                            HorizontalOptions="Fill"
+                                            Command="{Binding SelectCommand}"
+                                            CommandParameter="{Binding Id}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </views:LayoutView.PageContent>
+    </views:LayoutView>
+</ContentPage>
+    
+    

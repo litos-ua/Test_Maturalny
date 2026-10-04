@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ========== ТЕМНАЯ ТЕМА (из React) ========== -->
+
+    <!-- Фоны -->
+    <Color x:Key="DarkBackgroundColor">#121212</Color>
+    <Color x:Key="DarkPageBackgroundColor">#121212</Color>
+    <Color x:Key="DarkCardBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="DarkSurfaceColor">#1E1E1E</Color>
+
+    <!-- Текст -->
+    <Color x:Key="DarkTextPrimaryColor">#FFFFFF</Color>
+    <Color x:Key="DarkTextSecondaryColor">#AAAAAA</Color>
+    <Color x:Key="DarkTextDisabledColor">#666666</Color>
+
+    <!-- Divider -->
+    <Color x:Key="DarkDividerColor">#1EFFFFFF</Color>
+
+    <!-- Header -->
+    <Color x:Key="DarkHeaderBackgroundColor">#121212</Color>
+    <Color x:Key="DarkHeaderTextColor">#FFFFFF</Color>
+    <Color x:Key="DarkHeaderBorderColor">#0DFFFFFF</Color>
+
+    <!-- Footer -->
+    <Color x:Key="DarkFooterBackgroundColor">#1A1A1A</Color>
+    <Color x:Key="DarkFooterTextColor">#CCCCCC</Color>
+    <Color x:Key="DarkFooterLinkColor">#90CAF9</Color>
+
+    <!-- Кнопки -->
+    <Color x:Key="DarkPrimaryButtonBg">#F47E3E</Color>       <!-- Темно-оранжевый -->
+    <Color x:Key="DarkPrimaryButtonText">#000000</Color>     <!-- Черный -->
+    <Color x:Key="DarkSecondaryButtonBg">#00427A</Color>     <!-- Темно-синий -->
+    <Color x:Key="DarkSecondaryButtonText">#FFFFFF</Color>   <!-- Белый -->
+    <!-- Опасные кнопки (Удалить, Завершить) -->
+    <Color x:Key="DarkDangerButtonBg">#DC3545</Color>
+    <Color x:Key="DarkDangerButtonText">#FFFFFF</Color>
+    <Color x:Key="DarkDangerButtonBorder">#DC3545</Color>
+
+    <!-- Тени -->
+    <Color x:Key="DarkShadowColor">#4D000000</Color>
+
+    <!-- Chip (из React) -->
+    <Color x:Key="DarkReactVideoLabel">#6B5B8D</Color>
+    <Color x:Key="DarkReactPodcastLabel">#4A6B8D</Color>
+    <Color x:Key="DarkReactQuizLabel">#8D7A4A</Color>
+
+    <!-- AnimatedTextBlock (из React) -->
+    <Color x:Key="DarkAnimatedTexBackgroundColor">#1976d2</Color>
+    <Color x:Key="DarkHeroBackgroundColor">#1A1A1A</Color>
+
+    <!-- ========== ИНДИКАТОРЫ ВОПРОСОВ (кружки) ========== -->
+    <Color x:Key="DarkQuestionAnsweredBg">#4CAF50</Color>    <!-- Зеленый (отвечено) -->
+    <Color x:Key="DarkQuestionUnansweredBg">#555555</Color>  <!-- Темно-серый (не отвечено) -->
+    <Color x:Key="DarkQuestionCurrentBg">#F47E3E</Color>     <!-- Оранжевый (текущий) -->
+    <Color x:Key="DarkQuestionTextColor">#FFFFFF</Color>     <!-- Белый (текст в кружке) -->
+
+    <!-- RadioButton и CheckBox ободок -->
+    <Color x:Key="DarkRadioButtonColor">#FFFFFF</Color>      <!-- Белый, видимый на темном фоне -->
+
+    <!-- Для опций в темной теме -->
+    <Color x:Key="DarkOptionsBackgroundColor">#2A2A2A</Color> <!-- Средне-серый фон для опций -->
+    <Color x:Key="DarkOptionsTextColor">#FFFFFF</Color>       <!-- Белый, хорошо читаемый -->
+    <Color x:Key="DarkOptionsLabelColor">#B0B0B0</Color>      <!-- Светло-серый для подписей -->
+
+    <!-- Auth Colors -->
+    <Color x:Key="DarkAuthBackground">#121212</Color>
+    <Color x:Key="DarkAuthCardBackground">#1E1E1E</Color>
+    <Color x:Key="DarkAuthInputBackground">#2A2A2A</Color>
+    <Color x:Key="DarkAuthBorderColor">#333333</Color>
+    <Color x:Key="DarkAuthPrimaryButtonBg">#F47E3E</Color>
+    <Color x:Key="DarkAuthPrimaryButtonText">#FFFFFF</Color>
+
+</ResourceDictionary>

@@ -1,0 +1,37 @@
+# Build
+bin/
+obj/
+ 
+# Visual Studio
+.vs/
+.vscode/
+ 
+# Rider
+.idea/
+ 
+# User files
+*.user
+*.suo
+ 
+# NuGet
+packages/
+*.nupkg
+ 
+# Logs
+*.log
+ 
+# Publish
+publish/
+ 
+# Android
+*.apk
+*.aab
+ 
+# iOS
+*.ipa
+ 
+# Mac
+.DS_Store
+
+# Images
+TestMaturalnyMobApp/Resources/Images/

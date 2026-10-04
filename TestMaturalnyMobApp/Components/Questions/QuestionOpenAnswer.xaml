@@ -1,0 +1,17 @@
+<components:QuestionBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:components="clr-namespace:TestMaturalnyMobApp.Components.Questions"
+                         x:Class="TestMaturalnyMobApp.Components.Questions.QuestionOpenAnswer"
+                         x:Name="this">
+
+    <VerticalStackLayout Spacing="8">
+
+        <Label Text="Введіть відповідь:"
+               FontSize="14"
+               TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+        <VerticalStackLayout x:Name="InputsContainer" Spacing="6"/>
+
+    </VerticalStackLayout>
+
+</components:QuestionBase>

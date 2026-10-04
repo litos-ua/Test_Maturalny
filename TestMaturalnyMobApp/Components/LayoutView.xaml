@@ -1,0 +1,25 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:TestMaturalnyMobApp.Components"
+             x:Class="TestMaturalnyMobApp.Components.LayoutView">
+
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <components:HeaderView Grid.Row="0"/>
+
+        <ContentView x:Name="ContentArea" Grid.Row="1" Padding="10,10"/>
+
+        <components:FooterView Grid.Row="2"/>
+    </Grid>
+</ContentView>
+
+
+
+
+
+

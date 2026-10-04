@@ -1,0 +1,160 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:TestMaturalnyMobApp.Components"
+             xmlns:components="clr-namespace:TestMaturalnyMobApp.Components"
+             xmlns:questionComponents="clr-namespace:TestMaturalnyMobApp.Components.Questions"
+             xmlns:controls="clr-namespace:TestMaturalnyMobApp.Components"
+             xmlns:controlsMath="clr-namespace:TestMaturalnyMobApp.Controls"
+             xmlns:converters="clr-namespace:TestMaturalnyMobApp.Converters"
+             xmlns:formula="clr-namespace:TestMaturalnyMobApp.Controls"
+             xmlns:mathControls="clr-namespace:TestMaturalnyMobApp.Controls"
+             xmlns:selectors="clr-namespace:TestMaturalnyMobApp.Selectors"
+             x:Class="TestMaturalnyMobApp.Views.TestSessionPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+             Title="Тестування">
+
+    <views:LayoutView>
+        <views:LayoutView.PageContent>
+            <Grid>
+
+                <!-- Индикатор загрузки -->
+                <ActivityIndicator x:Name="LoadingIndicator"
+                                   IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+
+                <!-- ===== КОНТЕНТ ТЕСТА ===== -->
+                <ScrollView IsVisible="{Binding ShowResults, Converter={StaticResource InverseBoolConverter}}">
+                    <VerticalStackLayout Spacing="10" Padding="10">
+
+                        <!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label x:Name="HeaderLabel"
+                                   Text="Тестування: ..."
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"
+                                   Grid.Column="0"
+                                   VerticalOptions="Center"/>
+
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="Час: "
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"
+                                       Grid.Column="0"
+                                       VerticalOptions="Center"/>
+
+                                <Label Text="{Binding TimeText}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"
+                                       Grid.Column="1"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Grid>
+
+                        <!-- ===== ИНДИКАТОРЫ ВОПРОСОВ ===== -->
+                        <CollectionView x:Name="QuestionsGrid"
+                                        ItemsSource="{Binding Questions}"
+                                        HeightRequest="200">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical"
+                                                 Span="5"
+                                                 VerticalItemSpacing="5"
+                                                 HorizontalItemSpacing="5"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Text="{Binding DisplayNumber}"
+                                            CornerRadius="25"
+                                            WidthRequest="40"
+                                            HeightRequest="40"
+                                            FontSize="12"
+                                            FontAttributes="Bold"
+                                            Clicked="OnQuestionIndicatorClicked"
+                                            CommandParameter="{Binding DisplayNumber}"
+                                            Padding="0"
+                                            TextColor="{AppThemeBinding Light={StaticResource LightQuestionTextColor}, Dark={StaticResource DarkQuestionTextColor}}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="BackgroundColor" 
+                                                        Value="{AppThemeBinding Light={StaticResource LightQuestionUnansweredBg}, Dark={StaticResource DarkQuestionUnansweredBg}}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger TargetType="Button"
+                                                                 Binding="{Binding IsCurrent}"
+                                                                 Value="True">
+                                                        <Setter Property="BackgroundColor" 
+                                                                Value="{AppThemeBinding Light={StaticResource LightQuestionCurrentBg}, Dark={StaticResource DarkQuestionCurrentBg}}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Button"
+                                                                 Binding="{Binding IsAnswered}"
+                                                                 Value="True">
+                                                        <Setter Property="BackgroundColor" 
+                                                                Value="{AppThemeBinding Light={StaticResource LightQuestionAnsweredBg}, Dark={StaticResource DarkQuestionAnsweredBg}}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!-- ===== ТЕЛО ВОПРОСА ===== -->
+                        <Frame BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2A2A2A}"
+                               CornerRadius="12"
+                               Padding="16"
+                               HasShadow="True">
+                            <VerticalStackLayout Spacing="15">
+
+                                <!-- ✅ ТЕКСТ ВОПРОСА С INLINE-ФОРМУЛАМИ -->
+                                <ScrollView Orientation="Vertical"
+                                        VerticalOptions="Fill"
+                                        HorizontalOptions="Fill"
+                                        MaximumHeightRequest="300">
+                                    <controlsMath:MathRichText 
+                                        Text="{Binding CurrentQuestion.Text}"
+                                        TextSize="17"
+                                        BaseHeight="90"
+                                        HorizontalOptions="Fill"/>
+                                </ScrollView>
+
+                                <!-- ✅ ИЗОБРАЖЕНИЕ ВОПРОСА (если есть) -->
+                                <ContentView IsVisible="{Binding CurrentQuestion.HasImage}">
+                                    <views:ZoomableImage Source="{Binding CurrentQuestion.ImageUrl}" 
+                                                         MaxHeight="200" 
+                                                         MaxWidth="320"/>
+                                </ContentView>
+
+                                <!-- Универсальный контейнер (через конвертер) -->
+                                <ContentView Content="{Binding CurrentQuestion, Converter={StaticResource QuestionToViewConverter}}"/>
+
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- ===== НАВИГАЦИЯ ===== -->
+                        <views:TestNavigation/>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+
+                <!-- ===== ДИАЛОГ РЕЗУЛЬТАТОВ ===== -->
+                <views:TestResultDialog x:Name="ResultsDialog"
+                                        IsVisible="{Binding ShowResults}"/>
+
+            </Grid>
+        </views:LayoutView.PageContent>
+    </views:LayoutView>
+</ContentPage>
