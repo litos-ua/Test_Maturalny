@@ -43,7 +43,7 @@ export const ROUTE = {
   SUBJECTINTRO: "subject-intro",
   TEST: "/test/:slug/:id",
   TESTEXAMRULES: "exam-rules",
-  TESTSELECTION: "test-selection",
+  TESTSELECTION: "/test-selection",
   TESTSESSION: "/test/session/:id/:name",
   TOPIC_SESSION: "/test/topic-session/:topicId/:topicName/:disciplineId", // Добавили "disciplineId"
   USEFULMATERIALS: "/usefulmaterials/:slug/:disciplineId",

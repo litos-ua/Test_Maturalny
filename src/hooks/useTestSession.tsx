@@ -72,7 +72,8 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(3600);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const currentQuestion = shuffledQuestions[currentIndex];
 
@@ -80,11 +81,17 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      setLoading(true);
+      setisLoading(true);
+      setIsEmpty(false);
       
       try {
         let data: Question[] = [];
         
+                // Проверяем есть ли вопросы
+        if (!data || data.length === 0) {
+          setIsEmpty(true);
+        }
+
         // если есть topicId — загружаем ВСЕ вопросы по теме
         if (topicId) {
           console.log(`📚 Загружаем вопросы по теме ID: ${topicId}`);
@@ -111,6 +118,7 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
             setTimeLeft(data.length * timePerQuestion);
           }
         } 
+
         // 🔹 СУЩЕСТВУЮЩЕЕ: загружаем по дисциплине (30 случайных)
         else if (disciplineId) {
           console.log(`📚 Загружаем вопросы по дисциплине ID: ${disciplineId}`);
@@ -135,12 +143,13 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
             // Существующая логика таймера (1 час)
             setTimeLeft(3600);
           }
+          
         }
         
       } catch (error) {
         console.error("❌ Ошибка загрузки вопросов:", error);
       } finally {
-        setLoading(false);
+        setisLoading(false);
       }
     };
     
@@ -168,6 +177,7 @@ export function useTestSession(disciplineId?: string, topicId?: number) {
     setCurrentIndex,
     timeLeft,
     currentQuestion,
-    loading,  // Добавляем loading для отображения состояния загрузки
+    isLoading,  // loading для отображения состояния загрузки
+    isEmpty,  // isEmpty для отображения состояния отсутствия вопросов по дисциплине
   };
 }

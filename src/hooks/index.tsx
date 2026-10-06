@@ -5,3 +5,4 @@ export * from "./useTestSessionCombined";
 export * from "./useTestAnswersReal";
 export * from "./useTestAnswersCombined";
 export * from "./useDisciplines";
+export * from "./useApkInfo";

@@ -15,6 +15,7 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import { TypographyDualAnimator} from "../../components/TypographyDualAnimator";
 import {floatingLabelStyle} from "./floatingLabelHomeStyle";
 import { useAuth } from "../../context";
+import { useApkInfo } from "../../hooks";
 import { defaultImages } from "../../constants/images";
 import { useNavigate } from "react-router-dom";
 import { ROUTE } from "../../router";
@@ -24,6 +25,7 @@ export function HomePage() {
   const theme = useTheme();
   const { authUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const apk = useApkInfo();
   console.log("🔎 isAuthenticated (Home):", isAuthenticated, authUser?.role);
  
   return (
@@ -298,7 +300,7 @@ export function HomePage() {
               size="large"
               startIcon={<AndroidIcon />} 
               component="a"
-              href="/download/com.companyname.testmaturalnymobapp-Signed.apk" 
+              href={apk?.url ?? "/download/com.companyname.testmaturalnymobapp-Signed.apk"} 
               download
               sx={{
                 textTransform: 'none',
@@ -324,7 +326,10 @@ export function HomePage() {
                 fontSize: { xs: '0.6rem', sm: '0.65rem', md: '0.7rem' }
               }}
             >
-              Версія 1.0.12 • 45 MB
+                    {apk
+                      ? `Версія ${apk.version} • ${Math.round(apk.sizeKBytes / 1024)} MB • ${apk.releaseDate}`
+                    : "Версія 2.1 • 30 MB • 2026-10-03"  // fallback, пока не загрузилось
+      }
             </Typography>
           </Stack>
         </Paper>

@@ -1,3 +1,284 @@
+# Клиентская часть платформы для подготовки к украинским выпускным экзаменам (ЗНО/НМТ). SPA на React 19 + TypeScript + Vite, UI на MUI v7, взаимодействует с ASP.NET Core Web API.
+
+# Общая архитектура
+Приложение построено как классический SPA-клиент к REST API. Вся бизнес-логика, связанная с хранением вопросов, пользователей, сессий и оценкой реальных тестов, находится на сервере. Клиент отвечает за:
+
+отображение интерфейса и навигацию;
+ввод ответов и их первичную валидацию;
+локальную оценку учебных тестов (см. ниже);
+отображение результатов, полученных от сервера в реальном режиме;
+управление аутентификацией (JWT access + refresh токены).
+Ключевая особенность — два независимых режима тестирования с разным распределением ответственности между UI и сервером, а также механизм автоматического переключения на резервный API при сетевых сбоях.
+
+# Маршрутизация
+Маршруты описаны в src/router/index.tsx через createBrowserRouter. Два дерева:
+С Layout (хедер + футер): главная, о проекте, контакты, профиль, тесты, материалы.
+Без Layout: auth-страницы, React Admin по /admin/*.
+Защищённые маршруты оборачиваются в ProtectedRoute. Все — в ErrorBoundary.
+
+## Основные пути:
+
+Путь-Назначение
+/	Главная
+/subject-intro	Карусель предметов
+/test-selection	Выбор дисциплины для теста
+/test/:slug/:id	Страница дисциплины (выбор темы или типа теста)
+/test/session/:id/:name	Сессия теста (учебный или реальный режим)
+/test/topic-session/:topicId/:topicName/:disciplineId	Тест по конкретной теме
+/usefulmaterials/:slug/:disciplineId	Корисні матеріали
+/profile, /profile-settings, /profile-results	Профиль
+/messages	Сообщения
+/admin/*	React Admin
+
+# Слой API и работа с бэкендом
+## Базовые клиенты
+apiClient (src/api/apiClient.tsx) — основной Axios-инстанс с интерсепторами.
+
+authClient, disciplineClient, questionClient, topicClient, testSessionClient, userClient, userProfileClient — специализированные обёртки над эндпоинтами.
+
+## Обёртки методов
+get / post / put / del (src/api/index.tsx) нормализуют ошибки через handleAuthError: если ответ пришёл от сервера — пробрасывается тело ответа, иначе — generic-ошибка.
+
+## Интерсепторы
+## Request:
+
+перед каждым запросом подставляет актуальный baseURL из configObj.axiosUrl (позволяет менять сервер на лету);
+добавляет Authorization: Bearer {accessToken}, если токен есть.
+
+## Response:
+
+401 → попытка refresh через authService.refresh(). Если параллельно уже идёт refresh — запросы ставятся в очередь (failedQueue), после получения нового токена повторяются. Если refresh не удался — токены очищаются, редирект на /login.
+
+Сетевая ошибка (ECONNABORTED, ERR_NETWORK, Network Error, 504, Failed to fetch) → мгновенное переключение на fallback API через switchToFallback(), запрос повторяется с новым baseURL.
+
+## Fallback-механизм
+Приложение поддерживает два бэкенда: основной (.NET) и резервный (PHP). configObj (src/constants/config.tsx) хранит оба URL и флаг isUsingFallback. При сетевом сбое switchToFallback() переключает axiosUrl и диспатчит событие api-switch, на которое подписан футер (индикатор активного сервера: LOCAL / .NET / PHP).
+
+# Хуки и сервисы
+useDisciplines — загрузка дисциплин с кэшированием между вызовами.
+
+useExplanation — загрузка и кэширование пояснений к вопросам (/questions/{id}/explanation или AI-эндпоинт).
+
+authService, userService, userOptionService, userProfileService, testSessionService, messageService — прикладные сервисы.
+
+tokenService — работа с токенами в localStorage + проверка срока действия (exp из JWT).
+
+# Аутентификация
+Логин (/auth/login) → { token, refreshToken, user }. Токены сохраняются в localStorage, пользователь кладётся в AuthContext.
+
+Refresh (/auth/refresh) — обновление пары токенов по refresh-токену. Сервер сам решает, нужно ли выдавать новый refresh (в зависимости от порога RefreshTokenRenewThresholdHours).
+
+Logout (/auth/logout) — отзыв refresh-токена на сервере + очистка localStorage.
+
+Регистрация (/auth/register), Forgot/Reset password — без токена.
+
+AuthContext при старте приложения: если есть токен → refresh → getCurrentUser() → загрузка userOption.
+
+Роли: Guest, Student, Teacher, Admin. Админ-роут защищён ProtectedRoute requiredRole="Admin".
+
+# Механизм тестирования
+Это центральная часть приложения. Существует три сценария прохождения теста, различающихся источником вопросов и тем, кто оценивает результат.
+
+Выбор режима
+На странице дисциплины (/test/:slug/:id) пользователь видит две карточки:
+
+Учбовий тест → ?type=learn
+Реальний тест → ?type=real
+Также доступен список тем дисциплины — клик по теме открывает тест по теме.
+Далее всё определяется query-параметром type в TestSessionPage. Развилка реализована в хуках useTestSessionCombined и useTestAnswersCombined.
+
+## Учебный режим (learn)
+
+Назначение: тренировка, навигация по вопросам с подсказками и пояснениями, без сохранения на сервере.
+Источник вопросов: сервер (QuestionsController):
+по дисциплине — GET /api/questions/random/by-discipline/{id}/{count} (30 случайных);
+по теме — GET /api/questions/by-topic/{topicId} (все вопросы темы).
+Опции каждого вопроса перемешиваются на клиенте (shuffleArray) перед показом.
+Сессия: не создаётся (sessionId: null).
+Хранение ответов: localStorage под ключом test_answers. При перезагрузке страницы ответы восстанавливаются.
+Таймер:
+по дисциплине — 3600 секунд (1 час);
+по теме — 120 сек × количество вопросов.
+Оценка: полностью на клиенте, в calculateTestResults (src/utils/testEvaluator.tsx). Результат — объект TestResult { totalScore, maxTotalScore, results[] }.
+Отправка на сервер: не производится. finishAndSendResults просто вызывает локальный расчёт.
+Пояснения: доступны по каждому вопросу через useExplanation → GET /api/questions/{id}/explanation (поле Explanation в AnswerOption). Отображаются в TestResultsDialog в тултипе с поддержкой LaTeX.
+Результат: показывается в модальном окне, кнопки «До тесту» и «На головну». В профиле не сохраняется.
+
+## Реальный режим (real)
+
+Назначение: имитация экзамена НМТ с фиксированным набором вопросов, серверной оценкой и сохранением в истории.
+Старт сессии: POST /api/testsession/exam/start с StartExamRequestDto:
+
+json
+{
+  "userId": 42,
+  "disciplineId": 1,
+  "description": "Описание реальной сессии",
+  "timeLimitSeconds": 3600
+}
+Сервер:
+проверяет, что userId совпадает с аутентифицированным;
+берёт TimeLimitSeconds и NumberOfTestQuestions из serverconfig.json;
+формирует набор вопросов по типам, специфичным для дисциплины (см. ниже);
+строит ShuffleMask — карту перемешивания опций, сохраняет в TestSession.JsonMask;
+создаёт TestSession в БД;
+возвращает { sessionId, questions }.
+Опции приходят уже перемешанными с сервера — клиент их не трогает, чтобы JsonMask оставалась валидной.
+Защита от двойного старта: флаг testSessionCreating в sessionStorage. Если пользователь обновит страницу во время старта — повторный запрос не уйдёт.
+Хранение ответов: только в состоянии React. При перезагрузке — потеря.
+Таймер: timeLeft инициализируется значением из конфига (3600 сек), тикает вниз. На сервере при завершении проверяется реальная длительность сессии с допуском +300 сек.
+Завершение: POST /api/testsession/end/{sessionId} с телом:
+
+json
+{
+  "reason": 0,
+  "answers": [
+    {
+      "questionId": 101,
+      "selectedOptionIds": [5],
+      "submittedAt": "2025-...",
+      "explanation": null
+    }
+  ]
+}
+Клиент формирует selectedOptionIds по-разному в зависимости от типа вопроса:
+Matching — массив фиксированной длины (options.length), невалидные значения заменяются на 0;
+OpenAnswer — selectedOptionIds: [], а сами текстовые ответы передаются в groupeLabel (массив строк);
+остальные — фильтруются только целые не-NaN числа.
+Оценка: на сервере (TestEvaluationService.EvaluateShuffleAsync + QuestionEvaluationHelper). Клиент получает TestEvaluationResultDto и маппит его в UI-модель TestResult.
+Результат: сохраняется в БД (UserAnswer), доступен в профиле в разделе «Сесії користувача».
+
+## Тест по теме
+Отдельный сценарий, доступный только в учебном режиме. Пользователь кликает по теме дисциплины — переход на /test/topic-session/:topicId/:topicName/:disciplineId.
+
+Загружаются все вопросы темы (getQuestionsByTopic).
+Опции перемешиваются на клиенте.
+Таймер: 120 сек × количество вопросов.
+Оценка локальная, результат не сохраняется.
+В useTestSessionCombined topicId прокидывается только в learn-ветку.
+Типы вопросов
+Поддерживается 6 типов (enum QuestionType):
+
+Код	Тип	Особенности UI
+0	SingleChoice	Radio-группа
+1	MultipleChoice	Checkbox-группа
+2	Matching	Select'ы с цветовой индикацией пар, перемешанный правый столбец хранится в sessionStorage
+3	DoubleChoice	Два числовых поля
+4	CorrectSequence	Select'ы для указания позиции каждого элемента
+5	OpenAnswer	Текстовые поля с валидацией (только цифры и точка), количество полей = число правильных опций
+Все компоненты единообразно принимают savedAnswer и onAnswer, поддерживают LaTeX (parseTextWithMath, MathFormula) и зум картинок (ZoomableImage).
+
+Matching — самый сложный:
+правый столбец перемешивается один раз и кэшируется в sessionStorage по ключу question-{id}-rightItems;
+каждой паре присваивается свой цвет (MATCHING_COLORS), который подсвечивает и выбранный пункт слева, и соответствующий пункт справа;
+поддерживаются изображения как в левом, так и в правом столбце.
+CorrectSequence: пользователь для каждого элемента выбирает его позицию (1..N). Оценка зависит от того, угаданы ли первая и последняя позиции.
+OpenAnswer: количество полей ввода равно количеству правильных опций. Разрешены только цифры и одна точка. Значение хранится как строка, а не число, чтобы не терять промежуточный ввод.
+
+## Специфика по дисциплинам
+Набор вопросов в реальном режиме формируется на сервере по имени дисциплины (TestSessionService.GetQuestionsForRealTestAsync):
+
+Дисциплина	Состав
+Історія України	20 SingleChoice + 4 Matching + 3 CorrectSequence + 3 MultipleChoice = 30
+Математика	15 SingleChoice + 3 Matching + 4 OpenAnswer = 22
+Фізика	14 SingleChoice + 2 Matching + 6 OpenAnswer = 22
+Остальные	totalCount случайных вопросов по дисциплине (обычно 30)
+Для учебного режима такой раскладки нет — просто N случайных вопросов по дисциплине или все вопросы темы.
+
+На клиенте есть собственный DISCIPLINE_TEST_CONFIGS (src/constants/testConfig.tsx), который используется:
+для подсказок UI (getRequiredAnswerCount — сколько ответов ожидается для вопроса);
+для флагов allowPartialScore (разрешить ли частичные баллы);
+для логики локальной оценки (isPartialScoreAllowed, getOpenAnswerRules).
+Это дублирует часть серверной логики, поэтому теоретически возможно расхождение между учебной (клиентской) и реальной (серверной) оценкой одного и того же ответа.
+
+## Оценка результатов
+Учебный режим — calculateTestResults (клиент)
+Полностью повторяет правила НМТ:
+SingleChoice — 1 балл при точном совпадении.
+DoubleChoice — 2 балла только если оба верны.
+MultipleChoice — балл = число верно выбранных опций, но 0 при дубликатах. isCorrect — только при полном совпадении.
+Matching — балл = число верных пар. isCorrect — когда верны все ожидаемые пары.
+CorrectSequence — 3/2/1/0 баллов:
+3 — полная последовательность;
+2 — угаданы первая и последняя позиции;
+1 — угадана только одна из них;
+0 — иначе.
+OpenAnswer — 2 балла за каждое верное поле, нормализация ,→. и сравнение чисел (с погрешностью 1e-4) или строк.
+Результат показывается в TestResultsDialog с тултипами-пояснениями.
+
+Реальный режим — сервер
+Та же логика реализована в QuestionEvaluationHelper.EvaluateQuestion / EvaluateOpenAnswer. Дополнительно сервер:
+восстанавливает порядок опций из JsonMask перед проверкой;
+для Matching нормализует ответы из UI-порядка в базовый (NormalizeAnswerToBaseOrder);
+сохраняет UserAnswer в БД.
+Клиент получает TestEvaluationResultDto с массивом QuestionResultDto и отображает результаты так же, как в учебном режиме.
+
+# Профиль и статистика
+/profile — данные пользователя из AuthContext (userData), настройки (userOption), средний балл.
+/profile-settings — редактирование профиля и опций.
+/profile-results — список завершённых реальных сессий с пагинацией (userProfileService.getCompletedSessions → /statistics/user-session/{userId}). Каждую сессию можно:
+раскрыть — детали по вопросам (/statistics/user-session/evaluation_details/{sessionId}): номер, текст, тема, балл;
+удалить (DELETE /api/testsession/{id}, только свои сессии).
+Учебные тесты в профиле не отображаются — они нигде не сохраняются.
+
+# Корисні матеріали
+
+Раздел /usefulmaterials/:slug/:disciplineId — подборка справочных таблиц по дисциплинам:
+Історія України: архітектура, мистецтво, карикатури, гетьмани, персоналії, договори, жінки в історії.
+Математика: формули.
+Данные хранятся в src/constants/UsefulMaterials/ (разбиты по периодам). Каждый материал — это объект с id, title, component, getData, pdfConfig. Компоненты рендерятся лениво (Suspense), экспортируются в PDF через pdfExportUniversal.
+
+# Админ-панель
+
+React Admin (/admin/*), защищён ProtectedRoute requiredRole="Admin".
+dataProvider (src/providers/dataProvider.tsx) ходит на /api/admin/{resource} с параметрами React Admin: _page, _perPage, _sort, _order, filter. Нормализует id/Id.
+
+authProvider проверяет токен и извлекает роль из JWT.
+
+Ресурсы: пользователи, дисциплины, темы, вопросы, варианты ответов.
+
+## Структура проекта
+text
+src/
+├── api/                 # Axios-клиенты и интерсепторы
+│   ├── interceptors/    # auth, fallback
+│   └── *Client.tsx
+├── assets/              # Статика (аватары, svg)
+├── components/          # Переиспользуемые компоненты
+│   ├── Auth/            # ProtectedRoute
+│   ├── DisciplineMenu/  # Меню дисциплин в хедере
+│   ├── Header/, Footer/, Layout/
+│   ├── UsefulMaterials/ # Таблицы по дисциплинам
+│   ├── ZoomableImage/, RotatingImages/, ...
+├── constants/           # Конфиги, тексты, данные
+│   ├── UsefulMaterials/ # Данные для раздела материалов
+│   ├── config.tsx       # configObj (URL'ы, fallback)
+│   └── testConfig.tsx   # DISCIPLINE_TEST_CONFIGS
+├── context/             # AuthContext
+├── hooks/               # useTestSession*, useTestAnswers*, useExplanation, ...
+├── pages/               # Страницы по маршрутам
+│   ├── Admin/, Auth/, Profile/, Test/, TestSession/, UsefulMaterials/, ...
+├── providers/           # React Admin: dataProvider, authProvider
+├── router/              # Маршруты и ROUTE-константы
+├── services/            # Прикладные сервисы (auth, user, testSession, ...)
+├── types/               # TypeScript-типы по доменам
+└── utils/               # Утилиты (оценка, парсинг LaTeX, PDF, ...)
+## Ключевые особенности
+Два режима тестирования с разной ответственностью: учебный — оценка на клиенте, реальный — на сервере.
+Тест по теме — отдельный сценарий только в учебном режиме.
+Специфика дисциплин — фиксированные наборы типов вопросов для Історії, Математики, Фізики в реальном режиме.
+Автоматический fallback API при сетевых сбоях.
+JWT с refresh и очередью запросов при 401.
+LaTeX-поддержка в текстах вопросов, ответов и пояснений.
+PDF-экспорт справочных материалов.
+SEO через react-helmet-async.
+
+
+
+
+
+# 2025.07.12
+
 # Test_Maturalny
 A repository for a platform for independent testing of knowledge of students who have completed high school. The platform consists of two parts - a UI React application (branch 'rect') and an API ASP.NET Core application (branch 'dotnet').
 
@@ -917,3 +1198,13 @@ TestSessionController.StartExamSession
 UI → setSessionId, setQuestions
 
 Робим коригування в TestMaturalnyApp.Services/Services/TestSessionService.cs
+
+# 2026.10.06
+
+Додано обробку порожнього списку питань та уніфіковано маршрути
+
+Додано стан isEmpty у хуки useTestSession та useTestSessionReal для відображення повідомлення "Немає питань" замість нескінченного "Завантаження..."
+Додано кнопку повернення до вибору тестів при порожньому списку питань
+Уніфіковано константи маршрутів у router.tsx — всі шляхи тепер мають слеш на початку (/test-selection замість test-selection)
+
+Виводим версію в UI за допомогою хука useApkInfo.

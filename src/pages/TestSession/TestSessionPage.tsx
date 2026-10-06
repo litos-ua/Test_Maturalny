@@ -12,7 +12,9 @@ import { questionCircleStyle, questionHeaderStyle } from "./testSessionStyles"
 import type { TestResult } from "../../types/pages/testpages/types";
 import { useState, useMemo } from "react";
 import { useAuth } from "../../context";
+import { useNavigate } from "react-router-dom";
 import { getRequiredAnswerCount } from "../../utils/testConfigHelpers"
+import {ROUTE} from "../../router"
 
 export function TestSessionPage() {
   const { id, name, topicId, topicName, disciplineId } = useParams();  // id - disciplineId, topicId - для теста по теме
@@ -22,6 +24,7 @@ export function TestSessionPage() {
   const params = new URLSearchParams(location.search);
   const testType = params.get("type") || "learn";
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const isTopicTest = !!topicId;
@@ -50,6 +53,8 @@ export function TestSessionPage() {
     setCurrentIndex,
     timeLeft,
     currentQuestion,
+    isEmpty,    
+    isLoading,  
   } = startSession;
 
   const leftItemsMap = useMemo(() => {
@@ -146,7 +151,76 @@ const answeredIds = Object.entries(answers)
     }
   };
 
-  if (!currentQuestion) return <Typography>Загрузка вопросов...</Typography>;
+//   if (!currentQuestion) return (
+//   <Typography 
+//     sx={{ 
+//       fontSize: { 
+//         xs: '1.5rem',   // мобільні
+//         sm: '1.75rem',  // планшети
+//         md: '2rem',     // десктоп
+//         lg: '2.5rem',   // великі екрани
+//       },
+//       textAlign: 'center',
+//       mt: 4,
+//     }}
+//   >
+//     ⏳ Завантаження питань...
+//   </Typography>
+// );
+
+  // 🔑 1. Спочатку перевіряємо завантаження
+  if (isLoading) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 8 }}>
+        <Typography 
+          sx={{ 
+            fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+            color: 'text.secondary',
+          }}
+        >
+          ⏳ Завантаження питань...
+        </Typography>
+      </Box>
+    );
+  }
+
+  // 🔑 2. Потім — порожній результат
+  if (isEmpty) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 8, px: 2 }}>
+        <Typography 
+          sx={{ 
+            fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+            color: 'error.main',
+            mb: 3,
+          }}
+        >
+          ❌ На жаль, для цієї дисципліни ще немає питань
+        </Typography>
+        
+        <Typography 
+          variant="body1" 
+          sx={{ mb: 4, color: 'text.secondary' }}
+        >
+          Спробуйте іншу дисципліну або зверніться пізніше
+        </Typography>
+        
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => navigate(ROUTE.TESTSELECTION)}
+          sx={{ 
+            minWidth: 200,
+            py: 1.5,
+            fontSize: '1.1rem',
+          }}
+        >
+          До вибору тестів
+        </Button>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ 
