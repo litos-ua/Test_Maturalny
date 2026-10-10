@@ -150,6 +150,41 @@
                     </VerticalStackLayout>
                 </ScrollView>
 
+                <!-- ✅ ===== СООБЩЕНИЕ ОБ ОТСУТСТВИИ ВОПРОСОВ ===== -->
+                <VerticalStackLayout 
+                    IsVisible="{Binding IsEmpty}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    Spacing="16"
+                    Padding="24"
+                    Margin="0,30,0,0">
+
+                                <Label 
+                                    Text="Немає питань"
+                                    FontSize="20"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Light={StaticResource LightTextPrimaryColor}, Dark={StaticResource DarkTextPrimaryColor}}"/>
+
+                                <Label 
+                                    Text="Для цієї дисципліни поки немає доступних питань. Спробуйте іншу дисципліну або поверніться пізніше."
+                                    FontSize="14"
+                                    HorizontalTextAlignment="Center"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Light={StaticResource LightTextSecondaryColor}, Dark={StaticResource DarkTextSecondaryColor}}"/>
+
+                                <Button 
+                                    Text="До вибору тестів"
+                                    Command="{Binding GoToTestSelectionCommand}"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonBg}, Dark={StaticResource DarkPrimaryButtonBg}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource LightPrimaryButtonText}, Dark={StaticResource DarkPrimaryButtonText}}"
+                                    CornerRadius="8"
+                                    Padding="20,12"
+                                    HorizontalOptions="Center"/>
+                    
+                </VerticalStackLayout>
+
+
                 <!-- ===== ДИАЛОГ РЕЗУЛЬТАТОВ ===== -->
                 <views:TestResultDialog x:Name="ResultsDialog"
                                         IsVisible="{Binding ShowResults}"/>

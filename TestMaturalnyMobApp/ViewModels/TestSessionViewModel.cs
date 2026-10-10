@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TestMaturalnyMobApp.Models;
 using TestMaturalnyMobApp.Services;
@@ -75,12 +73,33 @@ public class TestSessionViewModel : BaseViewModel
         }
     }
 
+    private bool _isEmpty = false;
+    public bool IsEmpty
+    {
+        get => _isEmpty;
+        set { _isEmpty = value; OnPropertyChanged(); }
+    }
+
     private bool _showResults = false;
+    //public bool ShowResults
+    //{
+    //    get => _showResults;
+    //    set
+    //    {
+    //        _showResults = value;
+    //        OnPropertyChanged();
+    //    }
+    //}
+
     public bool ShowResults
     {
         get => _showResults;
         set
         {
+            // Не показываем результаты, если вопросов нет
+            if (value && IsEmpty)
+                return;
+
             _showResults = value;
             OnPropertyChanged();
         }
@@ -207,6 +226,7 @@ public class TestSessionViewModel : BaseViewModel
         _disciplineId = disciplineId;
         _disciplineName = disciplineName;
         IsLoading = true;
+        IsEmpty = false;
         ShowResults = false;
 
         try
@@ -218,6 +238,11 @@ public class TestSessionViewModel : BaseViewModel
             else
             {
                 await _sessionService.LoadQuestionsByDiscipline(disciplineId);
+            }
+            // Проверяем на пустой массив вопросов при  загрузке
+            if (Questions.Count == 0)
+            {
+                IsEmpty = true;
             }
         }
         catch (Exception ex)
